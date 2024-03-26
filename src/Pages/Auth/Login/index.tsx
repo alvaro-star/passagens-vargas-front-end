@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import InputLabel from "../../Components/InputLabel"
-import TextInput from "../../Components/TextInput"
+import InputLabel from "../../../Components/InputLabel"
+import TextInput from "../../../Components/TextInput"
 import axios from "axios"
-import ApplicationLogo from "../../Components/ApplicationLogo"
+import FormTemplate from "../Components/FormTemplate"
 
 const Login = () => {
     const [login, setLogin] = useState<string>("")
@@ -21,8 +21,7 @@ const Login = () => {
     }
     return (
         <div className="flex justify-center">
-            <form className="flex flex-col items-center justify-center bg-slate-200 p-5 rounded" onSubmit={enviar}>
-                <ApplicationLogo className="h-12" />
+            <FormTemplate onSubmit={enviar} className="mt-20">
                 <div className="mt-2">
                     <InputLabel>Email</InputLabel>
                     <TextInput value={login} onChange={eve => setLogin(eve.target.value)} />
@@ -31,10 +30,7 @@ const Login = () => {
                     <InputLabel>Contrasena</InputLabel>
                     <TextInput value={contrasena} onChange={eve => setContrasena(eve.target.value)} />
                 </div>
-                <button className="bg-red-500 p-2 mt-2 rounded  text-white">
-                    Enviar
-                </button>
-            </form>
+            </FormTemplate>
         </div>
     )
 }
