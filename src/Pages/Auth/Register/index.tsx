@@ -3,6 +3,7 @@ import TextInput from "../../../Components/TextInput"
 import FormTemplate from "../Components/FormTemplate"
 import InputLabel from "../../../Components/InputLabel"
 import InputError from "../../../Components/InputError"
+import http from "../../../http"
 
 const Register = () => {
     const [nombre, setNombre] = useState<string>('')
@@ -19,11 +20,22 @@ const Register = () => {
 
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
+        setContrasenaError("")
+        setContrasena2Error("")
         if (contrasena === contrasena2) {
-            const usuario = [login, nombre, telefono, contrasena]
+            const role = "ROLE_CLIENTE";
+            const usuario = {login, nombre, telefono, contrasena, role}
             setNombreError("")
             setLoginError("")
             setTelefonoError("")
+            http.post('auth/register', usuario)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(erro => {
+                    alert(erro.response.data.conteudo)
+                    console.log(erro.response.data)
+                })
         } else {
             setContrasenaError("La contrasenha es distinta")
             setContrasena2Error("La contrasenha es distinta")
