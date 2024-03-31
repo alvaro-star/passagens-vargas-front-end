@@ -1,11 +1,14 @@
 import { useState } from "react"
 import TextInput from "../../../Components/TextInput"
-import FormTemplate from "../Components/FormTemplate"
+import FormTemplate from "../../../Components/FormTemplate"
 import InputLabel from "../../../Components/InputLabel"
 import InputError from "../../../Components/InputError"
 import http from "../../../http"
+import { IError } from "../../../Types/IError"
+import { useNavigate } from "react-router-dom"
 
 const Register = () => {
+    const navigate = useNavigate()
     const [nombre, setNombre] = useState<string>('')
     const [login, setLogin] = useState<string>('')
     const [telefono, setTelefono] = useState<string>('')
@@ -22,19 +25,44 @@ const Register = () => {
         eve.preventDefault()
         setContrasenaError("")
         setContrasena2Error("")
-        if (contrasena === contrasena2) {
+        if (contrasena === contrasena2 && contrasena != "") {
             const role = "ROLE_CLIENTE";
-            const usuario = {login, nombre, telefono, contrasena, role}
+            const usuario = { login, nombre, telefono, contrasena, role }
             setNombreError("")
             setLoginError("")
             setTelefonoError("")
+            setContrasena("")
             http.post('auth/register', usuario)
-                .then(response => {
-                    console.log(response);
+                .then(resposta => {
+                    if (resposta.request.status == 201) {
+                        alert("Cadastrado com sucesso!!!");
+                        navigate("/login")
+                    }else{ // Provisorio
+                        console.log(resposta.data.message);
+                    }
                 })
                 .catch(erro => {
-                    alert(erro.response.data.conteudo)
-                    console.log(erro.response.data)
+                    if (erro?.response?.data?.errors) {
+                        let erros: IError[] = erro?.response?.data?.errors
+                        erros.forEach(erro => {
+                            switch (erro.name) {
+                                case "nombre":
+                                    setNombreError(erro.message)
+                                    break;
+                                case "login":
+                                    setLoginError(erro.message)
+                                    break;
+                                case "telefono":
+                                    setTelefonoError(erro.message)
+                                    break;
+                                case "contrasena":
+                                    setContrasenaError(erro.message)
+                                    break;
+                            }
+                        })
+                    }else{
+                        console.log("Houve um erro durante a solicitação");
+                    }
                 })
         } else {
             setContrasenaError("La contrasenha es distinta")
@@ -44,7 +72,7 @@ const Register = () => {
 
     return (
         <div className="mt-10 flex justify-center items-center ">
-            <FormTemplate className="w-80" onSubmit={enviar}>
+            <FormTemplate onSubmit={enviar}>
                 <h2 className="text-xl font-bold">Registrar</h2>
                 <div className="mt-2 w-full">
                     <InputLabel value="Nombre" />
