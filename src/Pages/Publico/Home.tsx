@@ -7,7 +7,7 @@ import IPage from "../../Types/IPage"
 import ICiudad from "../../Types/ICiudad"
 import InputError from "../../Components/InputError"
 import IViaje from "../../Types/IViaje"
-import { Link } from "react-router-dom"
+import CardViaje from "./Components/CardViaje"
 
 const Home = () => {
     const [ciudadSalida, setCiudadSalida] = useState('')
@@ -121,41 +121,12 @@ const Home = () => {
                 </div>
             </FormTemplate>
 
-            <div className="w-full mt-5">
-                <h2 className="bg-red-100 text-2xl font-bold">Viajes</h2>
+            <section className="w-full mt-5">
+                <h2 className="text-2xl font-bold bg-red-100 ">Viajes</h2>
                 <div className="w-full">
-                    {viajes.map(viaje =>
-                        <div className="bg-slate-100 m-5 p-5 rounded" key={viaje.id}>
-                            <section className="flex items-center">
-                                <img src={viaje.logo} className="w-14 mr-3 rounded-full" />
-                                <section className="text-lg flex justify-between w-full items-center">
-                                    <div>
-                                        <p>{viaje.salida.lugar + ', ' + viaje.salida.ciudad} </p>
-                                        <p className="mt-1">{viaje.destino.lugar + ', ' + viaje.destino.ciudad} </p>
-                                    </div>
-                                    <div className="text-xl">
-                                        {viaje.salida.dataHora.split('T')[1].split('.')[0]} - {viaje.destino.dataHora.split('T')[1].split('.')[0]}
-                                    </div>
-                                </section>
-                            </section>
-                            <div className="flex flex-col border-t mt-2 pt-2">
-                                {viaje.precios.map(
-                                    precio => !precio.lleno &&
-                                        <div className="w-full p-1 flex items-center justify-between">
-                                            <p>
-                                                <b className="font-semibold">Piso</b>: {precio.nPiso}
-                                            </p>
-                                            <p className="font-semibold">
-                                                Precio: Bs. {precio.precio}
-                                            </p>
-                                            <Link className="py-1 px-2 bg-blue-500 rounded text-white" to={`/viaje/${precio.id}`}>ESCOJER</Link>
-                                        </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
+                    {viajes.map(viaje => <CardViaje key={viaje.id} viaje={viaje} />)}
                 </div>
-            </div>
+            </section>
         </div>
     )
 }

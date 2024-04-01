@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import IPiso from "../../../Types/IPiso"
+import SillaSquare from "./SillaSquare"
 
 interface Props {
     piso: IPiso,
@@ -54,9 +55,12 @@ const Piso = ({ piso, adicionar }: Props) => {
                 }
                 <div></div>
                 {sillas.map((silla, index) =>
-                    <button onClick={(eve) => adicionar(eve, silla)} key={index} className="text-center lg:rotate-90 h-10 w-10 flex items-center justify-center bg-yellow-300 hover:bg-yellow-100 border">
-                        {silla}
-                    </button>
+                    <SillaSquare
+                        key={index}
+                        nSilla={silla}
+                        onClick={(eve) => adicionar(eve, silla)}
+                        className="bg-yellow-400 hover:bg-yellow-100 lg:rotate-90"
+                    />
                 )}
             </div>
             <div className="p-2 text-white bg-red-500 text-center rounded-b">

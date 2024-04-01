@@ -5,6 +5,7 @@ import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import NotFound from "../Pages/NotFound";
 import ViajeShow from "../Pages/Publico/ViajeShow";
+import PassagensList from "../Pages/Publico/PassagensList";
 
 const AppRouter = () => {
     return (
@@ -15,7 +16,8 @@ const AppRouter = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/registrar" element={<Register />} />
                 <Route path="*" element={<NotFound />} />
-                <Route path="/viaje/:id" element={<ViajeShow />}/>
+                <Route path="/viaje/:id" element={<ViajeShow />} />
+                <Route path="/viaje/step3" element={<PassagensList />} />
             </Routes>
         </Router>
     )

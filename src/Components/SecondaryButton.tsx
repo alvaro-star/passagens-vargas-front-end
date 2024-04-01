@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes } from 'react';
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    className: string,
-    disabled: boolean,
-    children: React.ReactNode
+    className?: string,
+    disabled?: boolean,
+    children?: React.ReactNode
 }
 
 const SecondaryButton = ({ type = 'button', className = '', disabled, children, ...props }: Props) => {
