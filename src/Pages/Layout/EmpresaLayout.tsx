@@ -1,14 +1,11 @@
 import { Link, useNavigate } from "react-router-dom"
-import NavLink from "./NavLink"
-import ApplicationLogo from "./ApplicationLogo"
-import PrimaryButton from "./PrimaryButton"
+import ApplicationLogo from "../../Components/ApplicationLogo"
+import NavLink from "../../Components/NavLink"
+import PrimaryButton from "../../Components/PrimaryButton"
 
-const Header = () => {
+const AdminLayout = () => {
     const navihate = useNavigate()
     const links = [{
-        label: 'Home',
-        url: '/'
-    }, {
         label: 'Pasages',
         url: '/pasages'
     }, {
@@ -25,9 +22,9 @@ const Header = () => {
     }
 
     return (
-        <header className="p-5 bg-slate-100 flex justify-between items-center">
+        <header className="bg-red-100 p-6 flex justify-between items-center">
             <div className="flex items-center justify-center gap-2">
-                <ApplicationLogo className="h-8" />
+                <ApplicationLogo className="h-5" />
                 {links.map((link, index) =>
                     <NavLink active={true} to={link.url} key={index}>
                         {link.label}
@@ -49,8 +46,9 @@ const Header = () => {
                         </Link>
                     </>
                 }
+
             </div>
         </header>
     )
 }
-export default Header
+export default AdminLayout

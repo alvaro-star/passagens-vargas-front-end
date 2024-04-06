@@ -1,16 +1,20 @@
-import { Link } from "react-router-dom";
 import IViaje from "../../../Types/IViaje";
 interface Props {
     viaje: IViaje
+    index?: number
+    escojerViaje?: (indexViaje: number|undefined, idViaje: number, idPrecio: string) => void
+    className?: string
 }
-const CardViaje = ({ viaje }: Props) => {
+
+const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
     const getDataHora = (dataHora: string) => {
         let hora = dataHora.split('T')[1];
         let partes = hora.split(':')
         return `${partes[0]}:${partes[1]}`
     }
+
     return (
-        <div className="m-5 p-5 bg-slate-100 rounded">
+        <div className={` p-5 bg-slate-100 rounded ${className}`}>
             <section className="flex items-center">
                 <img src={viaje.logo} className="mr-3 w-14  rounded-full" />
                 <section className="text-lg flex justify-between w-full items-center">
@@ -23,20 +27,21 @@ const CardViaje = ({ viaje }: Props) => {
                     </div>
                 </section>
             </section>
-            <section className="flex flex-col border-t mt-2 pt-2">
-                {viaje.precios.map(
-                    precio => !precio.lleno &&
-                        <div className="w-full p-1 flex items-center justify-between">
+            {(viaje.precios?.length != 0 && escojerViaje) && <section className="flex flex-col border-t mt-2 pt-2">
+                {viaje.precios?.map(
+                    (precio, index) => !precio.lleno &&
+                        <div className="w-full p-1 flex items-center justify-between" key={index}>
                             <p>
                                 <b className="font-semibold">Piso</b>: {precio.nPiso}
                             </p>
                             <p className="font-semibold">
                                 Precio: Bs. {precio.precio}
                             </p>
-                            <Link className="py-1 px-2 bg-blue-500 rounded text-white" to={`/viaje/${precio.id}`}>ESCOJER</Link>
+                            <button className="py-1 px-2 bg-blue-500 rounded text-white" onClick={() => escojerViaje(index, viaje.id, precio.id)}>ESCOJER</button>
                         </div>
                 )}
             </section>
+            }
         </div>
     )
 }

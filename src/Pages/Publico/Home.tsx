@@ -6,8 +6,7 @@ import http from "../../http"
 import IPage from "../../Types/IPage"
 import ICiudad from "../../Types/ICiudad"
 import InputError from "../../Components/InputError"
-import IViaje from "../../Types/IViaje"
-import CardViaje from "./Components/CardViaje"
+import { useNavigate } from "react-router-dom"
 
 const Home = () => {
     const [ciudadSalida, setCiudadSalida] = useState('')
@@ -19,7 +18,7 @@ const Home = () => {
     const [salidaErro, setSalidaErro] = useState('')
     const [destinoErro, setDestinoErro] = useState('')
 
-    const [viajes, setViajes] = useState<IViaje[]>([])
+    const navigate = useNavigate()
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
         setSalidaErro('')
@@ -52,20 +51,19 @@ const Home = () => {
         }
 
         if (idDestino != -1 && idSalida != -1 && fechaIda != '') {
-            const peticao = {
+            const formViajes = {
                 idCiudadSalida: idSalida,
                 idCiudadDestino: idDestino,
-                fechaSalida: fechaIda
+                fechaSalida: fechaIda,
+                fechaVuelta: fechaVuelta
             }
-            http.post<IViaje[]>("viajes", peticao)
-                .then(resposta => {
-                    setViajes(resposta.data)
-                }).catch(() => {
-                    alert("Um erro")
-                })
+
+            sessionStorage.setItem("formViaje", JSON.stringify(formViajes))
+            navigate('/viajes')
         }
 
     }
+
     useEffect(() => {
         if (ciudadSalida != '') {
             http.get<IPage<ICiudad>>(`ciudades/${ciudadSalida}/like`)
@@ -83,6 +81,7 @@ const Home = () => {
                 })
         }
     }, [ciudadDestino])
+
     return (
         <div className="flex items-center justify-center flex-col">
             <FormTemplate className="mt-10" onSubmit={enviar}>
@@ -120,13 +119,6 @@ const Home = () => {
                     </div>
                 </div>
             </FormTemplate>
-
-            <section className="w-full mt-5">
-                <h2 className="text-2xl font-bold bg-red-100 ">Viajes</h2>
-                <div className="w-full">
-                    {viajes.map(viaje => <CardViaje key={viaje.id} viaje={viaje} />)}
-                </div>
-            </section>
         </div>
     )
 }
