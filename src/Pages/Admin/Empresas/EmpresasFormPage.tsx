@@ -4,11 +4,9 @@ import InputLabel from "../../../Components/InputLabel"
 import TextInput from "../../../Components/TextInput"
 import http from "../../../http"
 import { useNavigate } from "react-router-dom"
+import ICampo from "../../../Types/ICampo"
 
-interface ICampo<T> {
-    value: T
-    erro: string
-}
+
 const EmpresasFormPage = () => {
     const [nombre, setNombre] = useState<ICampo<string>>({ value: '', erro: '' })
     const [logo, setLogo] = useState<ICampo<string>>({ value: '', erro: '' })

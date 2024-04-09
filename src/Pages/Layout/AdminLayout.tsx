@@ -15,6 +15,7 @@ const AdminLayout = () => {
         label: 'Sobre',
         url: '/sobre'
     }]
+    
     let token = sessionStorage.getItem("token")
     const sair = () => {
         sessionStorage.removeItem("token")
@@ -46,7 +47,6 @@ const AdminLayout = () => {
                         </Link>
                     </>
                 }
-
             </div>
         </header>
     )

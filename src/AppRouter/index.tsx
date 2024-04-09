@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "../Pages/Publico/Home";
 import LayoutPublicClass from "../Pages/Layout/LayoutPublicClass";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
@@ -12,12 +11,17 @@ import LayoutAdminPage from "../Pages/Admin/LayoutAdminPage";
 import Dashboard from "../Pages/Admin/Dashboard";
 import ListPage from "../Pages/Admin/Empresas/ListPage";
 import EmpresasFormPage from "../Pages/Admin/Empresas/EmpresasFormPage";
+import EmpresaLayout from "../Pages/Layout/EmpresaLayout";
+import Home from "../Pages/Publico/Home";
+import HomeEmpresaPage from "../Pages/Empresa/HomeEmpresaPage";
+import AutobusesIndexPage from "../Pages/Admin/Autobuses/AutobusesIndexPage";
+import AutobusesFormPage from "../Pages/Admin/Autobuses/AutobusesFormPage";
 
 const AppRouter = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<LayoutPublicClass />}>
+                <Route path="/">
                     <Route index element={<Home />} />
                     <Route path="login" element={<Login />} />
                     <Route path="registrar" element={<Register />} />
@@ -28,11 +32,17 @@ const AppRouter = () => {
                 </Route>
                 <Route path="/admin" element={<LayoutAdminPage />}>
                     <Route index element={<Dashboard />} />
-                    <Route path="empresas" element={<ListPage />} />
-                    <Route path="empresas/create" element={<EmpresasFormPage />} />
+                    <Route path="empresas">
+                        <Route index element={<ListPage />} />
+                        <Route path="create" element={<EmpresasFormPage />} />
+                    </Route>
+                    <Route path="autobuses">
+                        <Route index element={<AutobusesIndexPage />} />
+                        <Route path="create" element={<AutobusesFormPage />} />
+                    </Route>
                 </Route>
-                <Route path="/empresa" >
-
+                <Route path="/empresa" element={<EmpresaLayout />}>
+                    <Route index element={<HomeEmpresaPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
