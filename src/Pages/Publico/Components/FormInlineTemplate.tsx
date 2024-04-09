@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom"
 import http from "../../../http"
 import IPage from "../../../Types/IPage"
 import ICampo from "../../../Types/ICampo"
+import IFormViaje from "../IFormViaje"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
+    formData?: IFormViaje
 }
 
 
 
-const FormInlineTemplate = ({ className, ...props }: Props) => {
+const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
 
     const [ciudadSalida, setCiudadSalida] = useState<ICampo<string>>({ value: '', erro: '' })
     const [ciudadDestino, setCiudadDestino] = useState<ICampo<string>>({ value: '', erro: '' })
@@ -86,6 +88,26 @@ const FormInlineTemplate = ({ className, ...props }: Props) => {
                 })
         }
     }, [ciudadDestino])
+
+    useEffect(() => {
+        console.log('Componente form');
+        console.log(formData);
+        
+        
+        if (formData) {
+            http.get<ICiudad>(`ciudades/${formData.idCiudadSalida}`)
+                .then(resposta => {
+                    setCiudadSalida({ value: resposta.data.nombre, erro: '' })
+                })
+            http.get<ICiudad>(`ciudades/${formData.idCiudadDestino}`)
+                .then(resposta => {
+                    setCiudadDestino({ value: resposta.data.nombre, erro: '' })
+                })
+            setFechaIda(formData.fechaSalida)
+            setFechaVuelta(formData.fechaVuelta)
+
+        }
+    }, [])
     return (
         <form className={"max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5  rounded " + className}
             {...props}

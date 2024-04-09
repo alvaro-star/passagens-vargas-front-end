@@ -7,6 +7,7 @@ import SillaSquare from "./Components/SillaSquare";
 import PrimaryButton from "../../Components/PrimaryButton";
 import CardViaje from "./Components/CardViaje";
 import IViaje from "../../Types/IViaje";
+import ProcessLine from "./Components/ProcessLine";
 
 
 interface IPrecio {
@@ -71,6 +72,9 @@ const ViajeShow = () => {
     return (
         <div className="w-full flex flex-col items-center">
             <header className="w-full bg-yellow-300 text-white font-bold p-2">Viaje</header>
+            <div className="w-full">
+                <ProcessLine className="my-8 mx-10" />
+            </div>
 
             <section className="w-full">
                 {viaje &&
@@ -78,9 +82,8 @@ const ViajeShow = () => {
                 }
             </section>
 
-
             {precio?.piso &&
-                <Piso piso={precio.piso} adicionar={adicionar} sillasOcupadas= {precio.sillasOcupadas} />}
+                <Piso piso={precio.piso} adicionar={adicionar} sillasOcupadas={precio.sillasOcupadas} />}
 
             <section className="bg-green-400 mt-10 lg:-mt-40  w-full p-10">
                 <h2 className="text-white font-bold">

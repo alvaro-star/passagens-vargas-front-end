@@ -14,7 +14,7 @@ const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
     }
 
     return (
-        <div className={` p-5 bg-slate-100 rounded ${className}`}>
+        <div className={`p-5 bg-gray-200 rounded ${className}`}>
             <section className="flex items-center">
                 <img src={viaje.logo} className="mr-3 w-14  rounded-full" />
                 <section className="text-lg flex justify-between w-full items-center">
@@ -27,7 +27,7 @@ const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
                     </div>
                 </section>
             </section>
-            {(viaje.precios?.length != 0 && escojerViaje) && <section className="flex flex-col border-t mt-2 pt-2">
+            {(viaje.precios?.length != 0 && escojerViaje) && <section className="flex flex-col border-t border-black mt-2 pt-2">
                 {viaje.precios?.map(
                     (precio, index) => !precio.lleno &&
                         <div className="w-full p-1 flex items-center justify-between" key={index}>

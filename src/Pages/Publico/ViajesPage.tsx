@@ -4,13 +4,18 @@ import IViaje from "../../Types/IViaje"
 import IFormViaje from "./IFormViaje"
 import http from "../../http"
 import { useNavigate } from "react-router-dom"
+import FormInlineTemplate from "./Components/FormInlineTemplate"
+import ProcessLine from "./Components/ProcessLine"
 
 const ViajesPage = () => {
     const navigate = useNavigate()
     const [viajes, setViajes] = useState<IViaje[]>([])
+
+    const [formData, setFormData] = useState<IFormViaje>()
     useEffect(() => {
         let cookie1 = sessionStorage.getItem("formViaje")
         const formViaje: IFormViaje = cookie1 ? JSON.parse(cookie1) : {}
+        setFormData(formViaje)
 
         const solicitacao = {
             idCiudadSalida: formViaje.idCiudadSalida,
@@ -39,9 +44,22 @@ const ViajesPage = () => {
     }
 
     return (
-        <div className="">
-            <section className="w-full mt-5">
-                <h2 className="m-5 text-2xl font-bold">Viajes</h2>
+        <div className="w-full">
+            <header className="w-full px-14 py-8">
+                <h1 className="text-5xl"> Logo</h1>
+                {formData &&
+                    <FormInlineTemplate formData={formData} className="mt-8" />
+                }
+            </header>
+            <section className="w-full bg-gray-200 p-4 px-14 text-lg">
+                Pasajes (Falta configurarar o back-end) de Autobus de <b className="font-semibold">Teste - T</b> , para <b className="font-semibold">Potosi - PT</b>
+            </section>
+
+            <section className="w-full">
+
+                <ProcessLine className="my-8 mx-10" />
+
+
                 <div className="grid grid-cols-1 gap-5 m-5">
                     {viajes.map((viaje, index) =>
                         <CardViaje key={viaje.id}
