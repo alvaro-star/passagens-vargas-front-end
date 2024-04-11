@@ -8,7 +8,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const SillaSquare = ({ nSilla, className = '', ...props }: Props) => {
     return (
         <button {...props}
-            className={`h-10 w-10 bg-red-500 text-white flex justify-center items-center p-2 rounded hover:bg-red-100 ${className}`}>
+            className={`font-bold text-xl border-2 border-gray-500 h-12 w-12 bg-gray-300 flex justify-center items-center p-2 rounded hover:bg-white ${className}`}>
             {nSilla}
         </button>
     )

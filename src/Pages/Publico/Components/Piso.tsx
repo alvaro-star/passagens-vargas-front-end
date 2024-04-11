@@ -52,46 +52,46 @@ const Piso = ({ piso, sillasOcupadas = [], adicionar }: Props) => {
         }
     }, [])
     return (
-        <div className="w-96 lg:-rotate-90 lg:-mt-40 mt-10 bg-slate-100 p-5 rounded grid place-content-center">
-            <div className="p-2 bg-red-500  text-white text-center rounded-t-xl">
-                Cabeça
-            </div>
-            <div className="p-5 bg-red-200 grid grid-cols-4 gap-3 place-content-center">
+        <div className="w-full rounded bg-gray-300 min-h-72 flex justify-center items-center">
+            <div className="lg:h-96  lg:-rotate-90 p-5 rounded grid place-content-center">
+                <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
+                </div>
+                <div className="p-5 bg-gray-200 grid grid-cols-4 gap-3 place-content-center">
+                    <div></div>
+                    {
+                        piso.nColunas == 4 &&
+                        <>
+                            <div></div>
+                            <div></div>
+                        </>
+                    }
+                    {
+                        (piso.nColunas == 3 && piso.distribuicaoFileira == 'IZQUIERDA') &&
+                        <>
+                            <div className="row-span-12"></div>
+                            <div></div>
+                        </>
+                    }
+                    {
+                        (piso.nColunas == 3 && piso.distribuicaoFileira == 'DERECHA') &&
+                        <>
+                            <div></div>
+                            <div className="row-span-12"></div>
+                        </>
+                    }
+                    <div></div>
+                    {sillas.map((silla, index) =>
+                        <SillaSquare
+                            key={index}
+                            nSilla={silla.numero}
+                            onClick={(eve) => adicionar(eve, silla.numero)}
+                            className={`${silla.ocupado ? 'bg-gray-100' : 'bg-gray-400'} lg:rotate-90`}
+                        />
+                    )}
+                </div>
+                <div className="p-2 h-10 text-white bg-gray-500 text-center rounded-b">
 
-                <div></div>
-                {
-                    piso.nColunas == 4 &&
-                    <>
-                        <div></div>
-                        <div></div>
-                    </>
-                }
-                {
-                    (piso.nColunas == 3 && piso.distribuicaoFileira == 'IZQUIERDA') &&
-                    <>
-                        <div className="row-span-12"></div>
-                        <div></div>
-                    </>
-                }
-                {
-                    (piso.nColunas == 3 && piso.distribuicaoFileira == 'DERECHA') &&
-                    <>
-                        <div></div>
-                        <div className="row-span-12"></div>
-                    </>
-                }
-                <div></div>
-                {sillas.map((silla, index) =>
-                    <SillaSquare
-                        key={index}
-                        nSilla={silla.numero}
-                        onClick={(eve) => adicionar(eve, silla.numero)}
-                        className={`${silla.ocupado ? 'bg-yellow-100' : 'bg-yellow-400'} hover:bg-yellow-100 lg:rotate-90`}
-                    />
-                )}
-            </div>
-            <div className="p-2 text-white bg-red-500 text-center rounded-b">
-                Rabo
+                </div>
             </div>
         </div>
     )

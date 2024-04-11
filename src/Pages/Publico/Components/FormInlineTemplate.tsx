@@ -90,10 +90,6 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
     }, [ciudadDestino])
 
     useEffect(() => {
-        console.log('Componente form');
-        console.log(formData);
-        
-        
         if (formData) {
             http.get<ICiudad>(`ciudades/${formData.idCiudadSalida}`)
                 .then(resposta => {

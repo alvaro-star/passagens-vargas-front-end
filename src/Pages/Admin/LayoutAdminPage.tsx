@@ -15,6 +15,12 @@ const LayoutAdminPage = () => {
     }, {
         label: 'Trayectos',
         url: '/admin/trayectos'
+    }, {
+        label: 'Ciudades',
+        url: '/admin/ciudades'
+    }, {
+        label: 'Lugares',
+        url: '/admin/lugares'
     }]
 
     const deslogar = () => {

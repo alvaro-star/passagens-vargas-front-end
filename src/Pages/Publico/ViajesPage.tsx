@@ -26,6 +26,8 @@ const ViajesPage = () => {
         http.post<IViaje[]>("viajes", solicitacao)
             .then(resposta => {
                 setViajes(resposta.data)
+                console.log(resposta.data);
+                
             }).catch(() => {
                 alert("Um erro")
             })
@@ -34,7 +36,7 @@ const ViajesPage = () => {
     const escojerViaje = (indexViaje: number | undefined, idViaje: number, idPrecio: string) => {
         if (indexViaje != null) {
             if (viajes[indexViaje].id === idViaje) {
-                sessionStorage.removeItem("formViaje")
+                //sessionStorage.removeItem("formViaje")
                 let viaje = viajes[indexViaje]
                 viaje.precios = []
                 sessionStorage.setItem('viajeData', JSON.stringify(viaje))
@@ -57,7 +59,7 @@ const ViajesPage = () => {
 
             <section className="w-full">
 
-                <ProcessLine className="my-8 mx-10" />
+                <ProcessLine step={1} className="my-8 mx-10" />
 
 
                 <div className="grid grid-cols-1 gap-5 m-5">

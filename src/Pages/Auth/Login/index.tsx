@@ -30,8 +30,8 @@ const Login = () => {
             })
     }
     return (
-        <div className="flex justify-center">
-            <FormTemplate onSubmit={enviar} className="mt-20">
+        <div className="min-h-full w-full grid place-content-center">
+            <FormTemplate onSubmit={enviar} className="">
                 <div className="mt-2 w-full">
                     <InputLabel>Email</InputLabel>
                     <TextInput value={login} onChange={eve => setLogin(eve.target.value)} />

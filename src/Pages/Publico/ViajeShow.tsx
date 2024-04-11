@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import http from "../../http";
 import IPiso from "../../Types/IPiso";
 import Piso from "./Components/Piso";
-import SillaSquare from "./Components/SillaSquare";
 import PrimaryButton from "../../Components/PrimaryButton";
 import CardViaje from "./Components/CardViaje";
 import IViaje from "../../Types/IViaje";
 import ProcessLine from "./Components/ProcessLine";
+import FormInlineTemplate from "./Components/FormInlineTemplate";
 
 
 interface IPrecio {
@@ -70,31 +70,58 @@ const ViajeShow = () => {
     }, [])
 
     return (
-        <div className="w-full flex flex-col items-center">
-            <header className="w-full bg-yellow-300 text-white font-bold p-2">Viaje</header>
+        <div className="w-full bg-slate-100 flex flex-col items-center">
+            <header className="w-full h-64 bg-slate-500 p-2 grid place-content-center gap-6">
+                <div className="text-white font-semibold text-4xl text-center">Header</div>
+                <FormInlineTemplate />
+            </header>
             <div className="w-full">
-                <ProcessLine className="my-8 mx-10" />
+                <ProcessLine step={2} className="my-8 mx-10" />
             </div>
 
             <section className="w-full">
-                {viaje &&
-                    <CardViaje className="m-5" viaje={viaje} />
-                }
+                {viaje && <CardViaje className="m-5" viaje={viaje} />}
             </section>
 
-            {precio?.piso &&
-                <Piso piso={precio.piso} adicionar={adicionar} sillasOcupadas={precio.sillasOcupadas} />}
-
-            <section className="bg-green-400 mt-10 lg:-mt-40  w-full p-10">
-                <h2 className="text-white font-bold">
-                    Sillas Escogidas:
-                </h2>
-                <div className="flex flex-wrap mt-2 gap-4">
-                    {sillasEscogidas.map((nSilla, index) =>
-                        <SillaSquare nSilla={nSilla} onClick={(eve) => adicionar(eve, nSilla)} key={index} />
-                    )}
+            <section className="px-10 w-full my-10">
+                {precio?.piso &&
+                    <Piso piso={precio.piso} adicionar={adicionar} sillasOcupadas={precio.sillasOcupadas} />}
+            </section>
+            <section className="w-full px-20  mb-10 text-sky-900">
+                <div className="grid grid-cols-2 gap-3">
+                    <section className="border-2 border-gray-300 p-5 rounded-lg">
+                        <h2 className="text-xl font-bold">Preferências y Condiciones</h2>
+                        <h3 className="mt-2 text-lg font-semibold uppercase">Reembolsos y cambios</h3>
+                        <p>Tasas de reembolsos hasta 3h antes dela salida - 100%</p>
+                        <p>Cambia de fecha tu viaje gratis</p>
+                        <h3 className="mt-2 text-lg font-semibold uppercase">Requisitos de Embarque</h3>
+                        <p>Pide tu boleto en la terminal antes de partir</p>
+                        <p>Los certificados</p>
+                    </section>
+                    <section className="">
+                        <section className="border-2 border-gray-300 w-full p-5 rounded-lg">
+                            <h2 className="text-xl font-bold">
+                                Sillas Escogidas:
+                            </h2>
+                            <div className="flex flex-wrap mt-2 gap-4">
+                                {sillasEscogidas.map((nSilla, index) =>
+                                    <button
+                                        onClick={(eve) => adicionar(eve, nSilla)}
+                                        className="h-10 w-10 border-2 border-gray-500 bg-gray-300 rounded font-bold text-black"
+                                        key={index}>
+                                        {nSilla}
+                                    </button>
+                                )}
+                            </div>
+                        </section>
+                        <PrimaryButton
+                            onClick={eve => mandar(eve)}
+                            className="mt-2"
+                            disabled={sillasEscogidas.length == 0} >
+                            Escoger lista
+                        </PrimaryButton>
+                    </section>
                 </div>
-                <PrimaryButton onClick={eve => mandar(eve)} className="mt-2" disabled={sillasEscogidas.length == 0} >Mandar Lista</PrimaryButton>
             </section>
         </div>
     )
