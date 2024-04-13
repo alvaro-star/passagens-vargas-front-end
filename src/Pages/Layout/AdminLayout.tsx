@@ -4,7 +4,7 @@ import ApplicationLogo from "../../Components/ApplicationLogo"
 import NavLink from "../../Components/NavLink"
 
 
-const LayoutAdminPage = () => {
+const AdminLayout = () => {
     const navigate = useNavigate()
     const rotas = [{
         label: 'Empresas',
@@ -29,7 +29,7 @@ const LayoutAdminPage = () => {
     }
 
     return (
-        <>
+        <section className="min-h-screen relative bg-gray-100">
             <header className="w-full bg-black text-white p-5 flex justify-between">
                 <div className="flex items-center gap-5">
                     <ApplicationLogo className="h-10 invert" />
@@ -46,10 +46,10 @@ const LayoutAdminPage = () => {
                 </div>
             </header>
             <Outlet />
-            <footer className="w-full bg-black text-white p-5">
+            <footer style={{ bottom: '0' }} className="absolute w-full bg-black text-white p-5">
                 Teste
             </footer>
-        </>
+        </section>
     )
 }
-export default LayoutAdminPage
+export default AdminLayout

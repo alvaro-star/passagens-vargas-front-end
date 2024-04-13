@@ -1,22 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LayoutPublicClass from "../Pages/Layout/LayoutPublicClass";
-import Login from "../Pages/Auth/Login";
-import Register from "../Pages/Auth/Register";
-import NotFound from "../Pages/NotFound";
-import ViajeShow from "../Pages/Publico/ViajeShow";
-import PassagensList from "../Pages/Publico/PassagensList";
-import ViajesPage from "../Pages/Publico/ViajesPage";
-import SobrePage from "../Pages/Publico/SobrePage";
-import LayoutAdminPage from "../Pages/Admin/LayoutAdminPage";
-import Dashboard from "../Pages/Admin/Dashboard";
-import ListPage from "../Pages/Admin/Empresas/ListPage";
-import EmpresasFormPage from "../Pages/Admin/Empresas/EmpresasFormPage";
-import EmpresaLayout from "../Pages/Layout/EmpresaLayout";
-import Home from "../Pages/Publico/Home";
-import HomeEmpresaPage from "../Pages/Empresa/HomeEmpresaPage";
-import AutobusesIndexPage from "../Pages/Admin/Autobuses/AutobusesIndexPage";
-import AutobusesFormPage from "../Pages/Admin/Autobuses/AutobusesFormPage";
-import CiudadesIndexPage from "../Pages/Admin/Ciudades/CiudadesIndexPage";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
+import NotFound from "./Pages/NotFound";
+import ViajeShow from "./Pages/Publico/ViajeShow";
+import PassagensList from "./Pages/Publico/PassagensList";
+import ViajesPage from "./Pages/Publico/ViajesPage";
+import SobrePage from "./Pages/Publico/SobrePage";
+import Dashboard from "./Pages/Admin/Dashboard";
+import EmpresasFormPage from "./Pages/Admin/Empresas/EmpresasFormPage";
+import EmpresaLayout from "./Pages/Layout/EmpresaLayout";
+import Home from "./Pages/Publico/Home";
+import HomeEmpresaPage from "./Pages/Empresa/HomeEmpresaPage";
+import AutobusesIndexPage from "./Pages/Admin/Autobuses/AutobusesIndexPage";
+import CiudadesIndexPage from "./Pages/Admin/Ciudades/CiudadesIndexPage";
+import AutobusesFormPage from "./Pages/Admin/Autobuses/AutobusesFormPage/AutobusFormPage";
+import EmpresaShowPage from "./Pages/Admin/Empresas/EmpresaShowPage";
+import EmpresaIndexPage from "./Pages/Admin/Empresas/EmpresaIndexPage";
+import AdminLayout from "./Pages/Layout/AdminLayout";
 
 const AppRouter = () => {
     return (
@@ -31,11 +31,12 @@ const AppRouter = () => {
                     <Route path="viaje/step3/:id" element={<PassagensList />} />
                     <Route path="sobre" element={<SobrePage />} />
                 </Route>
-                <Route path="/admin" element={<LayoutAdminPage />}>
+                <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="empresas">
-                        <Route index element={<ListPage />} />
+                        <Route index element={<EmpresaIndexPage />} />
                         <Route path="create" element={<EmpresasFormPage />} />
+                        <Route path=":id" element={<EmpresaShowPage />} />
                     </Route>
                     <Route path="autobuses">
                         <Route index element={<AutobusesIndexPage />} />
@@ -43,7 +44,6 @@ const AppRouter = () => {
                     </Route>
                     <Route path="ciudades">
                         <Route index element={<CiudadesIndexPage />} />
-                        <Route path="create" element={<AutobusesFormPage />} />
                     </Route>
                 </Route>
                 <Route path="/empresa" element={<EmpresaLayout />}>

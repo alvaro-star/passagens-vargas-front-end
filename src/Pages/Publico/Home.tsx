@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import FormInlineTemplate from "./Components/FormInlineTemplate"
 
 const Home = () => {
-
+    
     const token = sessionStorage.getItem('token')
 
     return (

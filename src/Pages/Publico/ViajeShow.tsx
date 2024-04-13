@@ -8,6 +8,7 @@ import CardViaje from "./Components/CardViaje";
 import IViaje from "../../Types/IViaje";
 import ProcessLine from "./Components/ProcessLine";
 import FormInlineTemplate from "./Components/FormInlineTemplate";
+import ISilla from "../../Types/ISilla";
 
 
 interface IPrecio {
@@ -29,9 +30,20 @@ const ViajeShow = () => {
     const [viaje, setViaje] = useState<IViaje>()
     const [sillasEscogidas, setSillasEscogidas] = useState<number[]>([])
 
+    const clickSilla = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, silla: ISilla) => {
+        eve.preventDefault()
+        if (silla.numero != -1 && silla.ocupado == false && sillasEscogidas.includes(silla.numero)) {
+            setSillasEscogidas(sillasEscogidas.filter(value => value != silla.numero).sort((a, b) => a - b))
+        } else {
+            if (sillasEscogidas.length < 5) {
+                setSillasEscogidas([...sillasEscogidas, silla.numero].sort((a, b) => a - b))
+            }
+        }
+    }
+
     const adicionar = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, nSilla: number) => {
         eve.preventDefault()
-        if (sillasEscogidas.includes(nSilla)) {
+        if (nSilla != -1 && sillasEscogidas.includes(nSilla)) {
             setSillasEscogidas(sillasEscogidas.filter(value => value != nSilla).sort((a, b) => a - b))
         } else {
             if (sillasEscogidas.length < 5) {
@@ -85,7 +97,7 @@ const ViajeShow = () => {
 
             <section className="px-10 w-full my-10">
                 {precio?.piso &&
-                    <Piso piso={precio.piso} adicionar={adicionar} sillasOcupadas={precio.sillasOcupadas} />}
+                    <Piso piso={precio.piso} clickSilla={clickSilla} sillasOcupadas={precio.sillasOcupadas} />}
             </section>
             <section className="w-full px-20  mb-10 text-sky-900">
                 <div className="grid grid-cols-2 gap-3">

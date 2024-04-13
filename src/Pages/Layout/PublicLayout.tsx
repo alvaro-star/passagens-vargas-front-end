@@ -3,7 +3,7 @@ import NavLink from "../../Components/NavLink"
 import ApplicationLogo from "../../Components/ApplicationLogo"
 import PrimaryButton from "../../Components/PrimaryButton"
 
-const LayoutPublicClass = () => {
+const PublicLayout = () => {
     const navihate = useNavigate()
     const links = [{
         label: 'Home',
@@ -53,4 +53,4 @@ const LayoutPublicClass = () => {
         </>
     )
 }
-export default LayoutPublicClass
+export default PublicLayout

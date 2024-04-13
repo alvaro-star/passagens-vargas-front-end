@@ -30,7 +30,7 @@ const Login = () => {
             })
     }
     return (
-        <div className="min-h-full w-full grid place-content-center">
+        <div className="h-full w-full grid place-content-center">
             <FormTemplate onSubmit={enviar} className="">
                 <div className="mt-2 w-full">
                     <InputLabel>Email</InputLabel>

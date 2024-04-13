@@ -1,16 +1,11 @@
+import IEmpresa from "@/Types/IEmpresa"
+import IPage from "@/Types/IPage"
+import http from "@/http"
 import { useEffect, useState } from "react"
-import http from "../../../http"
-import IPage from "../../../Types/IPage"
 import { Link } from "react-router-dom"
 
-interface IEmpresa {
-    id: string
-    nombre: string,
-    logo: string,
-    numeroCuenta: string
-}
 
-const ListPage = () => {
+const EmpresaIndexPage = () => {
     const [empresas, setEmpresas] = useState<IEmpresa[]>([])
     useEffect(() => {
         http.get<IPage<IEmpresa>>('/empresas')
@@ -60,4 +55,4 @@ const ListPage = () => {
     )
 }
 
-export default ListPage
+export default EmpresaIndexPage

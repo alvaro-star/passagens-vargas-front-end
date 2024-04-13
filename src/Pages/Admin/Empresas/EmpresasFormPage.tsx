@@ -1,10 +1,11 @@
+import FormTemplate from "@/Components/FormTemplate"
+import InputLabel from "@/Components/InputLabel"
+import TextInput from "@/Components/TextInput"
+import ICampo from "@/Types/ICampo"
+import http from "@/http"
 import React, { useState } from "react"
-import FormTemplate from "../../../Components/FormTemplate"
-import InputLabel from "../../../Components/InputLabel"
-import TextInput from "../../../Components/TextInput"
-import http from "../../../http"
 import { useNavigate } from "react-router-dom"
-import ICampo from "../../../Types/ICampo"
+
 
 
 const EmpresasFormPage = () => {

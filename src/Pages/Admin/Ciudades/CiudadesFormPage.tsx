@@ -1,11 +1,12 @@
+import FormTemplate from "@/Components/FormTemplate"
+import InputLabel from "@/Components/InputLabel"
+import TextInput from "@/Components/TextInput"
+import ICampo from "@/Types/ICampo"
+import ICiudad from "@/Types/ICiudad"
+import IPage from "@/Types/IPage"
+import http from "@/http"
 import { useEffect, useState } from "react"
-import FormTemplate from "../../../Components/FormTemplate"
-import InputLabel from "../../../Components/InputLabel"
-import TextInput from "../../../Components/TextInput"
-import IPage from "../../../Types/IPage"
-import http from "../../../http"
-import ICampo from "../../../Types/ICampo"
-import ICiudad from "../../../Types/ICiudad"
+
 
 
 interface Props {

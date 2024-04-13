@@ -1,9 +1,10 @@
+import Button from "@/Components/Button"
+import ICiudad from "@/Types/ICiudad"
+import IPage from "@/Types/IPage"
+import http from "@/http"
 import { useEffect, useState } from "react"
-import http from "../../../http"
-import IPage from "../../../Types/IPage"
-import ICiudad from "../../../Types/ICiudad"
-import Button from "../../../Components/Button"
 import CiudadesFormPage from "./CiudadesFormPage"
+
 
 const CiudadesIndexPage = () => {
     const [ciudades, setCiudades] = useState<ICiudad[]>([])

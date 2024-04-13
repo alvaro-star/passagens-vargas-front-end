@@ -1,12 +1,12 @@
 export default interface IPiso {
-    id: number,
+    id: number | null,
     nLinhas: number,
     nColunas: number,
     distribuicaoFileira: string,
     nPiso: number,
     inicioContagem: string,
-    nSillas: number,
+    nSillas: number | null,
     primeraSilla: number,
-    idAutobus: number,
+    idAutobus: number | null,
     posicoesIndisponiveis: number[]
 }

@@ -1,23 +1,13 @@
 import { useEffect, useState } from "react"
-import ICampo from "../../../Types/ICampo"
-import TextInput from "../../../Components/TextInput"
-import InputLabel from "../../../Components/InputLabel"
-import SillaSquare from "../../Publico/Components/SillaSquare"
-
-interface IPisoForm {
-    distribuicaoFileira: string,
-    inicioContagem: string,
-    posicoesIndisponiveis: number[],
-    ncolunas: number,
-    nlinhas: number
-}
+import ICampo from "../../../../Types/ICampo"
+import TextInput2 from "../../../../Components/TextInput2"
+import InputLabel from "../../../../Components/InputLabel"
+import SillaSquare from "../../../Publico/Components/SillaSquare"
 
 interface ISilla {
     value: number
     disponivel: boolean
-    order: number // variavel auxiliar, caso a variavel inicio contagem seja 'derecha', esta variavel será usada
 }
-
 const AutobusesFormPage = () => {
 
     const [placa, setPlaca] = useState<ICampo<string>>({ value: '', erro: '' })
@@ -26,55 +16,66 @@ const AutobusesFormPage = () => {
     const [nColunas, setNColunas] = useState<ICampo<number>>({ value: 4, erro: '' })
     const [distribuicaoFileira, setDistribuicaoFileira] = useState<ICampo<string>>({ value: 'DERECHA', erro: '' })
     const [inicioContagem, setInicioContagem] = useState<ICampo<string>>({ value: 'DERECHA', erro: '' })
-    const [sillasIndisponiveis, setSillasIndisponiveis] = useState<number[]>([])
 
+    const [sillasIndisponiveis, setSillasIndisponiveis] = useState<number[]>([])
     const [sillas, setSillas] = useState<ISilla[]>([])
 
     const [linhas, setLinhas] = useState<number[]>([])
+    const [colunas, setColunas] = useState<number[]>([])
     let contador = 0
+    let indexSillas = 0
+
     useEffect(() => {
         let sillasDisponibles: ISilla[] = []
+        let index = 0
+        let linhasFor = []
 
-        let t
-        let x
         for (let i = 0; i < nLinhas.value; i++) {
             for (let j = 0; j < nColunas.value; j++) {
-                t = nLinhas.value * i + j + 1
-                x = nLinhas.value * (i + 1) - j
                 sillasDisponibles.push({
-                    value: t,
-                    disponivel: true,
-                    order: x
+                    value: index,
+                    disponivel: true
                 })
+                index++
             }
+            linhasFor.push(nColunas.value)
         }
 
-        let linhasFor = []
-        for (let j = 0; j < nLinhas.value; j++) {
-            linhasFor.push(j)
+        let colunasFor = []
+        for (let i = 0; i < nColunas.value; i++) {
+            colunasFor.push(i)
         }
 
+        setColunas(colunasFor)
         setLinhas(linhasFor)
         setSillas(sillasDisponibles)
+        setSillasIndisponiveis([])
     }, [nLinhas, nColunas])
 
     useEffect(() => {
         contador = 0
+        indexSillas = 0
     }, [sillas])
 
     const clickSilla = (eve: React.MouseEvent<HTMLButtonElement, MouseEvent>, posicao: number) => {
         eve.preventDefault()
+
+        let sillasT = sillas
+        let chave = (posicao) / nColunas.value
+        chave = Math.floor(chave)
+        let linhasAux = linhas.map(linha => linha);
+
         if (sillasIndisponiveis.includes(posicao)) {
-            let sillasT = sillas
-            sillasT[posicao - 1].disponivel = true
-            setSillas(sillasT)
+            linhasAux[chave] = linhasAux[chave] + 1
+            sillasT[posicao].disponivel = true
             setSillasIndisponiveis(sillasIndisponiveis.filter(value => value != posicao))
         } else {
-            let sillasT = sillas
-            sillasT[posicao - 1].disponivel = false
-            setSillas(sillasT)
+            linhasAux[chave] = linhasAux[chave] - 1
+            sillasT[posicao].disponivel = false
             setSillasIndisponiveis([...sillasIndisponiveis, posicao])
         }
+        setLinhas(linhasAux)
+        setSillas(sillasT)
     }
 
     return (
@@ -83,9 +84,9 @@ const AutobusesFormPage = () => {
                 <div className="flex justify-between">
                     <div className="w-24">
                         <InputLabel value="Placa" className="text-white" />
-                        <TextInput
-                            value={placa.value}
-                            onChange={eve => setPlaca({ value: eve.target.value, erro: placa.erro })}
+                        <TextInput2
+                            campo={placa}
+                            setCampo={setPlaca}
                             placeholder="N° Placa"
                         />
                     </div>
@@ -128,7 +129,6 @@ const AutobusesFormPage = () => {
                             <option value='DERECHA'>DERECHA</option>
                         </select>
                     </div>
-                    //Crie algun vazios e inverta o inicio da contagem
                     <div>
                         <InputLabel value="Inicio Conteo" className="text-white" />
                         <select value={inicioContagem.value} onChange={eve => setInicioContagem({ value: eve.target.value, erro: nColunas.erro })} className="rounded w-28 p-1 text-center">
@@ -137,74 +137,57 @@ const AutobusesFormPage = () => {
                         </select>
                     </div>
                 </div>
-                //Inicio contagem inconcluso
-                <section className="flex justify-center">
-                    <div className="w-96 lg:-rotate-90 lg:-mt-40 mt-10 bg-slate-100 p-5 rounded grid place-content-center">
-                        <div className="p-2 bg-red-500  text-white text-center rounded-t-xl">
-                            Cabeça
+                <section className="w-full rounded bg-gray-300 min-h-72 flex justify-center items-center">
+                    <div className="lg:h-96  lg:-rotate-90 p-5 rounded grid place-content-center">
+                        <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
                         </div>
-                        <div className="p-5 bg-red-200 grid grid-cols-5 gap-3 place-content-center">
+                        <div className="p-5 bg-gray-200 grid grid-cols-4 gap-3 place-content-center">
                             <div></div>
-                            {nColunas.value == 4 &&
-                                <>
-                                    <div></div>
-                                    <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div>
-                                    <div></div>
-                                </>
+                            {(nColunas.value == 3 && distribuicaoFileira.value == 'IZQUIERDA') ?
+                                <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div> :
+                                <div></div>
                             }
-                            {(nColunas.value == 3 && distribuicaoFileira.value == 'IZQUIERDA') &&
-                                <>
-                                    <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div>
-                                    <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div>
-                                    <div></div>
-                                </>
-                            }
-                            {(nColunas.value == 3 && distribuicaoFileira.value == 'DERECHA') &&
-                                <>
-                                    <div></div>
-                                    <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div>
-                                    <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div>
-                                </>
+                            {(nColunas.value == 3 && distribuicaoFileira.value == 'DERECHA') ?
+                                <div style={{ gridRow: `span ${nLinhas.value + 1} / span ${nLinhas.value + 1}` }}></div> :
+                                <div></div>
                             }
                             <div></div>
-                            {inicioContagem.value === 'DERECHA' && sillas.map((silla, index) => {
-                                let className = ''
-                                if (silla.disponivel) {
-                                    contador++
-                                } else {
-                                    className = 'silla bg-opacity-0 text-opacity-0 border-0'
-                                }
-                                return (
-                                    <SillaSquare
-                                        key={index}
-                                        nSilla={contador}
-                                        className={className}
-                                        onClick={eve => clickSilla(eve, index + 1)}
-                                        style={{ order: silla.order }}
-                                    />
+                            {inicioContagem.value === 'DERECHA' && linhas.map((linha) => {
+                                contador += linha
+                                const conteudoJSX = (
+                                    colunas.map(() => {
+                                        let silla = sillas[indexSillas]
+                                        indexSillas++
+
+                                        const sillaJSX = (<SillaSquare
+                                            key={silla.value}
+                                            nSilla={contador}
+                                            transparent={!silla.disponivel}
+                                            onClick={eve => clickSilla(eve, silla.value)}
+                                        />)
+                                        if (silla.disponivel) {
+                                            contador--
+                                        }
+                                        return sillaJSX
+                                    })
                                 )
+                                contador += linha
+                                return conteudoJSX
                             })}
 
                             {inicioContagem.value === 'IZQUIERDA' && sillas.map((silla, index) => {
-                                let className = ''
                                 if (silla.disponivel) {
                                     contador++
-                                } else {
-                                    className = 'silla bg-opacity-0 text-opacity-0 border-0'
                                 }
-                                return (
-                                    <SillaSquare
-                                        key={index}
-                                        nSilla={contador}
-                                        className={className}
-                                        onClick={eve => clickSilla(eve, index + 1)}
-                                    />
-                                )
+                                return (<SillaSquare
+                                    key={index}
+                                    nSilla={contador}
+                                    transparent={!silla.disponivel}
+                                    onClick={eve => clickSilla(eve, index)}
+                                />)
                             })}
-
                         </div>
-                        <div className="p-2 text-white bg-red-500 text-center rounded-b">
-                            Rabo
+                        <div className="p-2 h-10 text-white bg-gray-500 text-center rounded-b">
                         </div>
                     </div>
                 </section>
@@ -212,5 +195,4 @@ const AutobusesFormPage = () => {
         </div>
     )
 }
-
 export default AutobusesFormPage

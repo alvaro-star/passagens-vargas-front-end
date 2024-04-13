@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react"
-import http from "../../../http"
-import IPage from "../../../Types/IPage"
 import { Link } from "react-router-dom"
+import IAutobus from "@/Types/IAutobus"
+import IPage from "@/Types/IPage"
+import http from "@/http"
 
-interface IAutobus {
-    id: number
-    placa: string,
-    idEmpresa: string
-}
 
 const AutobusesIndexPage = (() => {
 
