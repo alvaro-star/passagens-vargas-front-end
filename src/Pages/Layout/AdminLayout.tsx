@@ -10,9 +10,6 @@ const AdminLayout = () => {
         label: 'Empresas',
         url: '/admin/empresas'
     }, {
-        label: 'Autobuses',
-        url: '/admin/autobuses'
-    }, {
         label: 'Trayectos',
         url: '/admin/trayectos'
     }, {

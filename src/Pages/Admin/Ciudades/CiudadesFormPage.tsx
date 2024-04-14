@@ -22,8 +22,9 @@ interface IDepartamento {
 }
 
 const CiudadesFormPage = ({ openForm, updateCiudades, setOpenForm }: Props) => {
+    const construtorCampo = { value: '', erro: '' };
     const [departamentos, setDepartamentos] = useState<IDepartamento[]>([])
-    const [nombre, setNombre] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [nombre, setNombre] = useState<ICampo<string>>(construtorCampo)
     const [idDepartamento, setIdDepartamento] = useState<ICampo<string>>({ value: '1', erro: '' })
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
@@ -58,7 +59,7 @@ const CiudadesFormPage = ({ openForm, updateCiudades, setOpenForm }: Props) => {
                 </h2>
                 <div className="w-full mt-2">
                     <InputLabel value='Nombre' />
-                    <TextInput value={nombre.value} placeholder="Escribe el nombre dela ciudad" onChange={eve => setNombre({ value: eve.target.value, erro: nombre.erro })} />
+                    <TextInput campo={nombre} placeholder="Escribe el nombre dela ciudad" setCampo={setNombre} />
                 </div>
                 <div className="w-full mt-2">
                     <InputLabel value='Departamento' />

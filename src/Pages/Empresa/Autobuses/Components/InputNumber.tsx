@@ -1,4 +1,4 @@
-import ICampo from "../../../../../Types/ICampo"
+import ICampo from "../../../../Types/ICampo"
 
 interface Props {
     campo: ICampo<number>

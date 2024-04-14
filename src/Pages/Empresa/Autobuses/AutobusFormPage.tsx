@@ -5,11 +5,17 @@ import ICampo from "@/Types/ICampo"
 import http from "@/http"
 import PrimaryButton from "@/Components/PrimaryButton"
 import InputLabel from "@/Components/InputLabel"
-import TextInput2 from "@/Components/TextInput2"
 import Piso from "@/Pages/Publico/Components/Piso"
+import IAutobusForm from "./Types/IAutobusForm"
+import IAutobus from "@/Types/IAutobus"
+import TextInput from "@/Components/TextInput"
 
+interface Props {
+    idEmpresa: string
+    aposCriar: (newAutobus: IAutobus) => void
+}
 
-const AutobusesFormPage = () => {
+const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
     const construtorPiso = {
         id: null,
         nLinhas: 10,
@@ -41,14 +47,51 @@ const AutobusesFormPage = () => {
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        http.post('autobuses')
+        let autobusForm: IAutobusForm | null = {
+            id: null,
+            placa: placa.value,
+            idEmpresa: idEmpresa,
+            pisos: [{
+                distribuicaoFileira: piso1.distribuicaoFileira,
+                inicioContagem: piso1.inicioContagem,
+                posicoesIndisponiveis: piso1.posicoesIndisponiveis,
+                ncolunas: piso1.nColunas,
+                nlinhas: piso1.nLinhas
+            }]
+        }
+
+        if (segundoPiso == true) {
+            autobusForm.pisos.push({
+                distribuicaoFileira: piso2.distribuicaoFileira,
+                inicioContagem: piso2.inicioContagem,
+                posicoesIndisponiveis: piso2.posicoesIndisponiveis,
+                ncolunas: piso2.nColunas,
+                nlinhas: piso2.nLinhas
+            })
+        }
+
+        http.post('autobuses', autobusForm)
+            .then(resposta => {
+                console.log(resposta);
+                autobusForm = null
+                setPiso1(construtorPiso)
+                setPiso2(construtorPiso)
+                setPlaca(construtor)
+                setEtapa(1)
+                setSegundoPiso(null)
+                aposCriar({
+                    id: resposta.data.id,
+                    placa: resposta.data.placa,
+                    idEmpresa: idEmpresa
+                })
+            })
     }
 
 
     return (
         <div className="px-5 sm:px-24 pt-7 pb-32">
             <h2 className="text-center text-2xl font-semibold my-5">
-                Ajusta las Dimensiones del Autobus a tu preferencia
+                Ajusta las Dimensiones del nuveo Autobus a tu preferencia
             </h2>
 
             {etapa == 1 && <section>
@@ -110,7 +153,7 @@ const AutobusesFormPage = () => {
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
                         <InputLabel value="N° Placa" />
-                        <TextInput2 campo={placa} setCampo={setPlaca} required />
+                        <TextInput campo={placa} setCampo={setPlaca} required />
                     </div>
                 </section>
                 <div>
@@ -124,7 +167,7 @@ const AutobusesFormPage = () => {
                     </div>
                 }
                 <div className="w-full mt-5 flex justify-center">
-                    <PrimaryButton>SALVAR Registro</PrimaryButton>
+                    <PrimaryButton>Salvar Registro</PrimaryButton>
                 </div>
             </form>}
         </div>

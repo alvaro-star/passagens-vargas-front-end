@@ -11,10 +11,8 @@ import EmpresasFormPage from "./Pages/Admin/Empresas/EmpresasFormPage";
 import EmpresaLayout from "./Pages/Layout/EmpresaLayout";
 import Home from "./Pages/Publico/Home";
 import HomeEmpresaPage from "./Pages/Empresa/HomeEmpresaPage";
-import AutobusesIndexPage from "./Pages/Admin/Autobuses/AutobusesIndexPage";
+import AutobusesIndexPage from "./Pages/Empresa/Autobuses/AutobusesIndexPage";
 import CiudadesIndexPage from "./Pages/Admin/Ciudades/CiudadesIndexPage";
-import AutobusesFormPage from "./Pages/Admin/Autobuses/AutobusesFormPage/AutobusFormPage";
-import EmpresaShowPage from "./Pages/Admin/Empresas/EmpresaShowPage";
 import EmpresaIndexPage from "./Pages/Admin/Empresas/EmpresaIndexPage";
 import AdminLayout from "./Pages/Layout/AdminLayout";
 
@@ -36,18 +34,19 @@ const AppRouter = () => {
                     <Route path="empresas">
                         <Route index element={<EmpresaIndexPage />} />
                         <Route path="create" element={<EmpresasFormPage />} />
-                        <Route path=":id" element={<EmpresaShowPage />} />
                     </Route>
-                    <Route path="autobuses">
-                        <Route index element={<AutobusesIndexPage />} />
-                        <Route path="create" element={<AutobusesFormPage />} />
-                    </Route>
+
                     <Route path="ciudades">
                         <Route index element={<CiudadesIndexPage />} />
                     </Route>
                 </Route>
                 <Route path="/empresa" element={<EmpresaLayout />}>
                     <Route index element={<HomeEmpresaPage />} />
+                    <Route path="admin">
+                        <Route path="autobuses">
+                            <Route index element={<AutobusesIndexPage />} />
+                        </Route>
+                    </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

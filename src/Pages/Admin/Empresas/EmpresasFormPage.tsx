@@ -40,15 +40,15 @@ const EmpresasFormPage = () => {
                 <FormTemplate onSubmit={enviar}>
                     <div className="w-full mt-2">
                         <InputLabel value="Nombre" />
-                        <TextInput value={nombre.value} onChange={eve => setNombre({ value: eve.target.value, erro: logo.erro })} />
+                        <TextInput campo={nombre} setCampo={setNombre} />
                     </div>
                     <div className="w-full mt-2">
                         <InputLabel value="Link da logo" />
-                        <TextInput value={logo.value} onChange={eve => setLogo({ value: eve.target.value, erro: logo.erro })} />
+                        <TextInput campo={logo} setCampo={setLogo} />
                     </div>
                     <div className="w-full mt-2">
                         <InputLabel value="Numero de Cuenta" />
-                        <TextInput value={numeroCuenta.value} onChange={eve => setNumeroCuenta({ value: eve.target.value, erro: logo.erro })} />
+                        <TextInput campo={numeroCuenta} setCampo={setNumeroCuenta} />
                     </div>
                 </FormTemplate>
             </div>

@@ -1,14 +1,16 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import http from "../../http";
-import IPiso from "../../Types/IPiso";
+
+
 import Piso from "./Components/Piso";
-import PrimaryButton from "../../Components/PrimaryButton";
 import CardViaje from "./Components/CardViaje";
-import IViaje from "../../Types/IViaje";
 import ProcessLine from "./Components/ProcessLine";
 import FormInlineTemplate from "./Components/FormInlineTemplate";
-import ISilla from "../../Types/ISilla";
+import http from "@/http";
+import IPiso from "@/Types/IPiso";
+import IViaje from "@/Types/IViaje";
+import ISilla from "@/Types/ISilla";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 
 interface IPrecio {

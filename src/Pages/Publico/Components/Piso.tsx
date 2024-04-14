@@ -1,7 +1,8 @@
+import IPiso from "@/Types/IPiso"
+import ISilla from "@/Types/ISilla"
 import { useEffect, useState } from "react"
-import IPiso from "../../../Types/IPiso"
 import SillaSquare from "./SillaSquare"
-import ISilla from "../../../Types/ISilla"
+
 
 interface Props {
     piso: IPiso,

@@ -1,12 +1,15 @@
+import InputLabel from "@/Components/InputLabel"
+import PrimaryButton from "@/Components/PrimaryButton"
+import IPiso from "@/Types/IPiso"
+import IViaje from "@/Types/IViaje"
+import http from "@/http"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import TextInput from "../../Components/TextInput"
-import InputLabel from "../../Components/InputLabel"
-import PrimaryButton from "../../Components/PrimaryButton"
-import http from "../../http"
-import IPiso from "../../Types/IPiso"
 import CardViaje from "./Components/CardViaje"
-import IViaje from "../../Types/IViaje"
+import ICampo from "@/Types/ICampo"
+import TextInput from "@/Components/TextInput"
+import TextInput234 from "@/Components/TextInput234"
+
 
 interface IPasaje {
     carnet: string
@@ -25,6 +28,7 @@ interface IPrecio {
     sillasOcupadas: number[],
     idViaje: number
 }
+
 const PassagensList = () => {
     const parametros = useParams()
     const metodos = ['QR', 'DEB', 'CRE']
@@ -32,10 +36,10 @@ const PassagensList = () => {
     const [pasajes, setPasajes] = useState<IPasaje[]>([])
     const [precio, setPrecio] = useState<IPrecio>()
 
-    const [email, setEmail] = useState('')
-    const [nombre, setNombre] = useState('')
-    const [telefono, setTelefono] = useState('')
-    const [confirmarEmail, setConfirmarEmail] = useState('')
+    const [email, setEmail] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [nombre, setNombre] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [telefono, setTelefono] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [confirmarEmail, setConfirmarEmail] = useState<ICampo<string>>({ value: '', erro: '' })
     const navigate = useNavigate()
     const editar = (indexPasaje: number, campo: string, value: string) => {
         let achei = 1
@@ -137,16 +141,16 @@ const PassagensList = () => {
                         </div>
                         <div className="mt-2">
                             <InputLabel>Nombre</InputLabel>
-                            <TextInput className="rounded-lg" placeholder="Nombre del pasajero..." value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} />
+                            <TextInput234 className="rounded-lg" placeholder="Nombre del pasajero..." value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} />
                         </div>
                         <div className="w-full mt-2 grid grid-cols-2 gap-5">
                             <div>
                                 <InputLabel>N°Carnet</InputLabel>
-                                <TextInput placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} />
+                                <TextInput234 placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} />
                             </div>
                             <div>
                                 <InputLabel>Nascimento</InputLabel>
-                                <TextInput type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} />
+                                <TextInput234 type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} />
                             </div>
                         </div>
                     </section>
@@ -159,19 +163,19 @@ const PassagensList = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="w-full">
                                 <InputLabel value="Nombre" />
-                                <TextInput value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Escribe el nombre del comprador (inecessario)..." />
+                                <TextInput campo={nombre} setCampo={setNombre} placeholder="Escribe el nombre del comprador (inecessario)..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="Telefono" />
-                                <TextInput value={telefono} onChange={e => setTelefono(e.target.value)} placeholder="Escribe el telefono del comprador..." />
+                                <TextInput campo={telefono} setCampo={setTelefono} placeholder="Escribe el telefono del comprador..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="E-mail" />
-                                <TextInput value={email} onChange={e => setEmail(e.target.value)} placeholder="Escribe el email del comprador..." />
+                                <TextInput campo={email} setCampo={setEmail} placeholder="Escribe el email del comprador..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="Confirmar Email" />
-                                <TextInput value={confirmarEmail} onChange={e => setConfirmarEmail(e.target.value)} placeholder="Escribe nuevamente el email" />
+                                <TextInput campo={confirmarEmail} setCampo={setConfirmarEmail} placeholder="Escribe nuevamente el email" />
                             </div>
                         </div>
                     </div>

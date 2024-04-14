@@ -1,4 +1,5 @@
-import IViaje from "../../../Types/IViaje";
+import IViaje from "@/Types/IViaje"
+
 interface Props {
     viaje: IViaje
     index?: number

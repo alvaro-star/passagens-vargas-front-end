@@ -1,26 +1,24 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import InputError from "../../../Components/InputError"
-import TextInput from "../../../Components/TextInput"
 import ICiudad from "../../../Types/ICiudad"
 import { useNavigate } from "react-router-dom"
 import http from "../../../http"
 import IPage from "../../../Types/IPage"
 import ICampo from "../../../Types/ICampo"
 import IFormViaje from "../IFormViaje"
+import TextInput from "@/Components/TextInput"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
     formData?: IFormViaje
 }
 
-
-
 const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
 
     const [ciudadSalida, setCiudadSalida] = useState<ICampo<string>>({ value: '', erro: '' })
     const [ciudadDestino, setCiudadDestino] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [fechaIda, setFechaIda] = useState('')
-    const [fechaVuelta, setFechaVuelta] = useState('')
+    const [fechaIda, setFechaIda] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [fechaVuelta, setFechaVuelta] = useState<ICampo<string>>({ value: '', erro: '' })
 
     const [ciudadesSalida, setCiudadesSalida] = useState<ICiudad[]>([])
     const [ciudadesDestino, setCiudadesDestino] = useState<ICiudad[]>([])
@@ -57,12 +55,12 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
             setCiudadDestino({ value: ciudadDestino.value, erro: 'Escribe una ciudad válido' })
         }
 
-        if (idDestino != -1 && idSalida != -1 && fechaIda != '') {
+        if (idDestino != -1 && idSalida != -1 && fechaIda.value != '') {
             const formViajes = {
                 idCiudadSalida: idSalida,
                 idCiudadDestino: idDestino,
-                fechaSalida: fechaIda,
-                fechaVuelta: fechaVuelta
+                fechaSalida: fechaIda.value,
+                fechaVuelta: fechaVuelta.value
             }
 
             sessionStorage.setItem("formViaje", JSON.stringify(formViajes))
@@ -99,9 +97,8 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
                 .then(resposta => {
                     setCiudadDestino({ value: resposta.data.nombre, erro: '' })
                 })
-            setFechaIda(formData.fechaSalida)
-            setFechaVuelta(formData.fechaVuelta)
-
+            setFechaIda({ value: formData.fechaSalida, erro: '' })
+            setFechaVuelta({ value: formData.fechaVuelta, erro: '' })
         }
     }, [])
     return (
@@ -109,8 +106,8 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
-                <TextInput list="salidas" placeholder="Santa Cruz" value={ciudadSalida.value}
-                    onChange={eve => setCiudadSalida({ value: eve.target.value, erro: ciudadSalida.erro })}
+                <TextInput list="salidas" placeholder="Santa Cruz" campo={ciudadSalida}
+                    setCampo={setCiudadSalida}
                     required />
                 <datalist id="salidas">
                     {!(ciudadesSalida.length == 1 && ciudadesSalida[0].nombre === ciudadSalida.value) &&
@@ -120,8 +117,8 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
                 <InputError message={ciudadSalida.erro} />
             </div>
             <div className="w-full">
-                <TextInput list="destinos" placeholder="Cochabamba" value={ciudadDestino.value}
-                    onChange={eve => setCiudadDestino({ value: eve.target.value, erro: ciudadDestino.erro })}
+                <TextInput list="destinos" placeholder="Cochabamba" campo={ciudadDestino}
+                    setCampo={setCiudadDestino}
                     required />
                 <datalist id="destinos">
                     {!(ciudadesDestino.length == 1 && ciudadesDestino[0].nombre === ciudadDestino.value) &&
@@ -131,10 +128,10 @@ const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
                 <InputError message={ciudadDestino.erro} />
             </div>
             <div>
-                <TextInput type="date" value={fechaIda} onChange={eve => setFechaIda(eve.target.value)} required />
+                <TextInput type="date" campo={fechaIda} setCampo={setFechaIda} required />
             </div>
             <div>
-                <TextInput type="date" value={fechaVuelta} onChange={eve => setFechaVuelta(eve.target.value)} required />
+                <TextInput type="date" campo={fechaVuelta} setCampo={setFechaVuelta} required />
             </div>
             <div className="flex items-center h-full justify-center">
                 <button className="h-9 w-9 rounded bg-cyan-500 text-white">

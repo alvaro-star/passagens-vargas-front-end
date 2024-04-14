@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 const HomeEmpresaPage = () => {
     useEffect(() => {
-
+        
     }, [])
     return (
         <div className="w-full ">

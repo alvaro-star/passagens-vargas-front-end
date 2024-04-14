@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import ICampo from "../../../../../Types/ICampo"
-import InputLabel from "../../../../../Components/InputLabel"
-import Piso from "../../../../Publico/Components/Piso"
-import ISilla from "../../../../../Types/ISilla"
+import ICampo from "../../../../Types/ICampo"
+import InputLabel from "../../../../Components/InputLabel"
+import Piso from "../../../Publico/Components/Piso"
+import ISilla from "../../../../Types/ISilla"
 import InputNumber from "./InputNumber"
-import IPiso from "../../../../../Types/IPiso"
-import PrimaryButton from "../../../../../Components/PrimaryButton"
+import IPiso from "../../../../Types/IPiso"
+import PrimaryButton from "../../../../Components/PrimaryButton"
 
 interface Props {
     piso: IPiso,

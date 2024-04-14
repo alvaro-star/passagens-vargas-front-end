@@ -1,8 +1,9 @@
+import InputLabel from "@/Components/InputLabel"
+import TextInput2 from "@/Components/TextInput"
+import SillaSquare from "@/Pages/Publico/Components/SillaSquare"
+import ICampo from "@/Types/ICampo"
 import { useEffect, useState } from "react"
-import ICampo from "../../../../Types/ICampo"
-import TextInput2 from "../../../../Components/TextInput2"
-import InputLabel from "../../../../Components/InputLabel"
-import SillaSquare from "../../../Publico/Components/SillaSquare"
+
 
 interface ISilla {
     value: number

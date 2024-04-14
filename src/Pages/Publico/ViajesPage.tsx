@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import CardViaje from "./Components/CardViaje"
-import IViaje from "../../Types/IViaje"
 import IFormViaje from "./IFormViaje"
-import http from "../../http"
 import { useNavigate } from "react-router-dom"
 import FormInlineTemplate from "./Components/FormInlineTemplate"
 import ProcessLine from "./Components/ProcessLine"
+import IViaje from "@/Types/IViaje"
+import http from "@/http"
 
 const ViajesPage = () => {
     const navigate = useNavigate()
@@ -27,7 +27,7 @@ const ViajesPage = () => {
             .then(resposta => {
                 setViajes(resposta.data)
                 console.log(resposta.data);
-                
+
             }).catch(() => {
                 alert("Um erro")
             })
