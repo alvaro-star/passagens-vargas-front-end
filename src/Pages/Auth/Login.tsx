@@ -26,7 +26,8 @@ const Login = () => {
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
         const usuario = {
-            login, contrasena
+            login: login.value,
+            contrasena: contrasena.value
         }
 
         http.post<ILogin>("auth/login", usuario)

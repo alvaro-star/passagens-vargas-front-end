@@ -34,7 +34,7 @@ const Home = () => {
                     <FormInlineTemplate />
                 </section>
 
-                <section className="w-full mt-24 mx-24">
+                <section className="w-full mt-24 px-24">
                     <h2 className="text-2xl font-bold">Principais Rotas</h2>
                     <div className="mt-2">
                         <div className="w-64 rounded shadow-xl">

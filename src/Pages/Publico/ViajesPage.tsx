@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import CardViaje from "./Components/CardViaje"
-import IFormViaje from "./IFormViaje"
+import IFormViaje from "./Types/IFormViaje"
 import { useNavigate } from "react-router-dom"
 import FormInlineTemplate from "./Components/FormInlineTemplate"
 import ProcessLine from "./Components/ProcessLine"

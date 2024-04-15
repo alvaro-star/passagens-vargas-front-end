@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes, useState, useCallback } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes, useState} from 'react';
 
 interface Option {
     id: string;
@@ -63,6 +63,7 @@ export default forwardRef(function ReactSelectTemplate(
                 }}
                 onBlur={() => setIsFocused(false)}
             >
+                {idEscolhido}
                 <input
                     {...props}
                     type={type}

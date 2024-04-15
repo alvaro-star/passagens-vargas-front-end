@@ -1,17 +1,13 @@
+import ApplicationLogo from "@/Components/ApplicationLogo"
+import NavLink from "@/Components/NavLink"
+import SecondaryButton from "@/Components/SecondaryButton"
 import { Outlet, useNavigate } from "react-router-dom"
-import SecondaryButton from "../../Components/SecondaryButton"
-import ApplicationLogo from "../../Components/ApplicationLogo"
-import NavLink from "../../Components/NavLink"
-
 
 const AdminLayout = () => {
     const navigate = useNavigate()
     const rotas = [{
         label: 'Empresas',
         url: '/admin/empresas'
-    }, {
-        label: 'Trayectos',
-        url: '/admin/trayectos'
     }, {
         label: 'Ciudades',
         url: '/admin/ciudades'

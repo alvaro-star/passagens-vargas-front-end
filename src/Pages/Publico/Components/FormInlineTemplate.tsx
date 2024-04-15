@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import http from "../../../http"
 import IPage from "../../../Types/IPage"
 import ICampo from "../../../Types/ICampo"
-import IFormViaje from "../IFormViaje"
+import IFormViaje from "../Types/IFormViaje"
 import TextInput from "@/Components/TextInput"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
