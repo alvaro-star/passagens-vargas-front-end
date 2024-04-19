@@ -43,7 +43,7 @@ const AutobusesShowPage = () => {
                                 <p className="font-mono">
                                     {trayecto.codigo}
                                 </p>
-                                <PrimaryButton>VER trayecto</PrimaryButton>
+                                <PrimaryButton>Ver trayecto</PrimaryButton>
                             </div>
                         )}
                     </div>

@@ -1,137 +1,165 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
-import InputError from "../../../Components/InputError"
-import ICiudad from "../../../Types/ICiudad"
 import { useNavigate } from "react-router-dom"
-import http from "../../../http"
-import IPage from "../../../Types/IPage"
-import ICampo from "../../../Types/ICampo"
+import Select, { StylesConfig } from 'react-select';
+import http from "@/http"
+import IPage from "@/Types/IPage"
+import ICiudad from "@/Types/ICiudad"
+import InputError from "@/Components/InputError"
 import IFormViaje from "../Types/IFormViaje"
-import TextInput from "@/Components/TextInput"
+import TextInput234 from "@/Components/TextInput234";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
     formData?: IFormViaje
 }
 
+interface OptionType {
+    value: string | number;
+    label: string;
+}
+
+const customStyles: StylesConfig<OptionType, false> = {
+    control: (provided, state) => ({
+        ...provided,
+        border: state.isFocused ? '1px solid blue' : '1px solid #ccc',
+        padding: '2px'
+    })
+};
+
+interface Erros {
+    ciudadSalida: string,
+    ciudadDestino: string,
+    fechaIda: string,
+    fechaVuelta: string
+}
+
 const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
-
-    const [ciudadSalida, setCiudadSalida] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [ciudadDestino, setCiudadDestino] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [fechaIda, setFechaIda] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [fechaVuelta, setFechaVuelta] = useState<ICampo<string>>({ value: '', erro: '' })
-
-    const [ciudadesSalida, setCiudadesSalida] = useState<ICiudad[]>([])
-    const [ciudadesDestino, setCiudadesDestino] = useState<ICiudad[]>([])
-
     const navigate = useNavigate()
+    const [ciudadSalida123, setCiudadSalida123] = useState<OptionType | null>(null);
+    const [ciudadDestino123, setCiudadDestino123] = useState<OptionType | null>(null);
+    const [fechaIda, setFechaIda] = useState<string>('')
+    const [fechaVuelta, setFechaVuelta] = useState<string>('')
+
+    const [ciudadesSalida, setCiudadesSalida] = useState<OptionType[]>([])
+    const [ciudadesDestino, setCiudadesDestino] = useState<OptionType[]>([])
+    const [errors, setErrors] = useState<Erros>({
+        ciudadSalida: '',
+        ciudadDestino: '',
+        fechaIda: '',
+        fechaVuelta: ''
+    })
+
+    const handleChangeCiudadSalida = (selectedOption: OptionType | null) => {
+        setCiudadSalida123(selectedOption);
+    };
+
+    const handleInputChangeCiudadSalida = (inputValue: string) => {
+        if (inputValue.length > 2) {
+            http.get<IPage<ICiudad>>(`ciudades/${inputValue}/like`)
+                .then(resposta => {
+                    setCiudadesSalida(resposta.data.content.map(ciudad => ({ value: ciudad.id, label: ciudad.nombre })))
+                })
+        }
+    };
+
+    const handleChangeCiudadDestino = (selectedOption: OptionType | null) => {
+        setCiudadDestino123(selectedOption);
+    };
+
+    const handleInputChangeCiudadDestino = (inputValue: string) => {
+        if (inputValue.length > 2) {
+            http.get<IPage<ICiudad>>(`ciudades/${inputValue}/like`)
+                .then(resposta => {
+                    setCiudadesDestino(resposta.data.content.map(ciudad => ({ value: ciudad.id, label: ciudad.nombre })))
+                })
+        }
+    };
+
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
-        setCiudadSalida({ value: ciudadSalida.value, erro: '' })
-        setCiudadDestino({ value: ciudadDestino.value, erro: '' })
-        if (ciudadSalida === ciudadDestino) {
-            setCiudadSalida({ value: ciudadSalida.value, erro: 'La salida es igual al destino' })
-            setCiudadDestino({ value: ciudadDestino.value, erro: 'El destino es igual ala salida' })
+        let erros: Erros = {
+            ciudadSalida: '',
+            ciudadDestino: '',
+            fechaIda: '',
+            fechaVuelta: ''
         }
 
-        let idSalida = -1
-        ciudadesSalida.forEach((ci) => {
-            if (ci.nombre === ciudadSalida.value) {
-                idSalida = ci.id
-            }
-        })
-
-        let idDestino = -1
-        ciudadesDestino.forEach((ci) => {
-            if (ci.nombre === ciudadDestino.value) {
-                idDestino = ci.id
-            }
-        })
-
-        if (idSalida == -1) {
-            setCiudadSalida({ value: ciudadSalida.value, erro: 'Escribe una ciudad válido' })
+        if (fechaIda == '') {
+            erros.fechaIda = 'Escoje una fecha válida'
         }
+        if (!ciudadSalida123)
+            erros.ciudadSalida = 'Escoje una ciudad válida'
 
-        if (idDestino == -1) {
-            setCiudadDestino({ value: ciudadDestino.value, erro: 'Escribe una ciudad válido' })
-        }
+        if (!ciudadDestino123)
+            erros.ciudadDestino = 'Escoje una ciudad válida'
 
-        if (idDestino != -1 && idSalida != -1 && fechaIda.value != '') {
-            const formViajes = {
-                idCiudadSalida: idSalida,
-                idCiudadDestino: idDestino,
-                fechaSalida: fechaIda.value,
-                fechaVuelta: fechaVuelta.value
+        if (ciudadSalida123 && ciudadDestino123) {
+            if (ciudadSalida123.value === ciudadDestino123.value) {
+                erros.ciudadSalida = 'La salida es igual al destino'
+                erros.ciudadSalida = 'El destino es igual ala salida'
             }
 
-            sessionStorage.setItem("formViaje", JSON.stringify(formViajes))
-            navigate('/viajes')
+            if (erros.ciudadSalida == '' && erros.ciudadDestino == '' && erros.fechaIda == '') {
+                const formViajes = {
+                    idCiudadSalida: ciudadSalida123.value,
+                    idCiudadDestino: ciudadDestino123.value,
+                    fechaSalida: fechaIda,
+                    fechaVuelta: fechaVuelta
+                }
+
+                sessionStorage.setItem("formViaje", JSON.stringify(formViajes))
+                navigate('/viajes')
+            }
         }
 
+        setErrors(erros)
     }
-
-    useEffect(() => {
-        if (ciudadSalida.value != '') {
-            http.get<IPage<ICiudad>>(`ciudades/${ciudadSalida.value}/like`)
-                .then(resposta => {
-                    setCiudadesSalida(resposta.data.content)
-                })
-        }
-    }, [ciudadSalida])
-
-    useEffect(() => {
-        if (ciudadDestino.value != '') {
-            http.get<IPage<ICiudad>>(`ciudades/${ciudadDestino.value}/like`)
-                .then(resposta => {
-                    setCiudadesDestino(resposta.data.content)
-                })
-        }
-    }, [ciudadDestino])
 
     useEffect(() => {
         if (formData) {
             http.get<ICiudad>(`ciudades/${formData.idCiudadSalida}`)
                 .then(resposta => {
-                    setCiudadSalida({ value: resposta.data.nombre, erro: '' })
+                    setCiudadSalida123({ value: resposta.data.id, label: resposta.data.nombre })
                 })
             http.get<ICiudad>(`ciudades/${formData.idCiudadDestino}`)
                 .then(resposta => {
-                    setCiudadDestino({ value: resposta.data.nombre, erro: '' })
+                    setCiudadDestino123({ value: resposta.data.id, label: resposta.data.nombre })
                 })
-            setFechaIda({ value: formData.fechaSalida, erro: '' })
-            setFechaVuelta({ value: formData.fechaVuelta, erro: '' })
+            setFechaIda(formData.fechaSalida)
+            setFechaVuelta(formData.fechaVuelta)
         }
-    }, [])
+    }, [formData])
     return (
         <form className={"max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5  rounded " + className}
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
-                <TextInput list="salidas" placeholder="Santa Cruz" campo={ciudadSalida}
-                    setCampo={setCiudadSalida}
-                    required />
-                <datalist id="salidas">
-                    {!(ciudadesSalida.length == 1 && ciudadesSalida[0].nombre === ciudadSalida.value) &&
-                        ciudadesSalida.map(
-                            ciudad => <option key={ciudad.id} value={ciudad.nombre}></option>)}
-                </datalist>
-                <InputError message={ciudadSalida.erro} />
+                <Select
+                    styles={customStyles}
+                    value={ciudadSalida123}
+                    onChange={handleChangeCiudadSalida}
+                    options={ciudadesSalida}
+                    onInputChange={handleInputChangeCiudadSalida}
+                />
+                <InputError message={errors.ciudadSalida} />
             </div>
             <div className="w-full">
-                <TextInput list="destinos" placeholder="Cochabamba" campo={ciudadDestino}
-                    setCampo={setCiudadDestino}
-                    required />
-                <datalist id="destinos">
-                    {!(ciudadesDestino.length == 1 && ciudadesDestino[0].nombre === ciudadDestino.value) &&
-                        ciudadesDestino.map(
-                            ciudad => <option key={ciudad.id} value={ciudad.nombre}></option>)}
-                </datalist>
-                <InputError message={ciudadDestino.erro} />
+                <Select
+                    styles={customStyles}
+                    value={ciudadDestino123}
+                    onChange={handleChangeCiudadDestino}
+                    options={ciudadesDestino}
+                    onInputChange={handleInputChangeCiudadDestino}
+                />
+                <InputError message={errors.ciudadDestino} />
             </div>
             <div>
-                <TextInput type="date" campo={fechaIda} setCampo={setFechaIda} required />
+                <TextInput234 type="date" value={fechaIda} setValue={setFechaIda} required />
+                <InputError message={errors.fechaIda} />
             </div>
             <div>
-                <TextInput type="date" campo={fechaVuelta} setCampo={setFechaVuelta} required />
+                <TextInput234 type="date" value={fechaVuelta} setValue={setFechaVuelta} required />
+                <InputError message={errors.fechaVuelta} />
             </div>
             <div className="flex items-center h-full justify-center">
                 <button className="h-9 w-9 rounded bg-cyan-500 text-white">
