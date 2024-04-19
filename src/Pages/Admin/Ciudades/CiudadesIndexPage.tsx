@@ -1,19 +1,32 @@
-import Button from "@/Components/Button"
 import ICiudad from "@/Types/ICiudad"
 import IPage from "@/Types/IPage"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import CiudadesFormPage from "./CiudadesFormPage"
+import { Link, useNavigate } from "react-router-dom"
 
 
 const CiudadesIndexPage = () => {
+    const path = '/admin/ciudades/'
+    const navigate = useNavigate()
     const [ciudades, setCiudades] = useState<ICiudad[]>([])
 
-    const [openForm, setOpenForm] = useState(false)
-
-    const updateCiudades = (ciudad: ICiudad) => {
-        setCiudades([...ciudades, ciudad])
+    
+    const ver = (id: number) => {
+        navigate(path + id)
     }
+
+    const editar = (id: number) => {
+        navigate(path + id + '/edit')
+    }
+
+    const eliminar = (id: number) => {
+        http.delete(`ciudades/${id}`)
+            .then(() => {
+                let ciudadesAux = ciudades.filter(ciudad => ciudad.id != id)
+                setCiudades(ciudadesAux)
+            }).catch(() => alert("No es posible eliminar la ciudad"))
+    }
+
     useEffect(() => {
         http.get<IPage<ICiudad>>('ciudades')
             .then(resposta => {
@@ -21,19 +34,13 @@ const CiudadesIndexPage = () => {
             })
     }, [])
 
-
     return (
         <div className="w-full flex justify-center flex-col items-center">
             <div className="my-5 w-full px-28 flex items-center justify-between">
                 <h2 className="text-2xl font-semibold">
                     Ciudades
                 </h2>
-                <Button onClick={() => setOpenForm(true)}>Registrar Nuevo</Button>
-                {openForm &&
-                    <div className="absolute top-0 right-0  left-0 bottom-0 h-full bg-white bg-opacity-65 grid place-content-center">
-                        <CiudadesFormPage updateCiudades={updateCiudades} openForm={openForm} setOpenForm={setOpenForm} />
-                    </div>
-                }
+                <Link className="bg-black rounded-lg uppercase text-white py-2 px-3 font-medium" to={path + 'create'}>Registrar Nuevo</Link>
             </div>
             <div className="mb-10 grid place-content-center bg-slate-500 rounded text-white p-5">
                 <table className="border-t border-x">
@@ -42,7 +49,7 @@ const CiudadesIndexPage = () => {
                             <th className="border-r w-8">Id</th>
                             <th className="border-r w-40">Nombre</th>
                             <th className="border-r w-16">IdDep</th>
-                            <th colSpan={2} className="w-40"> Action</th>
+                            <th colSpan={3} className="w-40"> Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,10 +58,16 @@ const CiudadesIndexPage = () => {
                                 <td className="p-1 text-center border-r">{ciudad.id}</td>
                                 <td className="p-1 border-r">{ciudad.nombre}</td>
                                 <td className="p-1 text-center border-r">{ciudad.idDepartamento}</td>
-                                <td className="p-1 font-semibold text-center border-r bg-yellow-400">
+                                <td className="p-1 font-semibold text-center border-r bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                                    onClick={() => ver(ciudad.id)} >
+                                    VER MAS
+                                </td>
+                                <td className="p-1 font-semibold text-center border-r bg-yellow-400 hover:bg-yellow-500 cursor-pointer"
+                                    onClick={() => editar(ciudad.id)} >
                                     EDITAR
                                 </td>
-                                <td className="p-1 font-semibold text-center bg-red-500">
+                                <td className="p-1 font-semibold text-center bg-red-500 cursor-pointer hover:bg-red-600"
+                                    onClick={() => eliminar(ciudad.id)} >
                                     ELIMINAR
                                 </td>
                             </tr>

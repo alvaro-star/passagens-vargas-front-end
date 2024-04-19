@@ -7,15 +7,10 @@ import PrimaryButton from "@/Components/PrimaryButton"
 import InputLabel from "@/Components/InputLabel"
 import Piso from "@/Pages/Publico/Components/Piso"
 import IAutobusForm from "./Types/IAutobusForm"
-import IAutobus from "@/Types/IAutobus"
 import TextInput from "@/Components/TextInput"
+import { useNavigate } from "react-router-dom"
 
-interface Props {
-    idEmpresa: string
-    aposCriar: (newAutobus: IAutobus) => void
-}
-
-const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
+const AutobusesFormPage = () => {
     const construtorPiso = {
         id: null,
         nLinhas: 10,
@@ -28,6 +23,9 @@ const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
         idAutobus: null,
         posicoesIndisponiveis: []
     }
+    const navigate = useNavigate()
+
+    const [idEmpresa, setIdEmpresa] = useState<string>('')
 
     const [piso1, setPiso1] = useState<IPiso>(construtorPiso)
     const [piso2, setPiso2] = useState<IPiso>(construtorPiso)
@@ -37,6 +35,14 @@ const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
     const [etapa, setEtapa] = useState(1)
     const [segundoPiso, setSegundoPiso] = useState<boolean | null>(null)
 
+    useEffect(() => {
+        let cookie1 = sessionStorage.getItem('idEmpresa')
+        if (cookie1) {
+            setIdEmpresa(cookie1)
+        } else {
+            navigate('/')
+        }
+    }, [])
     useEffect(() => {
         if (piso1.nSillas) {
             let piso2Aux = piso2
@@ -79,17 +85,13 @@ const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
                 setPlaca(construtor)
                 setEtapa(1)
                 setSegundoPiso(null)
-                aposCriar({
-                    id: resposta.data.id,
-                    placa: resposta.data.placa,
-                    idEmpresa: idEmpresa
-                })
+                navigate('/empresa/admin/autobuses')
             })
     }
 
 
     return (
-        <div className="px-5 sm:px-24 pt-7 pb-32">
+        <div className="px-5 sm:px-24 pb-32">
             <h2 className="text-center text-2xl font-semibold my-5">
                 Ajusta las Dimensiones del nuveo Autobus a tu preferencia
             </h2>
@@ -106,26 +108,30 @@ const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
             </section>}
 
             {etapa == 2 && <>
-                <div className="relative rounded-lg p-5 bg-white grid place-content-center ">
-                    <PrimaryButton
-                        onClick={() => setEtapa(1)}
-                        className='absolute mt-5 ml-5'>
-                        Volver
-                    </PrimaryButton>
-                    <p>
-                        Desea agregar un segundo Piso?
-                    </p>
-                    <div className="mt-2 flex gap-2 justify-center">
+                <div className="w-full rounded-lg p-5 bg-white">
+                    <div className="w-full">
                         <PrimaryButton
-                            onClick={() => setSegundoPiso(true)}
-                            className={`hover:bg-green-800 ${segundoPiso != null && segundoPiso == true ? 'bg-green-800' : 'bg-green-500'}`}>
-                            Si
+                            onClick={() => setEtapa(1)}
+                            className=''>
+                            Volver
                         </PrimaryButton>
-                        <PrimaryButton
-                            onClick={() => setSegundoPiso(false)}
-                            className={`hover:bg-red-800 ${segundoPiso != null && segundoPiso == false ? 'bg-red-800' : 'bg-red-500'}`}>
-                            No
-                        </PrimaryButton>
+                    </div>
+                    <div className="grid place-content-center">
+                        <p>
+                            Desea agregar un segundo Piso?
+                        </p>
+                        <div className="mt-2 flex gap-2 justify-center">
+                            <PrimaryButton
+                                onClick={() => setSegundoPiso(true)}
+                                className={`hover:bg-green-800 ${segundoPiso != null && segundoPiso == true ? 'bg-green-800' : 'bg-green-500'}`}>
+                                Si
+                            </PrimaryButton>
+                            <PrimaryButton
+                                onClick={() => setSegundoPiso(false)}
+                                className={`hover:bg-red-800 ${segundoPiso != null && segundoPiso == false ? 'bg-red-800' : 'bg-red-500'}`}>
+                                No
+                            </PrimaryButton>
+                        </div>
                     </div>
                     <div className="grid place-content-center">
                         {segundoPiso == false && <PrimaryButton className="mt-5" onClick={() => setEtapa(3)}>continuar</PrimaryButton>}
@@ -160,7 +166,7 @@ const AutobusesFormPage = ({ idEmpresa, aposCriar }: Props) => {
                     <h2 className="w-1/4 text-end my-2 text-xl font-semibold">Piso 1</h2>
                     <Piso piso={piso1} sillasOcupadas={[]} />
                 </div>
-                {segundoPiso == true &&
+                {segundoPiso &&
                     <div className="mt-10">
                         <h2 className="w-1/4 text-end my-2 text-xl font-semibold">Piso 2</h2>
                         <Piso piso={piso2} sillasOcupadas={[]}></Piso>

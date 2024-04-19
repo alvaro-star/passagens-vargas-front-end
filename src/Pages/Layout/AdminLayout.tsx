@@ -11,9 +11,6 @@ const AdminLayout = () => {
     }, {
         label: 'Ciudades',
         url: '/admin/ciudades'
-    }, {
-        label: 'Lugares',
-        url: '/admin/lugares'
     }]
 
     const deslogar = () => {
@@ -39,9 +36,7 @@ const AdminLayout = () => {
                 </div>
             </header>
             <Outlet />
-            <footer style={{ bottom: '0' }} className="absolute w-full bg-black text-white p-5">
-                Teste
-            </footer>
+
         </section>
     )
 }

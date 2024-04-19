@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom"
 import http from "@/http"
 import FormTemplate from "@/Components/FormTemplate"
 import InputLabel from "@/Components/InputLabel"
-import TextInput from "@/Components/TextInput"
-import ICampo from "@/Types/ICampo"
+import TextInput234 from "@/Components/TextInput234"
 
 interface ILogin {
     token: string
@@ -19,15 +18,14 @@ interface IUsuario {
 }
 
 const Login = () => {
-    const construtorCampoString = { value: "", erro: '' }
     const navigate = useNavigate()
-    const [login, setLogin] = useState<ICampo<string>>(construtorCampoString)
-    const [contrasena, setContrasena] = useState<ICampo<string>>(construtorCampoString)
+    const [login, setLogin] = useState<string>('')
+    const [contrasena, setContrasena] = useState<string>('')
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
         const usuario = {
-            login: login.value,
-            contrasena: contrasena.value
+            login: login,
+            contrasena: contrasena
         }
 
         http.post<ILogin>("auth/login", usuario)
@@ -36,8 +34,8 @@ const Login = () => {
                 sessionStorage.setItem("token", response.data.token)
 
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
-                    setLogin(construtorCampoString)
-                    setContrasena(construtorCampoString)
+                    setLogin('')
+                    setContrasena('')
                     //Só será mandado um role, por enquanto
                     sessionStorage.setItem("role", resposta.data.roles[0])
                     switch (resposta.data.roles[0]) {
@@ -70,11 +68,11 @@ const Login = () => {
             <FormTemplate onSubmit={enviar} className="">
                 <div className="mt-2 w-full">
                     <InputLabel value="Email" />
-                    <TextInput campo={login} setCampo={setLogin} />
+                    <TextInput234 value={login} setValue={setLogin} />
                 </div>
                 <div className="mt-2 w-full">
                     <InputLabel value="Contrasena" />
-                    <TextInput campo={contrasena} setCampo={setContrasena} />
+                    <TextInput234 value={contrasena} setValue={setContrasena} />
                 </div>
             </FormTemplate>
         </div>
