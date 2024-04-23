@@ -16,8 +16,10 @@ const AutobusesShowPage = () => {
 
     const parametros = useParams()
     const navigate = useNavigate()
+
     const [autobus, setAutobus] = useState<IAutobusExtend | null>(null)
     const [openForm, setOpenForm] = useState(false)
+
     const showtrayecto = (id: string) => navigate(path + '/viajes/' + id)
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const AutobusesShowPage = () => {
                 <>
                     {openForm &&
                         <div className="absolute inset-0 m-0 grid place-content-center bg-white bg-opacity-50">
-                            <div className="bg-white p-5 rounded">
+                            <div className="bg-gray-200 p-5 rounded">
                                 Estas Seguro de criar un trayecto?
                                 <div className="flex items-center justify-center gap-2 mt-2">
                                     <PrimaryButton className="bg-green-500">
