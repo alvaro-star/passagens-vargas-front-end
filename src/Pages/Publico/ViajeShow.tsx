@@ -28,6 +28,7 @@ const ViajeShow = () => {
     const parametros = useParams()
     const navigate = useNavigate()
 
+
     const [precio, setPrecio] = useState<IPrecio>()
     const [viaje, setViaje] = useState<IViaje>()
     const [sillasEscogidas, setSillasEscogidas] = useState<number[]>([])

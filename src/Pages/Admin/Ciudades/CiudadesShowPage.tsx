@@ -2,25 +2,23 @@ import ICiudad from "@/Types/ICiudad"
 import ILugar from "@/Types/ILugar"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import LugaresFormPage from "../Lugares/LugaresFormPage"
 
 const CiudadesShowPage = () => {
     const parametros = useParams()
+    const navigate = useNavigate()
     const [ciudad, setCiudad] = useState<ICiudad | null>(null)
     const [lugares, setLugares] = useState<ILugar[]>([])
     const [openForm, setOpenForm] = useState(false)
 
-    const [idLugarUpdate, setIdLugarUpdate] = useState<number | null>(null)
-
     const create = () => {
-        setIdLugarUpdate(null)
         setOpenForm(true)
     }
     const editar = (id: number) => {
-        setIdLugarUpdate(id)
-        setOpenForm(true)
+        navigate('/admin/lugares/' + id + '/edit')
     }
+
     const eliminar = (id: number) => {
         http.delete(`lugares/${id}`)
             .then(() => {
@@ -54,7 +52,7 @@ const CiudadesShowPage = () => {
                     onClick={create} >Registrar Nuevo</button>
                 {openForm && ciudad &&
                     <div className="absolute inset-0 grid place-content-center bg-white bg-opacity-35">
-                        <LugaresFormPage idLugar={idLugarUpdate} idCiudad={ciudad.id} closeModal={closeForm} setLugares={setLugares} lugares={lugares} />
+                        <LugaresFormPage idCiudadProp={ciudad.id} closeModal={closeForm} setLugares={setLugares} lugares={lugares} create={true} />
                     </div>
                 }
             </div>

@@ -4,18 +4,22 @@ import TextInput234 from "@/Components/TextInput234"
 import ILugar from "@/Types/ILugar"
 import http from "@/http"
 import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 interface Props {
-    closeModal: () => void,
-    setLugares: (lugares: ILugar[]) => void,
-    lugares: ILugar[]
-    idLugar: number | null
-    idCiudad: number
+    closeModal?: () => void,
+    setLugares?: (lugares: ILugar[]) => void,
+    lugares?: ILugar[]
+    idCiudadProp?: number
+    create?: boolean
 }
-const LugaresFormPage = ({ closeModal, setLugares, lugares, idLugar, idCiudad }: Props) => {
 
+const LugaresFormPage = ({ closeModal, setLugares, lugares, idCiudadProp, create = false }: Props) => {
+    const navigate = useNavigate()
     const [nombre, setNombre] = useState<string>('')
+    const [idCiudad, setIdCiudad] = useState<number>(idCiudadProp ? idCiudadProp : 0)
+    const parametros = useParams()
 
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
@@ -29,44 +33,40 @@ const LugaresFormPage = ({ closeModal, setLugares, lugares, idLugar, idCiudad }:
             nombre: nombre
         }
 
-        if (idLugar != null) {
-            http.put<ILugar>(`lugares/${idLugar}`, formUpdate)
-                .then(resposta => {
-                    let lugaresAux = lugares
-                    let index = -1
-                    index = lugaresAux.findIndex(lugarAux => lugarAux.id == idLugar)
-                    if (index != -1) {
-                        lugaresAux[index] = resposta.data
-                        setLugares(lugaresAux)
-                    }
-                    setNombre('')
-                    closeModal()
+        if (create == false) {
+            http.put<ILugar>(`lugares/${parametros.id}`, formUpdate)
+                .then(() => {
+                    navigate('/admin/ciudades/' + idCiudad)
                 })
         } else {
-            http.post<ILugar>('lugares', form)
-                .then(resposta => {
-                    setNombre('')
-                    setLugares([...lugares, resposta.data])
-                    closeModal()
-                })
+            if (setLugares && lugares && closeModal) {
+                http.post<ILugar>('lugares', form)
+                    .then(resposta => {
+                        setNombre('')
+                        setLugares([...lugares, resposta.data])
+                        closeModal()
+                    })
+            }
         }
     }
+
     useEffect(() => {
-        if (idLugar != null) {
-            let lugar = lugares.find(lugar => lugar.id == idCiudad)
-            if (lugar) {
-                setNombre(lugar.nombre)
-            }
+        if (create == false) {
+            http.get<ILugar>(`lugares/${parametros.id}`)
+                .then(resposta => {
+                    setNombre(resposta.data.nombre)
+                    setIdCiudad(resposta.data.idCiudad)
+                })
         } else {
             setNombre('')
         }
-    }, [idLugar])
+    }, [parametros])
 
     return (
         <div className="w-full my-8 grid place-content-center">
             <FormTemplate onSubmit={enviar}>
                 <h2 className="my-2 font-semibold text-xl">
-                    {idLugar != null ? 'Editando un Lugar' : 'Registrando una Lugar'}
+                    {create == false ? 'Editando un Lugar' : 'Registrando una Lugar'}
                 </h2>
                 <div className="w-full mt-2">
                     <InputLabel value='Nombre' />

@@ -19,6 +19,8 @@ import CiudadesFormPage from "./Pages/Admin/Ciudades/CiudadesFormPage";
 import CiudadesShowPage from "./Pages/Admin/Ciudades/CiudadesShowPage";
 import AutobusesFormPage from "./Pages/Empresa/Autobuses/AutobusFormPage";
 import AutobusesShowPage from "./Pages/Empresa/Autobuses/AutobusesShowPage";
+import LugaresFormPage from "./Pages/Admin/Lugares/LugaresFormPage";
+import ViajesShowPage from "./Pages/Empresa/Viajes/ViajesShowPage";
 
 const AppRouter = () => {
     return (
@@ -46,6 +48,9 @@ const AppRouter = () => {
                         <Route path=":id" element={<CiudadesShowPage />} />
                         <Route path=":id/edit" element={<CiudadesFormPage />} />
                     </Route>
+                    <Route path="lugares">
+                        <Route path=":id/edit" element={<LugaresFormPage />} />
+                    </Route>
                 </Route>
                 <Route path="/empresa" element={<EmpresaLayout />}>
                     <Route index element={<HomeEmpresaPage />} />
@@ -54,6 +59,9 @@ const AppRouter = () => {
                             <Route index element={<AutobusesIndexPage />} />
                             <Route path="create" element={<AutobusesFormPage />} />
                             <Route path=":id" element={<AutobusesShowPage />} />
+                        </Route>
+                        <Route path="viajes">
+                            <Route path=":id" element={<ViajesShowPage />} />
                         </Route>
                     </Route>
                 </Route>

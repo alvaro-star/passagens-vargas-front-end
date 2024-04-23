@@ -41,8 +41,8 @@ const AutobusesIndexPage = () => {
                 <div className="mx-10 grid gap-4">
                     {autobuses.map(autobus =>
                         <div key={autobus.id} className="p-5 bg-white rounded-lg flex justify-between items-center">
-                            {autobus.placa}
-                            <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver trayectos</PrimaryButton>
+                            Placa: {autobus.placa}
+                            <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver viajes</PrimaryButton>
                         </div>
                     )}
                 </div>
