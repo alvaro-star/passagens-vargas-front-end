@@ -9,6 +9,9 @@ const AdminLayout = () => {
     const rotas = [{
         label: 'Autobuses',
         url: '/empresa/admin/autobuses'
+    }, {
+        label: 'Viajes',
+        url: '/empresa/viajes'
     }]
 
     const deslogar = () => {

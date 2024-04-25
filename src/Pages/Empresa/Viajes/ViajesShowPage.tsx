@@ -1,18 +1,19 @@
 
+import PrimaryButton from "@/Components/PrimaryButton"
 import IViaje from "@/Types/IViaje"
 import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-interface ITrayectoExtends extends IViaje {
+interface IViajeExtends extends IViaje {
     paradas: IParada2[]
 }
 
 
 const ViajesShowPage = () => {
     const parametros = useParams()
-    const [trayecto, setTrayecto] = useState<ITrayectoExtends>()
+    const [viaje, setViaje] = useState<IViajeExtends>()
 
     const formatDataHora = (dataHora: string) => {
         let [data, time] = dataHora.split('T')
@@ -23,29 +24,53 @@ const ViajesShowPage = () => {
 
     useEffect(() => {
         if (parametros.id) {
-            http.get<ITrayectoExtends>(`viajes/${parametros.id}`)
-                .then(resposta => setTrayecto(resposta.data))
+            http.get<IViajeExtends>(`viajes/${parametros.id}`)
+                .then(resposta => setViaje(resposta.data))
         }
     }, [parametros])
     return (
         <div className="p-10">
-            {trayecto &&
+            {viaje &&
                 <>
-                    <h1 className="mt-5 px-5 py-2 bg-slate-400 text-white rounded">
-                        Paradas
-                    </h1>
-                    <div className="grid grid-cols-2 px-5 py-3 rounded">
-                        <p>Ciudad</p>
-                        <p className="text-end mr-7">Fecha y Hora</p>
+                    <div className="mt-5 flex items-center justify-between px-5 py-2 bg-slate-400 text-white rounded-t">
+                        <h2>Paradas</h2>
+                        <PrimaryButton>+ Parada</PrimaryButton>
                     </div>
-                    <div className="mt-0 space-y-3">
-                        {trayecto.paradas.map(parada =>
-                            <div className="grid grid-cols-3  px-5 py-3 bg-gray-300 rounded" key={parada.id}>
-                                <p>{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</p>
-                                <p className="text-center">Plataforma: {parada.plataforma}</p>
-                                <p className="text-end">{formatDataHora(parada.dataHora)}</p>
-                            </div>)}
+                    <div className="p-5 bg-gray-200 rounded-b">
+                        <table className="w-full text-center">
+                            <thead>
+                                <tr>
+                                    <th className="text-start">Ciudad</th>
+                                    <th>Plataforma</th>
+                                    <th>Fecha y Hora</th>
+                                    <th className="w-64">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {viaje.paradas.map(parada =>
+                                    <tr className="hover:bg-slate-300" key={parada.id}>
+                                        <td className="py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
+                                        <td className="">{parada.plataforma}</td>
+                                        <td className="">{formatDataHora(parada.dataHora)}</td>
+                                        <td className="">
+                                            <div className="space-x-1 text-white">
+                                                <button className="text-center bg-blue-700 rounded p-1.5 px-3 uppercase">
+                                                    Ver
+                                                </button>
+                                                <button className="bg-yellow-400 rounded p-1.5 px-3 uppercase">
+                                                    Editar
+                                                </button>
+                                                <button className="bg-red-500 rounded p-1.5 px-3 uppercase">
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>)}
+                            </tbody>
+                        </table>
                     </div>
+
+                    
                 </>
             }
         </div>

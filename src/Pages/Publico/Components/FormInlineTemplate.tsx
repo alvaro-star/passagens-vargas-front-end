@@ -5,7 +5,7 @@ import ICiudad from "@/Types/ICiudad"
 import InputError from "@/Components/InputError"
 import IFormViaje from "../Types/IFormViaje"
 import TextInput234 from "@/Components/TextInput234";
-import SelectCiudad from "./SelectCiudad";
+import SelectCiudad from "../../../Components/SelectCiudad";
 import IType from "@/Types/IType"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {

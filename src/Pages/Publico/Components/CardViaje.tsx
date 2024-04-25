@@ -1,9 +1,10 @@
-import IViaje from "@/Types/IViaje"
+
+import IVIajeResponse from "../Types/IViajeResponse"
 
 interface Props {
-    viaje: IViaje
+    viaje: IVIajeResponse
     index?: number
-    escojerViaje?: (indexViaje: number|undefined, idViaje: number, idPrecio: string) => void
+    escojerViaje?: (indexViaje: number|undefined, idViaje: string, idPrecio: string) => void
     className?: string
 }
 

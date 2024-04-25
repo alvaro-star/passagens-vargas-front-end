@@ -1,16 +1,14 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-
 import Piso from "./Components/Piso";
 import CardViaje from "./Components/CardViaje";
 import ProcessLine from "./Components/ProcessLine";
 import FormInlineTemplate from "./Components/FormInlineTemplate";
 import http from "@/http";
 import IPiso from "@/Types/IPiso";
-import IViaje from "@/Types/IViaje";
 import ISilla from "@/Types/ISilla";
 import PrimaryButton from "@/Components/PrimaryButton";
+import IVIajeResponse from "./Types/IViajeResponse";
 
 
 interface IPrecio {
@@ -30,7 +28,7 @@ const ViajeShow = () => {
 
 
     const [precio, setPrecio] = useState<IPrecio>()
-    const [viaje, setViaje] = useState<IViaje>()
+    const [viaje, setViaje] = useState<IVIajeResponse>()
     const [sillasEscogidas, setSillasEscogidas] = useState<number[]>([])
 
     const clickSilla = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, silla: ISilla) => {
@@ -65,8 +63,14 @@ const ViajeShow = () => {
 
     useEffect(() => {
         if (parametros.id) {
-            http.get<IPrecio>(`precios/${parametros.id}/vender`)
+            http.get(`precios/${parametros.id}/vender`)
                 .then(resposta => {
+                    let posicionesString: string = resposta.data.piso.posicoesBloqueadas
+                    let posicionesBloqueadas: number[] = []
+                    if (posicionesString != '') {
+                        posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
+                    }
+                    resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
                     setPrecio(resposta.data)
                 })
         } else {

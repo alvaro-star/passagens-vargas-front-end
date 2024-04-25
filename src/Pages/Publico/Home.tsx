@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import FormInlineTemplate from "./Components/FormInlineTemplate"
 
 
@@ -6,8 +6,12 @@ import FormInlineTemplate from "./Components/FormInlineTemplate"
 
 const Home = () => {
 
-
+    const navigate = useNavigate()
     const token = sessionStorage.getItem('token')
+    const logout = () => {
+        sessionStorage.removeItem('token')
+        navigate('/login')
+    }
 
     return (
         <div className="w-full relative flex items-center justify-center flex-col">
@@ -23,7 +27,7 @@ const Home = () => {
                         </div>
                         :
                         <div className="flex items-center gap-4">
-                            <Link to='/login' className="rounded bg-white text-black px-3 py-1.5">Log Out</Link>
+                            <button onClick={logout} className="rounded bg-white text-black px-3 py-1.5">Log Out</button>
                         </div>
                     }
                 </div>

@@ -3,13 +3,11 @@ import ISilla from "@/Types/ISilla"
 import { useEffect, useState } from "react"
 import SillaSquare from "./SillaSquare"
 
-
 interface Props {
     piso: IPiso,
     sillasOcupadas: number[],
     clickSilla?: (eve: React.MouseEvent<HTMLButtonElement, MouseEvent>, nSilla: ISilla) => void
 }
-
 
 const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
     const [sillas, setSillas] = useState<ISilla[]>([])
@@ -17,7 +15,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
         if (piso.nLinhas) {
             let SillasDisponibles: ISilla[] = []
 
-            piso.posicoesIndisponiveis.forEach(nIndisponivel => {
+            piso.posicoesBloqueadas.forEach(nIndisponivel => {
                 SillasDisponibles[nIndisponivel - 1] = {
                     numero: -1,
                     ocupado: false,
@@ -70,7 +68,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
         piso.nLinhas,
         piso.nColunas,
         piso.distribuicaoFileira,
-        piso.posicoesIndisponiveis,
+        piso.posicoesBloqueadas,
         piso.distribuicaoFileira,
         piso.inicioContagem
     ])

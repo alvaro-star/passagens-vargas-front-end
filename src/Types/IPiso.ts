@@ -8,5 +8,5 @@ export default interface IPiso {
     nSillas: number | null,
     primeraSilla: number,
     idAutobus: number | null,
-    posicoesIndisponiveis: number[]
+    posicoesBloqueadas: number[]
 }

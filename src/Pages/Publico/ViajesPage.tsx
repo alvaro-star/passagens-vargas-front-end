@@ -4,12 +4,13 @@ import IFormViaje from "./Types/IFormViaje"
 import { useNavigate } from "react-router-dom"
 import FormInlineTemplate from "./Components/FormInlineTemplate"
 import ProcessLine from "./Components/ProcessLine"
-import IViaje from "@/Types/IViaje"
 import http from "@/http"
+import IVIajeResponse from "./Types/IViajeResponse"
+
 
 const ViajesPage = () => {
     const navigate = useNavigate()
-    const [viajes, setViajes] = useState<IViaje[]>([])
+    const [viajes, setViajes] = useState<IVIajeResponse[]>([])
 
     const [formData, setFormData] = useState<IFormViaje>()
     useEffect(() => {
@@ -23,7 +24,7 @@ const ViajesPage = () => {
             fechaSalida: formViaje.fechaSalida,
         }
 
-        http.post<IViaje[]>("viajes", solicitacao)
+        http.post<IVIajeResponse[]>("viajes", solicitacao)
             .then(resposta => {
                 setViajes(resposta.data)
                 console.log(resposta.data);
@@ -33,7 +34,7 @@ const ViajesPage = () => {
             })
     }, [])
 
-    const escojerViaje = (indexViaje: number | undefined, idViaje: number, idPrecio: string) => {
+    const escojerViaje = (indexViaje: number | undefined, idViaje: string, idPrecio: string) => {
         if (indexViaje != null) {
             if (viajes[indexViaje].id === idViaje) {
                 //sessionStorage.removeItem("formViaje")

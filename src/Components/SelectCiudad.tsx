@@ -20,7 +20,7 @@ interface Props {
 
 const SelectCiudad = ({ option, setOption }: Props) => {
     const [ciudades, setCiudades] = useState<IType[]>([])
-    
+
     const handleInputChange = (inputValue: string) => {
         if (inputValue.length > 2) {
             http.get<IPage<ICiudad>>(`ciudades/${inputValue}/like`)
@@ -32,6 +32,7 @@ const SelectCiudad = ({ option, setOption }: Props) => {
     return (<Select
         styles={customStyles}
         value={option}
+        placeholder="Escoje una Ciudad"
         onChange={setOption}
         options={ciudades}
         onInputChange={handleInputChange}
