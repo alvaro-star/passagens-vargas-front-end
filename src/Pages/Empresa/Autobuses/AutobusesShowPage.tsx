@@ -23,7 +23,7 @@ const AutobusesShowPage = () => {
     const [pisos, setPisos] = useState<IPiso[]>([])
     const [openForm, setOpenForm] = useState(false)
 
-    const showtrayecto = (id: string) => navigate(path + '/viajes/' + id)
+    const showViaje = (id: string) => navigate(path + '/viajes/' + id)
 
     const criarViaje = (viaje: IViaje) => {
         setViajes([...viajes, viaje])
@@ -37,6 +37,7 @@ const AutobusesShowPage = () => {
                     setAutobus(resposta.data)
                     setPisos(resposta.data.pisos)
                     setViajes(resposta.data.viajes)
+                    console.log(resposta.data);
                 })
         } else navigate(`/`)
     }, [parametros])
@@ -64,7 +65,10 @@ const AutobusesShowPage = () => {
                                 <p className="font-mono">
                                     {viaje.codigo}
                                 </p>
-                                <PrimaryButton onClick={() => showtrayecto(viaje.codigo)} className="bg-blue-500">Ver viaje</PrimaryButton>
+                                <p>
+                                    Bs {viaje.valorArrecadado}
+                                </p>
+                                <PrimaryButton onClick={() => showViaje(viaje.codigo)} className="bg-blue-500">Ver viaje</PrimaryButton>
                             </div>
                         )}
                     </div>

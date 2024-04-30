@@ -71,6 +71,8 @@ const ViajeShow = () => {
                         posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
                     }
                     resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
+                    console.log(resposta.data);
+                    
                     setPrecio(resposta.data)
                 })
         } else {

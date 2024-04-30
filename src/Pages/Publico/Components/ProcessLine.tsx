@@ -22,12 +22,12 @@ const ProcessLine = ({ className = '', step }: Props) => {
                 <div className={`rounded-full h-10 w-10  bg-gray-500`}></div>
                 <p className="text-lg">Escojer Viaje</p>
             </div>
-            <div className={`border border-b-2 w-1/4 border-b-gray-500`}></div>
+            <div className={`border border-b-2 w-1/4 border-b-${bgsColors[0]}`}></div>
             <div className="flex items-center gap-3">
                 <div className={`rounded-full h-10 w-10  bg-${bgsColors[0]}`}></div>
                 <p className="text-lg">Asientos</p>
             </div>
-            <div className={`border border-b-2 w-1/4 border-b-${bgsColors[0]}`}></div>
+            <div className={`border border-b-2 w-1/4 border-b-${bgsColors[1]}`}></div>
             <div className="flex items-center gap-3">
                 <div className={`rounded-full h-10 w-10  bg-${bgsColors[1]}`}></div>
                 <p className="text-lg">Confirmar</p>

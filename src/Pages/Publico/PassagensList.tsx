@@ -1,15 +1,12 @@
 import InputLabel from "@/Components/InputLabel"
 import PrimaryButton from "@/Components/PrimaryButton"
 import IPiso from "@/Types/IPiso"
-import IViaje from "@/Types/IViaje"
 import http from "@/http"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import CardViaje from "./Components/CardViaje"
-import ICampo from "@/Types/ICampo"
-import TextInput from "@/Components/TextInput"
 import TextInput234 from "@/Components/TextInput234"
-
+import IVIajeResponse from "./Types/IViajeResponse"
+import TextInputObject from "./Components/TextInputObject"
 
 interface IPasaje {
     carnet: string
@@ -29,17 +26,24 @@ interface IPrecio {
     idViaje: number
 }
 
+interface Erros {
+    email: string
+    nombre: string
+    telefono: string
+    confirmarEmail: string
+}
+
 const PassagensList = () => {
     const parametros = useParams()
     const metodos = ['QR', 'DEB', 'CRE']
-    const [viaje, setViaje] = useState<IViaje>()
+    const [viaje, setViaje] = useState<IVIajeResponse>()
     const [pasajes, setPasajes] = useState<IPasaje[]>([])
     const [precio, setPrecio] = useState<IPrecio>()
 
-    const [email, setEmail] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [nombre, setNombre] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [telefono, setTelefono] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [confirmarEmail, setConfirmarEmail] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [email, setEmail] = useState<string>('')
+    const [nombre, setNombre] = useState<string>('')
+    const [telefono, setTelefono] = useState<string>('')
+    const [confirmarEmail, setConfirmarEmail] = useState<string>('')
     const navigate = useNavigate()
     const editar = (indexPasaje: number, campo: string, value: string) => {
         let achei = 1
@@ -63,6 +67,11 @@ const PassagensList = () => {
         }
     }
 
+    const getDataHora = (dataHora: string) => {
+        let hora = dataHora.split('T')[1];
+        let partes = hora.split(':')
+        return `${partes[0]}:${partes[1]}`
+    }
 
     useEffect(() => {
         let cookie2 = sessionStorage.getItem("sillasFromViaje")
@@ -75,6 +84,7 @@ const PassagensList = () => {
 
         const viajeS = JSON.parse(cookieJSON)
         setViaje(viajeS)
+
 
         if (sillasEscogidas == '') {
             navigate('/')
@@ -127,8 +137,8 @@ const PassagensList = () => {
         })
     }
     return (
-        <div className="text-sky-900 flex justify-center px-20 py-10 bg-gray-100 gap-4">
-            <section className="w-2/3 flex flex-col items-center gap-10">
+        <div className="text-gray-900 flex justify-center px-20 py-10 bg-gray-100 gap-4">
+            <section className="w-3/4 flex flex-col items-center gap-10">
                 {pasajes.map((pasaje, index) =>
                     <section
                         key={index}
@@ -141,20 +151,21 @@ const PassagensList = () => {
                         </div>
                         <div className="mt-2">
                             <InputLabel>Nombre</InputLabel>
-                            <TextInput234 className="rounded-lg" placeholder="Nombre del pasajero..." value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} />
+                            <TextInputObject className="rounded-lg" placeholder="Nombre del pasajero..." value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} />
                         </div>
                         <div className="w-full mt-2 grid grid-cols-2 gap-5">
                             <div>
                                 <InputLabel>N°Carnet</InputLabel>
-                                <TextInput234 placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} />
+                                <TextInputObject placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} />
                             </div>
                             <div>
                                 <InputLabel>Nascimento</InputLabel>
-                                <TextInput234 type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} />
+                                <TextInputObject type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} />
                             </div>
                         </div>
                     </section>
                 )}
+
                 <section className="w-full">
                     <div className="border-2 border-gray-300 rounded-lg p-5">
                         <p className="text-2xl font-semibold mb-2">
@@ -163,19 +174,19 @@ const PassagensList = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="w-full">
                                 <InputLabel value="Nombre" />
-                                <TextInput campo={nombre} setCampo={setNombre} placeholder="Escribe el nombre del comprador (inecessario)..." />
+                                <TextInput234 value={nombre} setValue={setNombre} placeholder="Escribe el nombre del comprador (inecessario)..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="Telefono" />
-                                <TextInput campo={telefono} setCampo={setTelefono} placeholder="Escribe el telefono del comprador..." />
+                                <TextInput234 value={telefono} setValue={setTelefono} placeholder="Escribe el telefono del comprador..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="E-mail" />
-                                <TextInput campo={email} setCampo={setEmail} placeholder="Escribe el email del comprador..." />
+                                <TextInput234 value={email} setValue={setEmail} placeholder="Escribe el email del comprador..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="Confirmar Email" />
-                                <TextInput campo={confirmarEmail} setCampo={setConfirmarEmail} placeholder="Escribe nuevamente el email" />
+                                <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} placeholder="Escribe nuevamente el email" />
                             </div>
                         </div>
                     </div>
@@ -186,79 +197,96 @@ const PassagensList = () => {
                     </PrimaryButton>
                 </section>
             </section>
-            <section className="w1/3">
-                <section className="w-full p-5 rounded-lg border-2 border-gray-300">
-                    <table className="w-full">
-                        <tbody>
-                            <tr>
-                                <td className="text-2xl font-bold">13:30</td>
-                                <td className="px-3 flex justify-center"><div className="h-8 w-8 bg-gray-200 rounded-full"></div></td>
-                                <td className="text-xl font-semibold">Postosi</td>
-                            </tr>
-                            <tr >
-                                <td></td>
-                                <td className="flex justify-center items-center py-2">
-                                    <div className="border-r-2 h-24">
-
-                                    </div>
-                                </td>
-                                <td className="">
-                                    <div className="top-0 h-24">
-                                        <p>
-                                            Terminal de Potose
-                                        </p>
-                                        <p>
-                                            Departamento de Potose
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="text-2xl font-bold">13:30</td>
-                                <td className="px-3 flex justify-center"><div className="h-8 w-8 bg-gray-200 rounded-full"></div></td>
-                                <td className="text-xl font-semibold">Santa Cruz</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div>
-                                        <p>
-                                            Terminal de Potose
-                                        </p>
-                                        <p>
-                                            Departamento de Potose
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                <section className="w-full">
-
-                    {viaje && <CardViaje className="" viaje={viaje} />}
-                </section>
-                {precio && <section className="w-full">
-                    <div className="bg-slate-300 rounded p-5">
-                        <div className="flex items-center justify-between">
-                            <p>
-                                Metodo de pago
-                            </p>
-                            <p className="font-semibold text-lg">
-                                Total: Bs {precio.precio * pasajes.length}
-                            </p>
-                        </div>
-                        <div className="flex justify-center gap-2 mt-2">
-                            {metodos.map((metodo, index) =>
-                                <div key={index} className="w-10 h-10 bg-white rounded font-bold flex items-center justify-center
-                            hover:bg-black hover:text-white">
-                                    {metodo}
+            <section className="w-96 ">
+                <div className="w-full p-5 text-2xl font-semibold rounded-t-lg border-2 border-gray-300">Datos del Viaje</div>
+                {viaje &&
+                    <section className="px-6 py-4 border-x-2 border-gray-300">
+                        <div className="w-full flex flex-col">
+                            <div className="flex items-center">
+                                <p className="w-20 text-black text-3xl font-bold">{getDataHora(viaje?.salida.dataHora)}</p>
+                                <div className="w-10 flex justify-center">
+                                    <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
                                 </div>
-                            )}
+                                <td className="text-2xl font-semibold">{viaje?.salida.ciudad}</td>
+                            </div>
+                            <div className="flex">
+                                <p className="w-20"></p>
+                                <div className="w-10 flex justify-center">
+                                    <div className="border-r-2 border-black h-24">
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>{viaje?.salida.departamento}, {viaje?.salida.abreviacion}</p>
+                                    <p>{viaje?.salida.lugar}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <p className="w-20 text-black text-3xl font-bold">{getDataHora(viaje?.destino.dataHora)}</p>
+                                <div className="w-10 flex justify-center">
+                                    <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
+                                </div>
+                                <td className="text-2xl font-semibold">{viaje?.destino.ciudad}</td>
+                            </div>
+                            <div className="flex items-center">
+                                <p className="w-20 text-3xl font-bold"></p>
+                                <div className="w-10 flex justify-center">
+                                </div>
+                                <div>
+                                    <p>{viaje?.destino.departamento}, {viaje?.destino.abreviacion}</p>
+                                    <p>{viaje?.destino.lugar}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </section>}
+                    </section>
+                }
+                <div className="w-full p-5 text-2xl font-semibold border-2 border-gray-300">
+                    Resumen de Factura
+                </div>
+                {precio &&
+                    <>
+                        <section className="border-x-2 px-5 py-3 border-gray-300">
+                            <p className="text-2xl font-semibold">
+                                {viaje?.salida.ciudad + ' -> ' + viaje?.destino.ciudad}
+                            </p>
+                            <div className="border-b-2 border-gray-300 text-lg py-2">
+                                {pasajes.map((pasajero, index) => <div className="font-semibold flex justify-between">
+                                    <p>
+                                        Pasajero {index + 1} - Silla {pasajero.nSilla}
+                                    </p>
+                                    <p>Bs {precio.precio.toFixed(2)}</p>
+                                </div>)}
+                            </div>
+                            <div className="text-lg font-semibold flex justify-between">
+                                <p>
+                                    Tasa de Servicio
+                                </p>
+                                <p>
+                                    Bs {(precio.precio * pasajes.length * 0.1).toFixed(2)}
+                                </p>
+                            </div>
+                        </section>
+                        <div className="px-5 py-3 border-2 border-gray-300 flex items-center justify-between text-2xl font-semibold">
+                            <p>
+                                Total:
+                            </p>
+                            <p className="font-semibold">
+                                Bs {(precio.precio * pasajes.length * 1.1).toFixed(2)}
+                            </p>
+                        </div>
+                        <div className="px-5 py-3 border-2 border-t-0 rounded-b-lg border-gray-300 text-center">
+                            <p className="text-lg font-semibold mb-2">
+                                Método de Pago
+                            </p>
+                            <div className="flex justify-center gap-2">
+                                {metodos.map((metodo, index) =>
+                                    <div key={index} className="w-10 h-10 bg-white rounded font-bold flex items-center justify-center hover:bg-black hover:text-white">
+                                        {metodo}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
             </section>
         </div>
     )

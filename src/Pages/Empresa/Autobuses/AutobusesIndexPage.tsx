@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react"
-import IAutobus from "@/Types/IAutobus"
 import IPage from "@/Types/IPage"
 import http from "@/http"
 import PrimaryButton from "@/Components/PrimaryButton"
 import IEmpresa from "@/Types/IEmpresa"
 import { useNavigate } from "react-router-dom"
 
+interface IAutobus {
+    id: number,
+    placa: string,
+    idEmpresa: string
+    valorViajes: number
+}
 
 const AutobusesIndexPage = () => {
     const path = '/empresa/admin/autobuses'
@@ -23,7 +28,11 @@ const AutobusesIndexPage = () => {
                 setEmpresa(resposta.data)
             })
         http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}`)
-            .then(resposta => setAutobuses(resposta.data.content))
+            .then(resposta => {
+                setAutobuses(resposta.data.content)
+                console.log(resposta.data.content);
+                
+            })
     }, [])
 
     return (
@@ -41,7 +50,8 @@ const AutobusesIndexPage = () => {
                 <div className="mx-10 grid gap-4">
                     {autobuses.map(autobus =>
                         <div key={autobus.id} className="p-5 bg-white rounded-lg flex justify-between items-center">
-                            Placa: {autobus.placa}
+                            <p>Placa: {autobus.placa}</p>
+                            <p>Valor: Bs {autobus.valorViajes} </p>
                             <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver viajes</PrimaryButton>
                         </div>
                     )}
