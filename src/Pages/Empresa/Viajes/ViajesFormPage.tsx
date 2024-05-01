@@ -1,25 +1,19 @@
 import InputError from "@/Components/InputError"
 import InputLabel from "@/Components/InputLabel"
-import SelectCiudad from "@/Components/SelectCiudad"
 import TextInput234 from "@/Components/TextInput234"
-import ILugar from "@/Types/ILugar"
-import IType from "@/Types/IType"
 import IViaje from "@/Types/IViaje"
 import http from "@/http"
-import { useEffect, useState } from "react"
-
-interface ParadaFormErro {
-    plataforma: string,
-    dataHora: string,
-    idLugar: string
-}
+import { useState } from "react"
+import IParadaForm from "./Types/IParadaForm"
+import IParadaFormErro from "./Types/IParadaFormErro"
+import ParadaForm from "./Components/ParadaForm"
 
 interface IErros {
     idAutobus: string,
     precioPiso1: string,
     precioPiso2: string,
-    salida: ParadaFormErro
-    destino: ParadaFormErro
+    salida: IParadaFormErro
+    destino: IParadaFormErro
 }
 
 interface Props {
@@ -30,17 +24,9 @@ interface Props {
 }
 
 const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => {
-    const [plataformaSalida, setPlataformaSalida] = useState<string>('')
-    const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null)
-    const [fechaEncuentroSalida, setFechaEncuentroSalida] = useState<string>('')
-    const [lugaresSalida, setLugaresSalidas] = useState<ILugar[]>([])
-    const [idLugarSalida, setIdLugarSalida] = useState('')
 
-    const [plataformaDestino, setPlataformaDestino] = useState<string>('')
-    const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null)
-    const [fechaEncuentroDestino, setFechaEncuentroDestino] = useState<string>('')
-    const [lugaresDestino, setLugaresDestino] = useState<ILugar[]>([])
-    const [idLugarDestino, setIdLugarDestino] = useState('')
+    const [salida, setSalida] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '' })
+    const [destino, setDestino] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '' })
 
     const [precio1, setPrecio1] = useState('0')
     const [precio2, setPrecio2] = useState('0')
@@ -65,65 +51,34 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
         }
     }
 
+    const validarParada = (parada: IParadaForm, errosParada: IParadaFormErro) => {
+        let valido = true
+        if (parada.idLugar === '') {
+            valido = false
+            errosParada.idLugar = 'Escoje un valor válido'
+        }
+
+        if (!parseInt(parada.plataforma)) {
+            valido = false
+            errosParada.plataforma = 'Valor inválido'
+        }
+
+        if (parada.dataHora === '') {
+            valido = false
+            errosParada.dataHora = 'Valor inválido'
+        }
+
+        return valido;
+    }
+
     const [erros, setErros] = useState<IErros>(construirViajeErro())
-
-    useEffect(() => {
-        if (ciudadSalida) {
-            http.get<ILugar[]>('ciudades/' + ciudadSalida.value + '/lugares')
-                .then(resposta => {
-                    setLugaresSalidas(resposta.data)
-                    if (resposta.data.length > 0) {
-                        setIdLugarSalida(resposta.data[0].id.toString())
-                    }
-                })
-        }
-    }, [ciudadSalida])
-
-    useEffect(() => {
-        if (ciudadDestino) {
-            http.get<ILugar[]>('ciudades/' + ciudadDestino.value + '/lugares')
-                .then(resposta => {
-                    setLugaresDestino(resposta.data)
-                    if (resposta.data.length > 0) {
-                        setIdLugarDestino(resposta.data[0].id.toString())
-                    }
-                })
-        }
-    }, [ciudadDestino])
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let errosInFuncton = construirViajeErro()
         let podeEnviar = true;
-        if (idLugarSalida === '') {
-            podeEnviar = false
-            errosInFuncton.salida.idLugar = 'Escoje un valor válido'
-        }
-
-        if (!parseInt(plataformaSalida)) {
-            podeEnviar = false
-            errosInFuncton.salida.plataforma = 'Valor inválido'
-        }
-
-        if (fechaEncuentroSalida === '') {
-            podeEnviar = false
-            errosInFuncton.salida.dataHora = 'Valor inválido'
-        }
-
-        if (idLugarDestino === '') {
-            podeEnviar = false
-            errosInFuncton.destino.idLugar = 'Escoje un valor válido'
-        }
-
-        if (!parseInt(plataformaDestino)) {
-            podeEnviar = false
-            errosInFuncton.destino.plataforma = 'Valor inválido'
-        }
-
-        if (fechaEncuentroDestino === '') {
-            podeEnviar = false
-            errosInFuncton.destino.dataHora = 'Valor inválido'
-        }
+        podeEnviar = validarParada(salida, errosInFuncton.salida)
+        podeEnviar = validarParada(destino, errosInFuncton.destino)
 
         if (!parseFloat(precio1)) {
             podeEnviar = false
@@ -148,16 +103,8 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
         if (podeEnviar) {
             let formData = {
                 idAutobus: idAutobus,
-                salida: {
-                    plataforma: plataformaSalida,
-                    dataHora: fechaEncuentroSalida,
-                    idLugar: idLugarSalida
-                },
-                destino: {
-                    plataforma: plataformaDestino,
-                    dataHora: fechaEncuentroDestino,
-                    idLugar: idLugarDestino
-                },
+                salida: salida,
+                destino: destino,
                 precioPiso1: parseFloat(precio1),
                 precioPiso2: 0
             }
@@ -166,9 +113,9 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
                 formData["precioPiso2"] = parseFloat(precio2)
             }
 
-            http.post('viajes/create', formData)
-                .then(resposta => { 
-                    addViaje({ idAutobus: idAutobus, codigo: resposta.data.codigo }) 
+            http.post('empresa/viajes/create', formData)
+                .then(resposta => {
+                    addViaje({ idAutobus: idAutobus, codigo: resposta.data.codigo, isCobrado: false, valorArrecadadoEfectivo: 0, valorArrecadadoWeb: 0, precios: [] })
                 })
         }
     }
@@ -184,67 +131,13 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
                     Datos dela Salida
                 </p>
 
-                <div className="flex items-center space-x-4">
-                    <div className="w-16">
-                        <InputLabel value="Plataforma" />
-                        <TextInput234 className="text-center" type="number" min={1} value={plataformaSalida} setValue={setPlataformaSalida} />
-                        <InputError message={erros.salida.plataforma} />
-                    </div>
-                    <div>
-                        <InputLabel value="Fecha de llegada" />
-                        <TextInput234 type="datetime-local" value={fechaEncuentroSalida} setValue={setFechaEncuentroSalida} />
-                        <InputError message={erros.salida.dataHora} />
-                    </div>
-                    <div className="w-64">
-                        <InputLabel value="Ciudad Salida" />
-                        <SelectCiudad option={ciudadSalida} setOption={setCiudadSalida} />
-                    </div>
-
-                    <div>
-                        <InputLabel value="Elije un lugar" />
-                        <select disabled={ciudadSalida == null}
-                            value={idLugarSalida} onChange={eve => setIdLugarSalida(eve.target.value)}
-                            className="w-64 p-2 border focus:outline-blue-300 border-gray-400 focus:border-indigo-500 focus:ring-indigo-500 rounded shadow-sm">
-                            {lugaresSalida.map(lugar =>
-                                <option key={lugar.id} value={lugar.id}>{lugar.nombre}</option>
-                            )}
-                        </select>
-                        <InputError message={erros.salida.idLugar} />
-                    </div>
-                </div>
+                <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
             </section>
             <section className="mt-3">
                 <p className="text-lg font-semibold">
                     Datos del destino
                 </p>
-                <div className="flex items-center space-x-4">
-                    <div className="w-16">
-                        <InputLabel value="Plataforma" />
-                        <TextInput234 className="text-center" type="number" value={plataformaDestino} setValue={setPlataformaDestino} />
-                        <InputError message={erros.destino.plataforma} />
-                    </div>
-                    <div>
-                        <InputLabel value="Fecha de llegada" />
-                        <TextInput234 type="datetime-local" value={fechaEncuentroDestino} setValue={setFechaEncuentroDestino} />
-                        <InputError message={erros.destino.dataHora} />
-                    </div>
-                    <div className="w-64">
-                        <InputLabel value="Ciudad Destino" />
-                        <SelectCiudad option={ciudadDestino} setOption={setCiudadDestino} />
-                    </div>
-
-                    <div>
-                        <InputLabel value="Elije un lugar" />
-                        <select disabled={ciudadDestino == null}
-                            value={idLugarDestino} onChange={eve => setIdLugarDestino(eve.target.value)}
-                            className="w-64 p-2 border focus:outline-blue-300 border-gray-400 focus:border-indigo-500 focus:ring-indigo-500 rounded shadow-sm">
-                            {lugaresDestino.map(lugar =>
-                                <option key={lugar.id} value={lugar.id}>{lugar.nombre}</option>
-                            )}
-                        </select>
-                        <InputError message={erros.destino.idLugar} />
-                    </div>
-                </div>
+                <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
             </section>
             <section className="">
                 <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>

@@ -12,24 +12,38 @@ interface Props {
 const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
     const [sillas, setSillas] = useState<ISilla[]>([])
     useEffect(() => {
-        if (piso.nLinhas) {
-            let SillasDisponibles: ISilla[] = []
+        if (!piso.nLinhas || !piso.nColunas) return;
+        let SillasDisponibles: ISilla[] = []
 
-            piso.posicoesBloqueadas.forEach(nIndisponivel => {
-                SillasDisponibles[nIndisponivel - 1] = {
-                    numero: -1,
-                    ocupado: false,
-                    posicion: nIndisponivel
+        piso.posicoesBloqueadas.forEach(nIndisponivel => {
+            SillasDisponibles[nIndisponivel - 1] = {
+                numero: -1,
+                ocupado: false,
+                posicion: nIndisponivel
+            }
+        })
+
+        let HashMapNSillaIndex: number[] = []
+
+        let contador = piso.primeraSilla - 1
+
+        if (piso.inicioContagem === 'IZQUIERDA') {
+            let nQuadrados = piso.nLinhas * piso.nColunas
+            for (let index = 0; index < nQuadrados; index++) {
+                if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
+                    contador++
+                    SillasDisponibles[index] = {
+                        numero: contador,
+                        ocupado: false,
+                        posicion: index + 1
+                    }
+                    HashMapNSillaIndex.push(index)
                 }
-            })
-
-            let HashMapNSillaIndex: number[] = []
-
-            let contador = piso.primeraSilla - 1
-
-            if (piso.inicioContagem === 'IZQUIERDA') {
-                let nQuadrados = piso.nLinhas * piso.nColunas
-                for (let index = 0; index < nQuadrados; index++) {
+            }
+        } else {
+            for (let i = 0; i < piso.nLinhas; i++) {
+                for (let j = piso.nColunas - 1; j >= 0; j--) {
+                    let index = piso.nColunas * i + j
                     if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
                         contador++
                         SillasDisponibles[index] = {
@@ -40,38 +54,17 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                         HashMapNSillaIndex.push(index)
                     }
                 }
-            } else {
-                for (let i = 0; i < piso.nLinhas; i++) {
-                    for (let j = piso.nColunas - 1; j >= 0; j--) {
-                        let index = piso.nColunas * i + j
-                        if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
-                            contador++
-                            SillasDisponibles[index] = {
-                                numero: contador,
-                                ocupado: false,
-                                posicion: index + 1
-                            }
-                            HashMapNSillaIndex.push(index)
-                        }
-                    }
-                }
             }
-
-
-            sillasOcupadas.forEach(sillaOcupada => {
-                SillasDisponibles[HashMapNSillaIndex[sillaOcupada - 1]].ocupado = true
-            })
-
-            setSillas(SillasDisponibles)
         }
-    }, [
-        piso.nLinhas,
-        piso.nColunas,
-        piso.distribuicaoFileira,
-        piso.posicoesBloqueadas,
-        piso.distribuicaoFileira,
-        piso.inicioContagem
-    ])
+
+
+        sillasOcupadas.forEach(sillaOcupada => {
+            SillasDisponibles[HashMapNSillaIndex[sillaOcupada - 1]].ocupado = true
+        })
+
+        setSillas(SillasDisponibles)
+
+    }, [piso])
     return (
         <div className="rounded min-h-60 flex justify-center items-center">
             <div className="lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">

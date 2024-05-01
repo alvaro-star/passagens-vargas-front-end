@@ -15,32 +15,30 @@ interface IAutobusExtend extends IAutobus {
 const AutobusesShowPage = () => {
     const path = '/empresa'
 
-    const parametros = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
 
-    const [autobus, setAutobus] = useState<IAutobus | null>(null)
-    const [viajes, setViajes] = useState<IViaje[]>([])
-    const [pisos, setPisos] = useState<IPiso[]>([])
+    const [autobus, setAutobus] = useState<IAutobusExtend | null>(null)
     const [openForm, setOpenForm] = useState(false)
 
     const showViaje = (id: string) => navigate(path + '/viajes/' + id)
 
     const criarViaje = (viaje: IViaje) => {
-        setViajes([...viajes, viaje])
-        setOpenForm(false)
-    }
+        setAutobus(prevAutobus => ({
+            ...prevAutobus!,
+            viajes: [...prevAutobus!.viajes, viaje]
+        }));
+        setOpenForm(false);
+    };
 
     useEffect(() => {
-        if (parametros.id) {
-            http.get<IAutobusExtend>(`autobuses/${parametros.id}`)
+        if (id) {
+            http.get<IAutobusExtend>(`autobuses/${id}`)
                 .then(resposta => {
                     setAutobus(resposta.data)
-                    setPisos(resposta.data.pisos)
-                    setViajes(resposta.data.viajes)
-                    console.log(resposta.data);
                 })
         } else navigate(`/`)
-    }, [parametros])
+    }, [id, navigate])
 
     return (
         <div className="p-10">
@@ -49,7 +47,7 @@ const AutobusesShowPage = () => {
                 <>
                     {openForm &&
                         <div className="absolute top-0 bottom-0 left-0 right-0 grid place-content-center m-0 bg-white bg-opacity-50">
-                            <ViajesFormPage setOpenForm={setOpenForm} addViaje={criarViaje} idAutobus={autobus.id} nPisos={pisos.length} />
+                            <ViajesFormPage setOpenForm={setOpenForm} addViaje={criarViaje} idAutobus={autobus.id} nPisos={autobus.pisos.length} />
                         </div>
                     }
                     <div className="w-full rounded-lg p-5 bg-slate-500 text-white font-semibold text-xl flex justify-between items-center">
@@ -60,17 +58,19 @@ const AutobusesShowPage = () => {
                         </div>
                     </div>
                     <div className="mt-5 space-y-3">
-                        {viajes.map(viaje =>
+                        {autobus.viajes.map(viaje =>
                             <div className="px-5 py-3 bg-gray-300 rounded flex items-center justify-between" key={viaje.codigo}>
-                                <p className="font-mono">
-                                    {viaje.codigo}
-                                </p>
-                                <p>
-                                    Bs {viaje.valorArrecadado}
-                                </p>
+                                <p className="font-mono">{viaje.codigo}</p>
+                                <p>Bs {viaje.valorArrecadadoEfectivo}</p>
+                                <p>Dinero disponible: Bs {viaje.valorArrecadadoWeb}</p>
                                 <PrimaryButton onClick={() => showViaje(viaje.codigo)} className="bg-blue-500">Ver viaje</PrimaryButton>
                             </div>
                         )}
+                        {autobus.viajes.length == 0 &&
+                            <div className="px-5 py-3 bg-gray-300 rounded flex items-center justify-between">
+                                No hay Viajes Registrados
+                            </div>
+                        }
                     </div>
                 </>
             }

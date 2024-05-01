@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom"
 interface IAutobus {
     id: number,
     placa: string,
+    valorViajesEfectivo: number
+    valorViajesWeb: number
     idEmpresa: string
     valorViajes: number
 }
@@ -23,17 +25,18 @@ const AutobusesIndexPage = () => {
     const verTrayectos = (idAutobus: number) => navigate(path + '/' + idAutobus)
 
     useEffect(() => {
-        http.get<IEmpresa>(`empresas/${idEmpresa}`)
-            .then(resposta => {
-                setEmpresa(resposta.data)
-            })
-        http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}`)
-            .then(resposta => {
-                setAutobuses(resposta.data.content)
-                console.log(resposta.data.content);
-                
-            })
-    }, [])
+        if (!idEmpresa) return;
+        const fetchData = async () => {
+            const [empresaResposta, autobusesResposta] = await Promise.all([
+                http.get<IEmpresa>(`empresas/${idEmpresa}`),
+                http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}`)
+            ]);
+            setEmpresa(empresaResposta.data);
+            setAutobuses(autobusesResposta.data.content);
+        };
+
+        fetchData();
+    }, [idEmpresa]);
 
     return (
         <>
@@ -45,13 +48,20 @@ const AutobusesIndexPage = () => {
                             {empresa?.nombre}
                         </p>
                     </div>
+                    <p>
+                        Dinero cobrado: Bs {empresa?.valorViajesEfectivo}
+                    </p>
+                    <p>
+                        Dinero disponible: Bs {empresa?.valorViajesWeb}
+                    </p>
                     <PrimaryButton onClick={create}>+ Autobus</PrimaryButton>
                 </div>
                 <div className="mx-10 grid gap-4">
                     {autobuses.map(autobus =>
                         <div key={autobus.id} className="p-5 bg-white rounded-lg flex justify-between items-center">
                             <p>Placa: {autobus.placa}</p>
-                            <p>Valor: Bs {autobus.valorViajes} </p>
+                            <p>Dinero arrecadado Efectivo: Bs {autobus.valorViajesEfectivo} </p>
+                            <p>Dinero disponible web: Bs {autobus.valorViajesWeb} </p>
                             <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver viajes</PrimaryButton>
                         </div>
                     )}

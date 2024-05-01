@@ -12,9 +12,8 @@ const ViajesIndexPage = () => {
     const idEmpresa = sessionStorage.getItem('idEmpresa')
     const [viajes, setViajes] = useState<IViaje[]>([])
 
-    const showViaje = (codigo: string) => {
-        navigate('/empresa/viajes/' + codigo)
-    }
+    const showViaje = (codigo: string) => navigate('/empresa/viajes/' + codigo)
+
     useEffect(() => {
         http.get<IPage<IViaje>>('empresa/viajes/from/' + idEmpresa)
             .then(resposta => {
@@ -47,15 +46,9 @@ const ViajesIndexPage = () => {
                     <tbody>
                         {viajes.map(viaje =>
                             <tr key={viaje.codigo} className="">
-                                <td className="py-2">
-                                    {viaje.codigo}
-                                </td>
-                                <td className="text-center">
-                                    Bs {viaje.valorArrecadadoEfectivo}
-                                </td>
-                                <td className="text-center">
-                                    Bs {viaje.valorArrecadadoWeb}
-                                </td>
+                                <td className="py-2">{viaje.codigo}</td>
+                                <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
+                                <td className="text-center">Bs {viaje.valorArrecadadoWeb}</td>
                                 <td className="text-center">
                                     <PrimaryButton onClick={() => showViaje(viaje.codigo)}>ver mais</PrimaryButton>
                                 </td>

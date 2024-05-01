@@ -1,4 +1,5 @@
 
+import DataHora from "@/Classes/DataHora"
 import PrimaryButton from "@/Components/PrimaryButton"
 import IViaje from "@/Types/IViaje"
 import IParada2 from "@/Types/IViaje/IParada2"
@@ -12,22 +13,30 @@ interface IViajeExtends extends IViaje {
 
 
 const ViajesShowPage = () => {
-    const parametros = useParams()
+    const { id } = useParams()
     const [viaje, setViaje] = useState<IViajeExtends>()
 
-    const formatDataHora = (dataHora: string) => {
-        let [data, time] = dataHora.split('T')
-        let [ano, mes, dia] = data.split('-')
-        let [hora, minutos] = time.split(':')
-        return `${dia}/${mes}/${ano} alas ${hora}:${minutos}`
-    }
+    const formatDataHora = (dataHora: string) => new DataHora(dataHora).imprimir()
 
     useEffect(() => {
-        if (parametros.id) {
-            http.get<IViajeExtends>(`viajes/${parametros.id}`)
-                .then(resposta => setViaje(resposta.data))
+        if (id) {
+            http.get<IViajeExtends>(`viajes/${id}`)
+                .then(resposta => {
+                    setViaje(resposta.data)
+                })
         }
-    }, [parametros])
+    }, [id])
+
+    const ordenarParadas = () => {
+        if (viaje) {
+            return viaje?.paradas.sort((a: IParada2, b: IParada2) => {
+                const dataHoraA: Date = new Date(a.dataHora);
+                const dataHoraB: Date = new Date(b.dataHora);
+                return dataHoraA.getTime() - dataHoraB.getTime();
+            });
+        } else return [];
+    }
+
     return (
         <div className="p-10">
             {viaje &&
@@ -43,20 +52,17 @@ const ViajesShowPage = () => {
                                     <th className="text-start">Ciudad</th>
                                     <th>Plataforma</th>
                                     <th>Fecha y Hora</th>
-                                    <th className="w-64">Acciones</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {viaje.paradas.map(parada =>
+                                {ordenarParadas().map(parada =>
                                     <tr className="hover:bg-slate-300" key={parada.id}>
                                         <td className="py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
                                         <td className="">{parada.plataforma}</td>
                                         <td className="">{formatDataHora(parada.dataHora)}</td>
                                         <td className="">
                                             <div className="space-x-1 text-white">
-                                                <button className="text-center bg-blue-700 rounded p-1.5 px-3 uppercase">
-                                                    Ver
-                                                </button>
                                                 <button className="bg-yellow-400 rounded p-1.5 px-3 uppercase">
                                                     Editar
                                                 </button>
@@ -65,12 +71,11 @@ const ViajesShowPage = () => {
                                                 </button>
                                             </div>
                                         </td>
-                                    </tr>)}
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
-
-                    
                 </>
             }
         </div>

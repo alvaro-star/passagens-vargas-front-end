@@ -1,8 +1,6 @@
-import ICampo from "../../../../Types/ICampo"
-
 interface Props {
-    campo: ICampo<number>
-    setCampo: (campo: ICampo<number>) => void
+    campo: number
+    setCampo: (campo: number) => void
     minValue: number
     maxValue: number
 }
@@ -13,19 +11,19 @@ const InputNumber = ({ minValue, maxValue, campo, setCampo }: Props) => {
             <div
                 className="w-1/3 hover:text-white hover:bg-slate-500 rounded cursor-pointer"
                 onClick={() => {
-                    if (!(campo.value - 1 < minValue)) {
-                        setCampo({ value: campo.value - 1, erro: campo.erro })
+                    if (!(campo - 1 < minValue)) {
+                        setCampo(campo - 1)
                     }
                 }}
             > {'<'} </div>
             <div className="w-1/3">
-                {campo.value}
+                {campo}
             </div>
             <div
                 className="w-1/3 hover:text-white hover:bg-slate-500 rounded cursor-pointer"
                 onClick={() => {
-                    if (!(campo.value + 1 > maxValue)) {
-                        setCampo({ value: campo.value + 1, erro: campo.erro })
+                    if (!(campo + 1 > maxValue)) {
+                        setCampo(campo + 1)
                     }
                 }}
             > {'>'} </div>

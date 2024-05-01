@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
-import ICampo from "../../../../Types/ICampo"
-import InputLabel from "../../../../Components/InputLabel"
-import Piso from "../../../Publico/Components/Piso"
-import ISilla from "../../../../Types/ISilla"
 import InputNumber from "./InputNumber"
-import IPiso from "../../../../Types/IPiso"
-import PrimaryButton from "../../../../Components/PrimaryButton"
+import PrimaryButton from "@/Components/PrimaryButton"
+import IPiso from "@/Types/IPiso"
+import ISilla from "@/Types/ISilla"
+import Piso from "@/Pages/Publico/Components/Piso"
+import InputLabel from "@/Components/InputLabel"
 
 interface Props {
     piso: IPiso,
@@ -16,10 +15,10 @@ interface Props {
 
 const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
     const posiciones = ['IZQUIERDA', 'DERECHA']
-    const [nLinhas, setNLinhas] = useState<ICampo<number>>({ value: piso.nLinhas, erro: '' })
-    const [nColunas, setNColunas] = useState<ICampo<number>>({ value: piso.nColunas, erro: '' })
-    const [distribuicaoFileira, setDistribuicaoFileira] = useState<ICampo<string>>({ value: piso.distribuicaoFileira, erro: '' })
-    const [inicioContagem, setInicioContagem] = useState<ICampo<string>>({ value: piso.inicioContagem, erro: '' })
+    const [nLinhas, setNLinhas] = useState<number>(piso.nLinhas)
+    const [nColunas, setNColunas] = useState<number>(piso.nColunas)
+    const [distribuicaoFileira, setDistribuicaoFileira] = useState<string>(piso.distribuicaoFileira)
+    const [inicioContagem, setInicioContagem] = useState<string>(piso.inicioContagem)
 
     useEffect(() => {
         setSillasIndisponiveis([])
@@ -37,20 +36,18 @@ const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
     }
 
     const confirmarModelo = () => {
-        setPiso({
-            id: null,
-            nLinhas: nLinhas.value,
-            nColunas: nColunas.value,
-            distribuicaoFileira: distribuicaoFileira.value,
-            nPiso: 1,
-            inicioContagem: inicioContagem.value,
-            nSillas: nLinhas.value * nColunas.value - sillasIndisponiveis.length,
-            primeraSilla: piso.primeraSilla,
-            idAutobus: null,
-            posicoesIndisponiveis: sillasIndisponiveis
-        })
-        setEtapa(etapa + 1)
-    }
+        const nuevoPiso = {
+            ...piso,
+            nLinhas,
+            nColunas,
+            distribuicaoFileira,
+            inicioContagem,
+            nSillas: nLinhas * nColunas - sillasIndisponiveis.length,
+            posicoesBloqueadas: sillasIndisponiveis
+        };
+        setPiso(nuevoPiso);
+        setEtapa(etapa + 1);
+    };
 
     return (
 
@@ -58,7 +55,7 @@ const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
             <div className="flex justify-center gap-4 flex-wrap items-center text-center">
                 <div>
                     <InputLabel value="N° Colunas" className="" />
-                    <select value={nColunas.value} onChange={eve => setNColunas({ value: parseInt(eve.target.value), erro: nColunas.erro })} className="rounded w-24 p-1 text-center">
+                    <select value={nColunas} onChange={eve => setNColunas(parseInt(eve.target.value))} className="rounded w-24 p-1 text-center">
                         <option>3</option>
                         <option>4</option>
                     </select>
@@ -71,13 +68,13 @@ const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
 
                 <div>
                     <InputLabel value="Direccion 2° Fila" className="" />
-                    <select disabled={nColunas.value == 4} value={distribuicaoFileira.value} onChange={eve => setDistribuicaoFileira({ value: eve.target.value, erro: nColunas.erro })} className="rounded w-28 p-1 text-center">
+                    <select disabled={nColunas == 4} value={distribuicaoFileira} onChange={eve => setDistribuicaoFileira(eve.target.value)} className="rounded w-28 p-1 text-center">
                         {posiciones.map((posicion, index) => <option key={index} value={posicion}>{posicion}</option>)}
                     </select>
                 </div>
                 <div>
                     <InputLabel value="Inicio Conteo" className="" />
-                    <select value={inicioContagem.value} onChange={eve => setInicioContagem({ value: eve.target.value, erro: nColunas.erro })} className="rounded w-28 p-1 text-center">
+                    <select value={inicioContagem} onChange={eve => setInicioContagem(eve.target.value)} className="rounded w-28 p-1 text-center">
                         {posiciones.map((posicion, index) => <option key={index} value={posicion}>{posicion}</option>)}
                     </select>
                 </div>
@@ -85,15 +82,15 @@ const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
             <Piso
                 piso={{
                     id: null,
-                    nLinhas: nLinhas.value,
-                    nColunas: nColunas.value,
-                    distribuicaoFileira: distribuicaoFileira.value,
+                    nLinhas: nLinhas,
+                    nColunas: nColunas,
+                    distribuicaoFileira: distribuicaoFileira,
                     nPiso: 1,
-                    inicioContagem: inicioContagem.value,
+                    inicioContagem: inicioContagem,
                     nSillas: null,
                     primeraSilla: piso.primeraSilla,
                     idAutobus: null,
-                    posicoesIndisponiveis: sillasIndisponiveis
+                    posicoesBloqueadas: sillasIndisponiveis
                 }}
                 sillasOcupadas={[]}
                 clickSilla={clickSilla} />

@@ -33,6 +33,7 @@ interface Erros {
     confirmarEmail: string
 }
 
+
 const PassagensList = () => {
     const parametros = useParams()
     const metodos = ['QR', 'DEB', 'CRE']
@@ -48,6 +49,7 @@ const PassagensList = () => {
     const editar = (indexPasaje: number, campo: string, value: string) => {
         let achei = 1
         let pasajesF = [...pasajes]
+        
         switch (campo) {
             case "carnet":
                 pasajesF[indexPasaje].carnet = value
@@ -62,6 +64,7 @@ const PassagensList = () => {
                 achei = 0
                 break
         }
+        
         if (achei) {
             setPasajes(pasajesF)
         }
@@ -118,6 +121,7 @@ const PassagensList = () => {
             idPrecio: precio?.id,
             descuento: 0,
             contacto: {
+                nombre,
                 email,
                 telefono
             },
@@ -174,7 +178,7 @@ const PassagensList = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="w-full">
                                 <InputLabel value="Nombre" />
-                                <TextInput234 value={nombre} setValue={setNombre} placeholder="Escribe el nombre del comprador (inecessario)..." />
+                                <TextInput234 value={nombre} setValue={setNombre} placeholder="Escribe el nombre del comprador..." />
                             </div>
                             <div className="w-full">
                                 <InputLabel value="Telefono" />
@@ -207,7 +211,7 @@ const PassagensList = () => {
                                 <div className="w-10 flex justify-center">
                                     <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
                                 </div>
-                                <td className="text-2xl font-semibold">{viaje?.salida.ciudad}</td>
+                                <p className="text-2xl font-semibold">{viaje?.salida.ciudad}</p>
                             </div>
                             <div className="flex">
                                 <p className="w-20"></p>
@@ -225,7 +229,7 @@ const PassagensList = () => {
                                 <div className="w-10 flex justify-center">
                                     <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
                                 </div>
-                                <td className="text-2xl font-semibold">{viaje?.destino.ciudad}</td>
+                                <p className="text-2xl font-semibold">{viaje?.destino.ciudad}</p>
                             </div>
                             <div className="flex items-center">
                                 <p className="w-20 text-3xl font-bold"></p>
@@ -249,7 +253,7 @@ const PassagensList = () => {
                                 {viaje?.salida.ciudad + ' -> ' + viaje?.destino.ciudad}
                             </p>
                             <div className="border-b-2 border-gray-300 text-lg py-2">
-                                {pasajes.map((pasajero, index) => <div className="font-semibold flex justify-between">
+                                {pasajes.map((pasajero, index) => <div key={index} className="font-semibold flex justify-between">
                                     <p>
                                         Pasajero {index + 1} - Silla {pasajero.nSilla}
                                     </p>

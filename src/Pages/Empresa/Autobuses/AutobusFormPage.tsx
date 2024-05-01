@@ -21,7 +21,7 @@ const AutobusesFormPage = () => {
         nSillas: null,
         primeraSilla: 1,
         idAutobus: null,
-        posicoesIndisponiveis: []
+        posicoesBloqueadas: []
     }
     const navigate = useNavigate()
 
@@ -60,7 +60,7 @@ const AutobusesFormPage = () => {
             pisos: [{
                 distribuicaoFileira: piso1.distribuicaoFileira,
                 inicioContagem: piso1.inicioContagem,
-                posicoesIndisponiveis: piso1.posicoesIndisponiveis,
+                posicoesBloqueadas: piso1.posicoesBloqueadas,
                 ncolunas: piso1.nColunas,
                 nlinhas: piso1.nLinhas
             }]
@@ -70,7 +70,7 @@ const AutobusesFormPage = () => {
             autobusForm.pisos.push({
                 distribuicaoFileira: piso2.distribuicaoFileira,
                 inicioContagem: piso2.inicioContagem,
-                posicoesIndisponiveis: piso2.posicoesIndisponiveis,
+                posicoesBloqueadas: piso2.posicoesBloqueadas,
                 ncolunas: piso2.nColunas,
                 nlinhas: piso2.nLinhas
             })
