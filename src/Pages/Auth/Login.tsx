@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import http from "@/http"
 import FormTemplate from "@/Components/FormTemplate"
-import InputLabel from "@/Components/InputLabel"
 import TextInput234 from "@/Components/TextInput234"
 
 interface ILogin {
@@ -67,12 +66,10 @@ const Login = () => {
         <div className="h-full w-full grid place-content-center">
             <FormTemplate onSubmit={enviar} className="">
                 <div className="mt-2 w-full">
-                    <InputLabel value="Email" />
-                    <TextInput234 value={login} setValue={setLogin} />
+                    <TextInput234 value={login} setValue={setLogin}  labelValue="E-mail"/>
                 </div>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Contrasena" />
-                    <TextInput234 value={contrasena} setValue={setContrasena} />
+                    <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena"/>
                 </div>
             </FormTemplate>
         </div>

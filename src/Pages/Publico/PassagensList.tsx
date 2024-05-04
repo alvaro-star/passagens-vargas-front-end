@@ -1,4 +1,3 @@
-import InputLabel from "@/Components/InputLabel"
 import PrimaryButton from "@/Components/PrimaryButton"
 import IPiso from "@/Types/IPiso"
 import http from "@/http"
@@ -9,10 +8,11 @@ import IVIajeResponse from "./Types/IViajeResponse"
 import TextInputObject from "./Components/TextInputObject"
 
 interface IPasaje {
-    carnet: string
-    nombre: string
-    nascimento: string
-    nSilla: number
+    carnet: string;
+    nombre: string;
+    nascimento: string;
+    nSilla: number;
+    [key: string]: string | number;
 }
 
 interface IPrecio {
@@ -46,28 +46,12 @@ const PassagensList = () => {
     const [telefono, setTelefono] = useState<string>('')
     const [confirmarEmail, setConfirmarEmail] = useState<string>('')
     const navigate = useNavigate()
+
     const editar = (indexPasaje: number, campo: string, value: string) => {
-        let achei = 1
         let pasajesF = [...pasajes]
-        
-        switch (campo) {
-            case "carnet":
-                pasajesF[indexPasaje].carnet = value
-                break
-            case "nombre":
-                pasajesF[indexPasaje].nombre = value
-                break
-            case "nascimento":
-                pasajesF[indexPasaje].nascimento = value
-                break
-            default:
-                achei = 0
-                break
-        }
-        
-        if (achei) {
-            setPasajes(pasajesF)
-        }
+        pasajesF[indexPasaje][campo] = value
+        setPasajes(pasajesF)
+
     }
 
     const getDataHora = (dataHora: string) => {
@@ -154,18 +138,11 @@ const PassagensList = () => {
                             </div>
                         </div>
                         <div className="mt-2">
-                            <InputLabel>Nombre</InputLabel>
-                            <TextInputObject className="rounded-lg" placeholder="Nombre del pasajero..." value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} />
+                            <TextInputObject className="rounded-lg" value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} labelValue="Nombre" />
                         </div>
                         <div className="w-full mt-2 grid grid-cols-2 gap-5">
-                            <div>
-                                <InputLabel>N°Carnet</InputLabel>
-                                <TextInputObject placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} />
-                            </div>
-                            <div>
-                                <InputLabel>Nascimento</InputLabel>
-                                <TextInputObject type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} />
-                            </div>
+                            <TextInputObject className="rounded-lg" placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} labelValue="N° Carnet" />
+                            <TextInputObject className="rounded-lg" type="text" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} labelValue="Nascimiento" />
                         </div>
                     </section>
                 )}
@@ -176,22 +153,10 @@ const PassagensList = () => {
                             Detalhes del contacto
                         </p>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="w-full">
-                                <InputLabel value="Nombre" />
-                                <TextInput234 value={nombre} setValue={setNombre} placeholder="Escribe el nombre del comprador..." />
-                            </div>
-                            <div className="w-full">
-                                <InputLabel value="Telefono" />
-                                <TextInput234 value={telefono} setValue={setTelefono} placeholder="Escribe el telefono del comprador..." />
-                            </div>
-                            <div className="w-full">
-                                <InputLabel value="E-mail" />
-                                <TextInput234 value={email} setValue={setEmail} placeholder="Escribe el email del comprador..." />
-                            </div>
-                            <div className="w-full">
-                                <InputLabel value="Confirmar Email" />
-                                <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} placeholder="Escribe nuevamente el email" />
-                            </div>
+                            <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
+                            <TextInput234 value={telefono} setValue={setTelefono} labelValue="Telefono" />
+                            <TextInput234 value={email} setValue={setEmail} labelValue="E-mail" />
+                            <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} labelValue="Confirmar Email" />
                         </div>
                     </div>
                 </section>

@@ -15,11 +15,9 @@ const ProcessLine = ({ className = '', step }: Props) => {
             break;
     }
     return (
-        <section className={" flex items-center justify-between "
-            + className
-        }>
+        <section className={" flex items-center justify-between " + className}>
             <div className="flex items-center gap-3">
-                <div className={`rounded-full h-10 w-10  bg-gray-500`}></div>
+                <div className='rounded-full h-10 w-10  bg-gray-500'></div>
                 <p className="text-lg">Escojer Viaje</p>
             </div>
             <div className={`border border-b-2 w-1/4 border-b-${bgsColors[0]}`}></div>

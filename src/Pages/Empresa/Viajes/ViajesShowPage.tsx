@@ -5,15 +5,15 @@ import IViaje from "@/Types/IViaje"
 import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 interface IViajeExtends extends IViaje {
     paradas: IParada2[]
 }
 
-
 const ViajesShowPage = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [viaje, setViaje] = useState<IViajeExtends>()
 
     const formatDataHora = (dataHora: string) => new DataHora(dataHora).imprimir()
@@ -43,8 +43,9 @@ const ViajesShowPage = () => {
                 <>
                     <div className="mt-5 flex items-center justify-between px-5 py-2 bg-slate-400 text-white rounded-t">
                         <h2>Paradas</h2>
-                        <PrimaryButton>+ Parada</PrimaryButton>
+                        <PrimaryButton onClick={() => { navigate(`/empresa/paradas/${id}/create`) }}>+ Parada</PrimaryButton>
                     </div>
+
                     <div className="p-5 bg-gray-200 rounded-b">
                         <table className="w-full text-center">
                             <thead>

@@ -1,10 +1,12 @@
 
-import IVIajeResponse from "../Types/IViajeResponse"
 
+import { FaArrowRightLong } from "react-icons/fa6";
+import IVIajeResponse from "../Types/IViajeResponse"
+import { MdTimer } from "react-icons/md";
 interface Props {
     viaje: IVIajeResponse
     index?: number
-    escojerViaje?: (indexViaje: number|undefined, idViaje: string, idPrecio: string) => void
+    escojerViaje?: (indexViaje: number | undefined, idViaje: string, idPrecio: string) => void
     className?: string
 }
 
@@ -16,20 +18,24 @@ const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
     }
 
     return (
-        <div className={`p-5 bg-gray-200 rounded ${className}`}>
+        <div className={`p-5 bg-gray-300 rounded ${className}`}>
             <section className="flex items-center">
-                <img src={viaje.logo} className="mr-3 w-14  rounded-full" />
+                <img src={viaje.logo} className="mr-3 w-20  rounded-lg" />
                 <section className="text-lg flex justify-between w-full items-center">
                     <div>
                         <p>{viaje.salida.lugar + ', ' + viaje.salida.ciudad} </p>
                         <p className="mt-1">{viaje.destino.lugar + ', ' + viaje.destino.ciudad} </p>
                     </div>
-                    <div className="text-xl">
-                        {getDataHora(viaje.salida.dataHora)} - {getDataHora(viaje.destino.dataHora)}
-                    </div>
                 </section>
             </section>
-            {(viaje.precios?.length != 0 && escojerViaje) && <section className="flex flex-col border-t border-black mt-2 pt-2">
+            <div className="text-xl flex items-center">
+                <MdTimer className="my-3 mr-3 text-3xl" />
+                <p className="font-semibold">Salida</p> {getDataHora(viaje.salida.dataHora)}
+                <FaArrowRightLong className="mx-3 text-3xl" />
+                <p className="font-semibold">Destino</p> {getDataHora(viaje.destino.dataHora)}
+
+            </div>
+            {(viaje.precios?.length != 0 && escojerViaje) && <section className="flex flex-col border-t border-black pt-2">
                 {viaje.precios?.map(
                     (precio, index) => !precio.lleno &&
                         <div className="w-full p-1 flex items-center justify-between" key={index}>

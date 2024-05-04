@@ -1,16 +1,18 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import http from "@/http"
-import ICiudad from "@/Types/ICiudad"
+import { FaSearch } from "react-icons/fa";
 import InputError from "@/Components/InputError"
 import IFormViaje from "../Types/IFormViaje"
-import TextInput234 from "@/Components/TextInput234";
 import SelectCiudad from "../../../Components/SelectCiudad";
 import IType from "@/Types/IType"
+import dataConvert from "@/Helpers/Date/dateConvert"
+import DatePickerCostumized from "@/Components/DatePickerCostumized"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
     formData?: IFormViaje
+    ciudadSalidaProps: IType | null
+    ciudadDestinoProps: IType | null
 }
 
 interface Erros {
@@ -19,102 +21,85 @@ interface Erros {
     fechaIda: string,
     fechaVuelta: string
 }
-
-const FormInlineTemplate = ({ formData, className = '', ...props }: Props) => {
-    const navigate = useNavigate()
+const FormInlineTemplate = ({ ciudadSalidaProps, ciudadDestinoProps, formData, className = '', ...props }: Props) => {
+    const navigate = useNavigate();
     const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null);
     const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null);
-    const [fechaIda, setFechaIda] = useState<string>('')
-    const [fechaVuelta, setFechaVuelta] = useState<string>('')
-
+    const [fechaIda, setFechaIda] = useState<Date | null>(new Date());
+    const [fechaVuelta, setFechaVuelta] = useState<Date | null>(new Date());
     const [errors, setErrors] = useState<Erros>({
         ciudadSalida: '',
         ciudadDestino: '',
         fechaIda: '',
         fechaVuelta: ''
-    })
+    });
 
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
-        eve.preventDefault()
+        eve.preventDefault();
         let erros: Erros = {
-            ciudadSalida: '',
-            ciudadDestino: '',
-            fechaIda: '',
+            ciudadSalida: !ciudadSalida ? 'Escoje una ciudad válida' : '',
+            ciudadDestino: !ciudadDestino ? 'Escoje una ciudad válida' : '',
+            fechaIda: !fechaIda ? 'Valor inválido' : '',
             fechaVuelta: ''
+        };
+
+        if (ciudadSalida && ciudadDestino && ciudadSalida.value === ciudadDestino.value) {
+            erros.ciudadSalida = 'La salida es igual al destino';
+            erros.ciudadDestino = 'El destino es igual a la salida';
         }
 
-        if (fechaIda == '') {
-            erros.fechaIda = 'Escoje una fecha válida'
-        }
-        if (!ciudadSalida)
-            erros.ciudadSalida = 'Escoje una ciudad válida'
+        if (!Object.values(erros).some(error => !!error)) {
+            const formViajes = {
+                idCiudadSalida: ciudadSalida!.value,
+                idCiudadDestino: ciudadDestino!.value,
+                fechaSalida: dataConvert(fechaIda!),
+                fechaVuelta: dataConvert(fechaVuelta!)
+            };
 
-        if (!ciudadDestino)
-            erros.ciudadDestino = 'Escoje una ciudad válida'
-
-        if (ciudadSalida && ciudadDestino) {
-            if (ciudadSalida.value === ciudadDestino.value) {
-                erros.ciudadSalida = 'La salida es igual al destino'
-                erros.ciudadSalida = 'El destino es igual ala salida'
-            }
-
-            if (erros.ciudadSalida == '' && erros.ciudadDestino == '' && erros.fechaIda == '') {
-                const formViajes = {
-                    idCiudadSalida: ciudadSalida.value,
-                    idCiudadDestino: ciudadDestino.value,
-                    fechaSalida: fechaIda,
-                    fechaVuelta: fechaVuelta
-                }
-
-                sessionStorage.setItem("formViaje", JSON.stringify(formViajes))
-                navigate('/viajes')
-            }
+            sessionStorage.setItem("formViaje", JSON.stringify(formViajes));
+            navigate('/viajes');
         }
 
-        setErrors(erros)
-    }
+        setErrors(erros);
+    };
 
     useEffect(() => {
-        if (formData) {
-            http.get<ICiudad>(`ciudades/${formData.idCiudadSalida}`)
-                .then(resposta => {
-                    setCiudadSalida({ value: resposta.data.id, label: resposta.data.nombre })
-                })
-            http.get<ICiudad>(`ciudades/${formData.idCiudadDestino}`)
-                .then(resposta => {
-                    setCiudadDestino({ value: resposta.data.id, label: resposta.data.nombre })
-                })
-            setFechaIda(formData.fechaSalida)
-            setFechaVuelta(formData.fechaVuelta)
+        if (formData && ciudadSalidaProps && ciudadDestinoProps) {
+            setCiudadSalida(ciudadSalidaProps)
+            setCiudadDestino(ciudadDestinoProps)
+            setFechaIda(new Date(formData.fechaSalida + "T00:00:00"));
+            setFechaVuelta(new Date(formData.fechaVuelta + "T00:00:00"));
         }
-    }, [formData])
+    }, [formData, ciudadSalidaProps, ciudadDestinoProps, navigate]);
+
     return (
-        <form className={"max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5  rounded " + className}
+        <form className={`max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5 rounded ${className}`}
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
-                <SelectCiudad option={ciudadSalida} setOption={setCiudadSalida} />
+                <SelectCiudad option={ciudadSalida} setOption={setCiudadSalida} labelValue="Salida" placeholder="Ciudad de Origen" />
                 <InputError message={errors.ciudadSalida} />
             </div>
             <div className="w-full">
-                <SelectCiudad option={ciudadDestino} setOption={setCiudadDestino} />
+                <SelectCiudad option={ciudadDestino} setOption={setCiudadDestino} labelValue="Destino" placeholder="Ciudad de Destino" />
                 <InputError message={errors.ciudadDestino} />
             </div>
             <div>
-                <TextInput234 type="date" value={fechaIda} setValue={setFechaIda} required />
+                <DatePickerCostumized dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
                 <InputError message={errors.fechaIda} />
             </div>
             <div>
-                <TextInput234 type="date" value={fechaVuelta} setValue={setFechaVuelta} required />
+                <DatePickerCostumized dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
                 <InputError message={errors.fechaVuelta} />
             </div>
             <div className="flex items-center h-full justify-center">
-                <button className="h-9 w-9 rounded bg-cyan-500 text-white">
-                    B
+                <button className="h-9 w-9 rounded bg-cyan-500 text-white grid place-content-center">
+                    <FaSearch />
                 </button>
             </div>
         </form>
-    )
-}
+    );
+};
+
 
 export default FormInlineTemplate

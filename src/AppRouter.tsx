@@ -22,6 +22,7 @@ import AutobusesShowPage from "./Pages/Empresa/Autobuses/AutobusesShowPage";
 import LugaresFormPage from "./Pages/Admin/Lugares/LugaresFormPage";
 import ViajesShowPage from "./Pages/Empresa/Viajes/ViajesShowPage";
 import ViajesIndexPage from "./Pages/Empresa/Viajes/ViajesIndexPage";
+import ParadaFormPage from "./Pages/Empresa/Paradas/ParadaFormPage";
 
 const AppRouter = () => {
     return (
@@ -64,6 +65,9 @@ const AppRouter = () => {
                     <Route path="viajes">
                         <Route index element={<ViajesIndexPage />} />
                         <Route path=":id" element={<ViajesShowPage />} />
+                    </Route>
+                    <Route path="paradas">
+                        <Route path=":id/create" element={<ParadaFormPage />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />

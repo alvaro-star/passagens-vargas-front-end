@@ -6,11 +6,16 @@ import FormInlineTemplate from "./Components/FormInlineTemplate"
 import ProcessLine from "./Components/ProcessLine"
 import http from "@/http"
 import IVIajeResponse from "./Types/IViajeResponse"
+import ICiudad from "@/Types/ICiudad"
+import TimeLine from "./Components/TimeLine"
 
 
 const ViajesPage = () => {
     const navigate = useNavigate()
     const [viajes, setViajes] = useState<IVIajeResponse[]>([])
+
+    const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
+    const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
 
     const [formData, setFormData] = useState<IFormViaje>()
     useEffect(() => {
@@ -27,12 +32,24 @@ const ViajesPage = () => {
         http.post<IVIajeResponse[]>("viajes", solicitacao)
             .then(resposta => {
                 setViajes(resposta.data)
-                console.log(resposta.data);
-
             }).catch(() => {
                 alert("Um erro")
             })
     }, [])
+
+    useEffect(() => {
+        if (formData) {
+            const fetchCiudad = (idCiudad: number, setter: React.Dispatch<React.SetStateAction<ICiudad | null>>) => {
+                http.get<ICiudad>(`ciudades/${idCiudad}`)
+                    .then(resposta => {
+                        setter(resposta.data);
+                    });
+            };
+
+            fetchCiudad(formData.idCiudadSalida, setCiudadSalida);
+            fetchCiudad(formData.idCiudadDestino, setCiudadDestino);
+        }
+    }, [formData]);
 
     const escojerViaje = (indexViaje: number | undefined, idViaje: string, idPrecio: string) => {
         if (indexViaje != null) {
@@ -50,20 +67,22 @@ const ViajesPage = () => {
         <div className="w-full">
             <header className="w-full px-14 py-8">
                 <h1 className="text-5xl"> Logo</h1>
-                {formData &&
-                    <FormInlineTemplate formData={formData} className="mt-8" />
-                }
+                {formData && ciudadSalida && ciudadDestino && <FormInlineTemplate
+                    ciudadSalidaProps={{ value: ciudadSalida.id, label: ciudadSalida.nombre }}
+                    ciudadDestinoProps={{ value: ciudadDestino.id, label: ciudadDestino.nombre }}
+                    formData={formData} className="mt-8" />}
             </header>
             <section className="w-full bg-gray-200 p-4 px-14 text-lg">
-                Pasajes (Falta configurarar o back-end) de Autobus de <b className="font-semibold">Teste - T</b> , para <b className="font-semibold">Potosi - PT</b>
+                Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b> , para <b className="font-semibold">{ciudadDestino?.nombre}</b>
             </section>
 
             <section className="w-full">
-
                 <ProcessLine step={1} className="my-8 mx-10" />
 
-
-                <div className="grid grid-cols-1 gap-5 m-5">
+                <div className="max-w-7xl mx-auto">
+                    <TimeLine />
+                </div>
+                <div className="grid grid-cols-1 gap-5 my-5 mx-auto max-w-7xl">
                     {viajes.map((viaje, index) =>
                         <CardViaje key={viaje.id}
                             index={index}
@@ -71,6 +90,12 @@ const ViajesPage = () => {
                             escojerViaje={escojerViaje}
                         />
                     )}
+
+                    {viajes.length == 0 &&
+                        <div>
+                            No hay viajes disponibles
+                        </div>
+                    }
                 </div>
             </section>
         </div>

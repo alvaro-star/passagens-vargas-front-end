@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react"
 import PisoFormPage from "./Components/PisoFormPage"
 import IPiso from "@/Types/IPiso"
-import ICampo from "@/Types/ICampo"
 import http from "@/http"
 import PrimaryButton from "@/Components/PrimaryButton"
-import InputLabel from "@/Components/InputLabel"
 import Piso from "@/Pages/Publico/Components/Piso"
 import IAutobusForm from "./Types/IAutobusForm"
-import TextInput from "@/Components/TextInput"
 import { useNavigate } from "react-router-dom"
+import TextInput234 from "@/Components/TextInput234"
 
 const AutobusesFormPage = () => {
     const construtorPiso = {
@@ -30,8 +28,7 @@ const AutobusesFormPage = () => {
     const [piso1, setPiso1] = useState<IPiso>(construtorPiso)
     const [piso2, setPiso2] = useState<IPiso>(construtorPiso)
 
-    const construtor = { value: '', erro: '' }
-    const [placa, setPlaca] = useState<ICampo<string>>(construtor)
+    const [placa, setPlaca] = useState<string>('')
     const [etapa, setEtapa] = useState(1)
     const [segundoPiso, setSegundoPiso] = useState<boolean | null>(null)
 
@@ -55,7 +52,7 @@ const AutobusesFormPage = () => {
         e.preventDefault()
         let autobusForm: IAutobusForm | null = {
             id: null,
-            placa: placa.value,
+            placa: placa,
             idEmpresa: idEmpresa,
             pisos: [{
                 distribuicaoFileira: piso1.distribuicaoFileira,
@@ -82,7 +79,7 @@ const AutobusesFormPage = () => {
                 autobusForm = null
                 setPiso1(construtorPiso)
                 setPiso2(construtorPiso)
-                setPlaca(construtor)
+                setPlaca('')
                 setEtapa(1)
                 setSegundoPiso(null)
                 navigate('/empresa/admin/autobuses')
@@ -158,8 +155,7 @@ const AutobusesFormPage = () => {
                 </PrimaryButton>
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
-                        <InputLabel value="N° Placa" />
-                        <TextInput campo={placa} setCampo={setPlaca} required />
+                        <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa"/>
                     </div>
                 </section>
                 <div>

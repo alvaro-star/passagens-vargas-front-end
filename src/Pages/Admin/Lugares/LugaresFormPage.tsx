@@ -69,8 +69,7 @@ const LugaresFormPage = ({ closeModal, setLugares, lugares, idCiudadProp, create
                     {create == false ? 'Editando un Lugar' : 'Registrando una Lugar'}
                 </h2>
                 <div className="w-full mt-2">
-                    <InputLabel value='Nombre' />
-                    <TextInput234 value={nombre} setValue={setNombre} />
+                    <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre"/>
                 </div>
             </FormTemplate>
         </div>

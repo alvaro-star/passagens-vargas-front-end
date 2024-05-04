@@ -71,17 +71,16 @@ const CiudadesFormPage = () => {
                     {parametros.id ? 'Editando una Ciudad' : 'Registrando una Ciudad'}
                 </h2>
                 <div className="w-full mt-2">
-                    <InputLabel value='Nombre' />
-                    <TextInput234 value={nombre} setValue={setNombre} />
+                    <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
                 </div>
                 {!(parametros.id) &&
-                    <div className="w-full mt-2">
-                        <InputLabel value='Departamento' />
+                    <div className="w-full mt-2 relative">
                         <select value={idDepartamento}
                             onChange={eve => setIdDepartamento(parseInt(eve.target.value))}
-                            className="p-2 w-full border border-gray-400 focus:border-indigo-500 focus:ring-indigo-500 rounded shadow-sm">
+                            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 peer">
                             {departamentos.map(departamento => <option key={departamento.id} value={departamento.id}>{departamento.nombre}</option>)}
                         </select>
+                        <label className="absolute text-sm text-gray-500 rounded-t bg-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Departamento</label>
                     </div>
                 }
             </FormTemplate>

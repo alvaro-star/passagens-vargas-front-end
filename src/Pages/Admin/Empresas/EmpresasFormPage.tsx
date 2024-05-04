@@ -1,32 +1,38 @@
 import FormTemplate from "@/Components/FormTemplate"
 import InputLabel from "@/Components/InputLabel"
 import TextInput from "@/Components/TextInput"
+import TextInput234 from "@/Components/TextInput234"
 import ICampo from "@/Types/ICampo"
 import http from "@/http"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+interface empresaFormErro {
+    nombre: string
+    logo: string
+    numeroCuenta: string
+}
 
 
 const EmpresasFormPage = () => {
-    const [nombre, setNombre] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [logo, setLogo] = useState<ICampo<string>>({ value: '', erro: '' })
-    const [numeroCuenta, setNumeroCuenta] = useState<ICampo<string>>({ value: '', erro: '' })
+    const [nombre, setNombre] = useState<string>('')
+    const [logo, setLogo] = useState<string>('')
+    const [numeroCuenta, setNumeroCuenta] = useState<string>('')
+    const [erros, setErros] = useState<empresaFormErro>({ nombre: '', logo: '', numeroCuenta: '' })
     const navigate = useNavigate()
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         //Validação
-        if (logo.value.length > 255) {
-            let campo = logo
-            campo.erro = 'El tamanho del link es muy grande'
-            setLogo(campo)
+        let errosV = { nombre: '', logo: '', numeroCuenta: '' }
+        if (logo.length > 255) {
+            errosV.logo = 'El tamanho del link es muy grande'
             return
         }
-        
+
         e.preventDefault()
         const empresa = {
-            nombre: nombre.value,
-            logo: logo.value,
-            numeroCuenta: numeroCuenta.value
+            nombre: nombre,
+            logo: logo,
+            numeroCuenta: numeroCuenta
         }
         http.post('empresas', empresa).then(() => {
             navigate('/admin/empresas')
@@ -39,16 +45,13 @@ const EmpresasFormPage = () => {
             <div>
                 <FormTemplate onSubmit={enviar}>
                     <div className="w-full mt-2">
-                        <InputLabel value="Nombre" />
-                        <TextInput campo={nombre} setCampo={setNombre} />
+                        <TextInput234 value={nombre} setValue={setNombre}  labelValue="Nombre"/>
                     </div>
                     <div className="w-full mt-2">
-                        <InputLabel value="Link da logo" />
-                        <TextInput campo={logo} setCampo={setLogo} />
+                        <TextInput234 value={logo} setValue={setLogo}  labelValue="Link da logo"/>
                     </div>
                     <div className="w-full mt-2">
-                        <InputLabel value="Numero de Cuenta" />
-                        <TextInput campo={numeroCuenta} setCampo={setNumeroCuenta} />
+                        <TextInput234 value={numeroCuenta} setValue={setNumeroCuenta}  labelValue="Numero de Cuenta"/>
                     </div>
                 </FormTemplate>
             </div>
