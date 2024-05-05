@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import NotFound from "./Pages/NotFound";
-import ViajeShow from "./Pages/Publico/ViajeShow";
 import PassagensList from "./Pages/Publico/PassagensList";
 import ViajesPage from "./Pages/Publico/ViajesPage";
 import SobrePage from "./Pages/Publico/SobrePage";
@@ -22,7 +21,7 @@ import AutobusesShowPage from "./Pages/Empresa/Autobuses/AutobusesShowPage";
 import LugaresFormPage from "./Pages/Admin/Lugares/LugaresFormPage";
 import ViajesShowPage from "./Pages/Empresa/Viajes/ViajesShowPage";
 import ViajesIndexPage from "./Pages/Empresa/Viajes/ViajesIndexPage";
-import ParadaFormPage from "./Pages/Empresa/Paradas/ParadaFormPage";
+import SwitchSillasPage from "./Pages/Publico/SwitchSillasPage";
 
 const AppRouter = () => {
     return (
@@ -33,7 +32,7 @@ const AppRouter = () => {
                     <Route path="login" element={<Login />} />
                     <Route path="registrar" element={<Register />} />
                     <Route path="viajes" element={<ViajesPage />} />
-                    <Route path="viaje/:id" element={<ViajeShow />} />
+                    <Route path="viaje" element={<SwitchSillasPage />} />
                     <Route path="viaje/step3/:id" element={<PassagensList />} />
                     <Route path="sobre" element={<SobrePage />} />
                 </Route>
@@ -65,9 +64,6 @@ const AppRouter = () => {
                     <Route path="viajes">
                         <Route index element={<ViajesIndexPage />} />
                         <Route path=":id" element={<ViajesShowPage />} />
-                    </Route>
-                    <Route path="paradas">
-                        <Route path=":id/create" element={<ParadaFormPage />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />

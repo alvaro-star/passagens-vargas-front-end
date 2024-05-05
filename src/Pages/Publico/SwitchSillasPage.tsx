@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Piso from "./Components/Piso";
 import CardViaje from "./Components/CardViaje";
 import ProcessLine from "./Components/ProcessLine";
@@ -9,7 +9,6 @@ import IPiso from "@/Types/IPiso";
 import ISilla from "@/Types/ISilla";
 import PrimaryButton from "@/Components/PrimaryButton";
 import IVIajeResponse from "./Types/IViajeResponse";
-
 
 interface IPrecio {
     id: string,
@@ -22,8 +21,8 @@ interface IPrecio {
     idViaje: number
 }
 
-const ViajeShow = () => {
-    const parametros = useParams()
+const SwitchSillasPage = () => {
+
     const navigate = useNavigate()
 
 
@@ -53,8 +52,7 @@ const ViajeShow = () => {
         }
     }
 
-    const mandar = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
-        eve.preventDefault()
+    const mandar = () => {
         if (sillasEscogidas.length > 0) {
             sessionStorage.setItem("sillasFromViaje", sillasEscogidas.join())
             navigate(`/viaje/step3/${precio?.id}`)
@@ -62,37 +60,32 @@ const ViajeShow = () => {
     }
 
     useEffect(() => {
-        if (parametros.id) {
-            http.get(`precios/${parametros.id}/vender`)
-                .then(resposta => {
-                    let posicionesString: string = resposta.data.piso.posicoesBloqueadas
-                    let posicionesBloqueadas: number[] = []
-                    if (posicionesString != '') {
-                        posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
-                    }
-                    resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
-                    console.log(resposta.data);
-                    
-                    setPrecio(resposta.data)
-                })
-        } else {
-            navigate('/')
-        }
-
         let cookie1 = sessionStorage.getItem("viajeData")
-        let cookieJSON = cookie1 ? cookie1 : ''
-        if (cookie1 === '') {
+        let cookie2 = sessionStorage.getItem("idPrecio")
+        let cookieJSON1 = cookie1 ? cookie1 : ''
+        let cookieJSON2 = cookie2 ? cookie2 : ''
+        if (cookieJSON1 === '' || cookieJSON2 === '')
             navigate('/')
-        }
 
-        const viajeS = JSON.parse(cookieJSON)
+        const viajeS = JSON.parse(cookieJSON1)
         setViaje(viajeS)
+
+        http.get(`precios/${cookieJSON2}/vender`)
+            .then(resposta => {
+                let posicionesString: string = resposta.data.piso.posicoesBloqueadas
+                let posicionesBloqueadas: number[] = []
+                if (posicionesString != '') {
+                    posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
+                }
+                resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
+                setPrecio(resposta.data)
+            })
 
     }, [])
 
     return (
         <div className="w-full bg-slate-100 flex flex-col items-center">
-            <header className="w-full h-64 bg-slate-500 p-2 grid place-content-center gap-6">
+            <header className="w-full h-64 bg-slate-500 p-2 flex flex-col items-center justify-center space-y-6">
                 <div className="text-white font-semibold text-4xl text-center">Header</div>
                 <FormInlineTemplate />
             </header>
@@ -136,7 +129,7 @@ const ViajeShow = () => {
                             </div>
                         </section>
                         <PrimaryButton
-                            onClick={eve => mandar(eve)}
+                            onClick={mandar}
                             className="mt-2"
                             disabled={sillasEscogidas.length == 0} >
                             Escoger lista
@@ -148,4 +141,4 @@ const ViajeShow = () => {
     )
 }
 
-export default ViajeShow;
+export default SwitchSillasPage;

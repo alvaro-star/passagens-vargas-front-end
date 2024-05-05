@@ -1,0 +1,10 @@
+/* Esconda a barra de rolagem */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Aplique rolagem apenas quando necessário */
+.overflow-x-scroll {
+    scrollbar-width: none;
+    /* Oculta a barra de rolagem no Firefox */
+}

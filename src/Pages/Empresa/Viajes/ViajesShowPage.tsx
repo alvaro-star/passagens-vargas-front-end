@@ -5,7 +5,9 @@ import IViaje from "@/Types/IViaje"
 import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import ParadaFormPage from "../Paradas/ParadaFormPage"
+import IParadaForm from "./Types/IParadaForm"
 
 interface IViajeExtends extends IViaje {
     paradas: IParada2[]
@@ -13,29 +15,46 @@ interface IViajeExtends extends IViaje {
 
 const ViajesShowPage = () => {
     const { id } = useParams()
-    const navigate = useNavigate()
     const [viaje, setViaje] = useState<IViajeExtends>()
-
-    const formatDataHora = (dataHora: string) => new DataHora(dataHora).imprimir()
+    const [openFormCreate, setOpenFormCreate] = useState(false)
 
     useEffect(() => {
         if (id) {
             http.get<IViajeExtends>(`viajes/${id}`)
-                .then(resposta => {
-                    setViaje(resposta.data)
-                })
+                .then(({ data }) => {
+                    const viaje = data;
+                    viaje.paradas = ordenarParadas(viaje.paradas);
+                    setViaje(viaje);
+                });
         }
-    }, [id])
+    }, [id]);
 
-    const ordenarParadas = () => {
+    const validarParada = (newParada: IParadaForm) => {
+        if (viaje && viaje.paradas.length >= 2) {
+            const dataHoraInicio = new Date(viaje.paradas[0].dataHora);
+            const ultimoIndice = viaje.paradas.length - 1;
+            const dataHoraFim = new Date(viaje.paradas[ultimoIndice].dataHora);
+            const dataHoraNovaParada = new Date(newParada.dataHora);
+            return dataHoraInicio < dataHoraNovaParada && dataHoraNovaParada < dataHoraFim;
+        }
+        return false;
+    };
+
+    const ordenarParadas = (paradas: IParada2[]) => {
+        if (paradas.length > 0) {
+            return [...paradas].sort((a: IParada2, b: IParada2) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+        } else {
+            return [];
+        }
+    };
+
+    const addParada = (newParada: IParada2) => {
         if (viaje) {
-            return viaje?.paradas.sort((a: IParada2, b: IParada2) => {
-                const dataHoraA: Date = new Date(a.dataHora);
-                const dataHoraB: Date = new Date(b.dataHora);
-                return dataHoraA.getTime() - dataHoraB.getTime();
-            });
-        } else return [];
-    }
+            viaje.paradas.push(newParada);
+            viaje.paradas = ordenarParadas(viaje.paradas);
+            setViaje({ ...viaje });
+        }
+    };
 
     return (
         <div className="p-10">
@@ -43,7 +62,10 @@ const ViajesShowPage = () => {
                 <>
                     <div className="mt-5 flex items-center justify-between px-5 py-2 bg-slate-400 text-white rounded-t">
                         <h2>Paradas</h2>
-                        <PrimaryButton onClick={() => { navigate(`/empresa/paradas/${id}/create`) }}>+ Parada</PrimaryButton>
+                        <PrimaryButton onClick={() => setOpenFormCreate(true)}>+ Parada</PrimaryButton>
+                        <div className={"absolute inset-0 grid place-content-center " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
+                            <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
+                        </div>
                     </div>
 
                     <div className="p-5 bg-gray-200 rounded-b">
@@ -57,17 +79,17 @@ const ViajesShowPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {ordenarParadas().map(parada =>
+                                {viaje.paradas.map(parada =>
                                     <tr className="hover:bg-slate-300" key={parada.id}>
                                         <td className="py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
                                         <td className="">{parada.plataforma}</td>
-                                        <td className="">{formatDataHora(parada.dataHora)}</td>
+                                        <td className="">{new DataHora(parada.dataHora).imprimir()}</td>
                                         <td className="">
                                             <div className="space-x-1 text-white">
-                                                <button className="bg-yellow-400 rounded p-1.5 px-3 uppercase">
+                                                <button disabled className="bg-yellow-400 rounded p-1.5 px-3 uppercase">
                                                     Editar
                                                 </button>
-                                                <button className="bg-red-500 rounded p-1.5 px-3 uppercase">
+                                                <button disabled className="bg-red-500 rounded p-1.5 px-3 uppercase">
                                                     Eliminar
                                                 </button>
                                             </div>
@@ -83,4 +105,4 @@ const ViajesShowPage = () => {
     )
 }
 
-export default ViajesShowPage
+export default ViajesShowPage;

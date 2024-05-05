@@ -4,44 +4,70 @@ import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import ParadaForm from "../Viajes/Components/ParadaForm"
 import PrimaryButton from "@/Components/PrimaryButton"
 import http from "@/http"
-import { useNavigate, useParams } from "react-router-dom"
 import IError from "@/Types/IError"
+import { IoClose } from "react-icons/io5"
+import IParada2 from "@/Types/IViaje/IParada2"
 
-const ParadaFormPage = () => {
-    const { id } = useParams()
+interface Props {
+    className?: string
+    idViaje: string
+    addParada: (newParada: IParada2) => void
+    validarParada: (newParada: IParadaForm) => boolean
+    setOpenForm: (value: boolean) => void
+}
 
-    const navigate = useNavigate()
+const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, validarParada }: Props) => {
 
-    const [parada, setParada] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '' })
-    const [paradaErros, setParadaErros] = useState<IParadaFormErro>({ plataforma: '', dataHora: '', idLugar: '' })
+    const novoParadaForm = () => {
+        return { plataforma: '', dataHora: '', idLugar: '' }
+    }
+    const [parada, setParada] = useState<IParadaForm>(novoParadaForm())
+    const [paradaErros, setParadaErros] = useState<IParadaFormErro>(novoParadaForm())
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        let haErros = parada.dataHora === '' || parada.plataforma === '' || parada.idLugar === '' || !id;
+        let erros: IParadaFormErro = novoParadaForm();
+        if (!validarParada(parada)) {
+            erros.dataHora = 'La fecha de partida esta fuera del limite'
+        }
+        let haErros = parada.dataHora === '' || parada.plataforma === '' || parada.idLugar === '' || !idViaje;
         if (!haErros) {
-            http.post('paradas', { ...parada, idViaje: id })
-                .then(() => navigate(`empresa/admin/viajes/${id}`))
-                .catch((erro) => {
+            http.post<IParada2>('paradas', { ...parada, idViaje: idViaje })
+                .then(resposta => {
+                    addParada(resposta.data)
+                    setOpenForm(false)
+                })
+                .catch(erro => {
                     console.log(erro);
-                    let erros: IParadaFormErro = { plataforma: '', dataHora: '', idLugar: '' };
                     if (erro.response.data.errors) {
-                        erro.response.data.errors.forEach((erro: IError) => {
-                            erros[erro.name] = erro.message;
+                        erro.response.data.errors.forEach((er: IError) => {
+                            erros[er.name] = er.message;
                         })
-                        setParadaErros(erros)
                     }
                 })
         }
+        setParadaErros(erros)
     }
 
-    return <div className="w-full grid place-content-center">
-        <form onSubmit={enviar} className="w-full flex justify-center flex-col p-5 bg-gray-300 rounded-lg my-10">
-            <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />
-            <div className="text-center mt-2">
-                <PrimaryButton type="submit">Enviar</PrimaryButton>
-            </div>
-        </form>
-    </div>
+    return (
+        <div className={"w-full grid place-content-center " + className}>
+            <form onSubmit={enviar} className="w-full flex justify-center flex-col p-5 bg-gray-300 rounded-lg">
+                <div className="my-2 w-full flex justify-between items-center">
+                    <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
+                    <button
+                        className="flex items-center justify-center rounded h-8 w-8 bg-red-500"
+                        onClick={() => setOpenForm(false)}
+                    >
+                        <IoClose className="text-xl text-center" />
+                    </button>
+                </div>
+                <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />
+                <div className="text-center mt-2">
+                    <PrimaryButton type="submit">Enviar</PrimaryButton>
+                </div>
+            </form>
+        </div>
+    )
 }
 
 export default ParadaFormPage

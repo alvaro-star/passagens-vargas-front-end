@@ -11,8 +11,8 @@ import DatePickerCostumized from "@/Components/DatePickerCostumized"
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
     formData?: IFormViaje
-    ciudadSalidaProps: IType | null
-    ciudadDestinoProps: IType | null
+    ciudadSalidaProps?: IType | null
+    ciudadDestinoProps?: IType | null
 }
 
 interface Erros {

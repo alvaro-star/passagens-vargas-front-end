@@ -46,10 +46,10 @@ const CiudadesShowPage = () => {
         <div className="w-full flex justify-center flex-col items-center">
             <div className="my-5 w-full px-28 flex items-center justify-between">
                 <h2 className="text-2xl font-semibold">
-                    {ciudad?.nombre}
+                    Lugares de {ciudad?.nombre}
                 </h2>
                 <button className="bg-black rounded-lg uppercase text-white py-2 px-3 font-medium"
-                    onClick={create} >Registrar Nuevo</button>
+                    onClick={create} >+ Lugar</button>
                 {openForm && ciudad &&
                     <div className="absolute inset-0 grid place-content-center bg-white bg-opacity-35">
                         <LugaresFormPage idCiudadProp={ciudad.id} closeModal={closeForm} setLugares={setLugares} lugares={lugares} create={true} />

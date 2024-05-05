@@ -6,6 +6,7 @@ import { useState } from "react"
 import IParadaForm from "./Types/IParadaForm"
 import IParadaFormErro from "./Types/IParadaFormErro"
 import ParadaForm from "./Components/ParadaForm"
+import { IoClose } from "react-icons/io5"
 
 interface IErros {
     idAutobus: string,
@@ -120,10 +121,12 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
     }
 
     return (
-        <form className="bg-gray-200 p-5 rounded flex flex-col" onSubmit={enviar}>
+        <form className="bg-gray-200 p-5 rounded-lg flex flex-col" onSubmit={enviar}>
             <div className="relative">
                 <h1 className="text-2xl my-4 font-semibold text-center">Registre los datos del nuevo Viaje</h1>
-                <button className="absolute top-0 right-0 bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setOpenForm(false)}>X</button>
+                <button className="absolute top-0 right-0 bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setOpenForm(false)}>
+                    <IoClose className="text-xl" />
+                </button>
             </div>
             <section>
                 <p className="text-lg font-semibold">
@@ -141,12 +144,12 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
                 <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>
                 <div className="flex gap-2">
                     <div className="w-full">
-                        <TextInput234 value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)"/>
+                        <TextInput234 value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)" />
                         <InputError message={erros.precioPiso1} />
                     </div>
                     {nPisos == 2 &&
                         <div className="w-full">
-                            <TextInput234 value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)"/>
+                            <TextInput234 value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
                             <InputError message={erros.precioPiso2} />
                         </div>
                     }

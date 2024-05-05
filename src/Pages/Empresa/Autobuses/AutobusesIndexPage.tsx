@@ -49,9 +49,6 @@ const AutobusesIndexPage = () => {
                         </p>
                     </div>
                     <p>
-                        Dinero cobrado: Bs {empresa?.valorViajesEfectivo}
-                    </p>
-                    <p>
                         Dinero disponible: Bs {empresa?.valorViajesWeb}
                     </p>
                     <PrimaryButton onClick={create}>+ Autobus</PrimaryButton>
@@ -60,7 +57,7 @@ const AutobusesIndexPage = () => {
                     {autobuses.map(autobus =>
                         <div key={autobus.id} className="p-5 bg-white rounded-lg flex justify-between items-center">
                             <p>Placa: {autobus.placa}</p>
-                            <p>Dinero arrecadado Efectivo: Bs {autobus.valorViajesEfectivo} </p>
+                            <p>Dinero arrecadado en Efectivo: Bs {autobus.valorViajesEfectivo} </p>
                             <p>Dinero disponible web: Bs {autobus.valorViajesWeb} </p>
                             <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver viajes</PrimaryButton>
                         </div>

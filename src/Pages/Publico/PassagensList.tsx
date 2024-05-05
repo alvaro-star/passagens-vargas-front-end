@@ -25,13 +25,13 @@ interface IPrecio {
     sillasOcupadas: number[],
     idViaje: number
 }
-
+/*
 interface Erros {
     email: string
     nombre: string
     telefono: string
     confirmarEmail: string
-}
+}*/
 
 
 const PassagensList = () => {

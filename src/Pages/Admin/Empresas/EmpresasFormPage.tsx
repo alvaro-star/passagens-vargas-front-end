@@ -1,24 +1,20 @@
 import FormTemplate from "@/Components/FormTemplate"
-import InputLabel from "@/Components/InputLabel"
-import TextInput from "@/Components/TextInput"
 import TextInput234 from "@/Components/TextInput234"
-import ICampo from "@/Types/ICampo"
 import http from "@/http"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-interface empresaFormErro {
+/*interface empresaFormErro {
     nombre: string
     logo: string
     numeroCuenta: string
-}
+}*/
 
 
 const EmpresasFormPage = () => {
     const [nombre, setNombre] = useState<string>('')
     const [logo, setLogo] = useState<string>('')
     const [numeroCuenta, setNumeroCuenta] = useState<string>('')
-    const [erros, setErros] = useState<empresaFormErro>({ nombre: '', logo: '', numeroCuenta: '' })
     const navigate = useNavigate()
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         //Validação
@@ -45,13 +41,13 @@ const EmpresasFormPage = () => {
             <div>
                 <FormTemplate onSubmit={enviar}>
                     <div className="w-full mt-2">
-                        <TextInput234 value={nombre} setValue={setNombre}  labelValue="Nombre"/>
+                        <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
                     </div>
                     <div className="w-full mt-2">
-                        <TextInput234 value={logo} setValue={setLogo}  labelValue="Link da logo"/>
+                        <TextInput234 value={logo} setValue={setLogo} labelValue="Link da logo" />
                     </div>
                     <div className="w-full mt-2">
-                        <TextInput234 value={numeroCuenta} setValue={setNumeroCuenta}  labelValue="Numero de Cuenta"/>
+                        <TextInput234 value={numeroCuenta} setValue={setNumeroCuenta} labelValue="Numero de Cuenta" />
                     </div>
                 </FormTemplate>
             </div>

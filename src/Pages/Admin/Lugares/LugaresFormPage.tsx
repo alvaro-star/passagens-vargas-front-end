@@ -1,5 +1,4 @@
 import FormTemplate from "@/Components/FormTemplate"
-import InputLabel from "@/Components/InputLabel"
 import TextInput234 from "@/Components/TextInput234"
 import ILugar from "@/Types/ILugar"
 import http from "@/http"

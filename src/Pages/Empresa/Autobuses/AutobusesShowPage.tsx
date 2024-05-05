@@ -53,7 +53,7 @@ const AutobusesShowPage = () => {
                     <div className="w-full rounded-lg p-5 bg-slate-500 text-white font-semibold text-xl flex justify-between items-center">
                         <p>{autobus.placa}</p>
                         <div className="space-x-4 flex items-center">
-                            <PrimaryButton>ver modelo</PrimaryButton>
+                            <PrimaryButton className="hidden">ver modelo</PrimaryButton>
                             <PrimaryButton onClick={() => { setOpenForm(true) }}> criar viaje</PrimaryButton>
                         </div>
                     </div>
@@ -61,8 +61,8 @@ const AutobusesShowPage = () => {
                         {autobus.viajes.map(viaje =>
                             <div className="px-5 py-3 bg-gray-300 rounded flex items-center justify-between" key={viaje.codigo}>
                                 <p className="font-mono">{viaje.codigo}</p>
-                                <p>Bs {viaje.valorArrecadadoEfectivo}</p>
-                                <p>Dinero disponible: Bs {viaje.valorArrecadadoWeb}</p>
+                                <p>Dinero Arrecadado en Efectivo Bs {viaje.valorArrecadadoEfectivo}</p>
+                                <p>Dinero disponible en la Web: Bs {viaje.valorArrecadadoWeb}</p>
                                 <PrimaryButton onClick={() => showViaje(viaje.codigo)} className="bg-blue-500">Ver viaje</PrimaryButton>
                             </div>
                         )}

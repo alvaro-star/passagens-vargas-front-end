@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 const ViajesIndexPage = () => {
     const [aba, setAba] = useState(0)
     const navigate = useNavigate()
-    const abas = ['Todos los Viajes', 'Viajes Pasados', 'Viajes disponíbles']
+    const abas = ['Todos los Viajes', 'Viajes Pasados -- Nãi implementado', 'Viajes disponíbles -- Não implementado']
     const idEmpresa = sessionStorage.getItem('idEmpresa')
     const [viajes, setViajes] = useState<IViaje[]>([])
 

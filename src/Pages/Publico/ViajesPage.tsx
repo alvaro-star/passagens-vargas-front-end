@@ -16,6 +16,7 @@ const ViajesPage = () => {
 
     const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
     const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
+    const [fechaSalidaSelecionada, setFechaSalidaSelecionada] = useState<Date>(new Date());
 
     const [formData, setFormData] = useState<IFormViaje>()
     useEffect(() => {
@@ -48,6 +49,7 @@ const ViajesPage = () => {
 
             fetchCiudad(formData.idCiudadSalida, setCiudadSalida);
             fetchCiudad(formData.idCiudadDestino, setCiudadDestino);
+            setFechaSalidaSelecionada(new Date(formData.fechaSalida + "T00:00:00"));
         }
     }, [formData]);
 
@@ -58,7 +60,8 @@ const ViajesPage = () => {
                 let viaje = viajes[indexViaje]
                 viaje.precios = []
                 sessionStorage.setItem('viajeData', JSON.stringify(viaje))
-                navigate(`/viaje/${idPrecio}`)
+                sessionStorage.setItem('idPrecio', idPrecio)
+                navigate(`/viaje`)
             }
         }
     }
@@ -66,21 +69,21 @@ const ViajesPage = () => {
     return (
         <div className="w-full">
             <header className="w-full px-14 py-8">
-                <h1 className="text-5xl"> Logo</h1>
+                <h1 className="text-5xl">Logo</h1>
                 {formData && ciudadSalida && ciudadDestino && <FormInlineTemplate
                     ciudadSalidaProps={{ value: ciudadSalida.id, label: ciudadSalida.nombre }}
                     ciudadDestinoProps={{ value: ciudadDestino.id, label: ciudadDestino.nombre }}
                     formData={formData} className="mt-8" />}
             </header>
-            <section className="w-full bg-gray-200 p-4 px-14 text-lg">
-                Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b> , para <b className="font-semibold">{ciudadDestino?.nombre}</b>
+            <section className="w-full text-center bg-gray-200 py-5 px-14 text-2xl">
+                Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b>, para <b className="font-semibold">{ciudadDestino?.nombre}</b>
             </section>
 
             <section className="w-full">
                 <ProcessLine step={1} className="my-8 mx-10" />
 
                 <div className="max-w-7xl mx-auto">
-                    <TimeLine />
+                    <TimeLine fechaSalida={fechaSalidaSelecionada} />
                 </div>
                 <div className="grid grid-cols-1 gap-5 my-5 mx-auto max-w-7xl">
                     {viajes.map((viaje, index) =>
