@@ -12,6 +12,9 @@ const AdminLayout = () => {
     }, {
         label: 'Viajes',
         url: '/empresa/viajes'
+    }, {
+        label: 'Funcionários',
+        url: '/empresa/admin/funcionarios'
     }]
 
     const deslogar = () => {

@@ -18,7 +18,7 @@ const DatePickerCostumized = ({ labelValue = "value", dataExtern, setDataExtern 
                 onChange={setDataExtern}
                 locale="es"
                 minDate={new Date()}
-                className="block px-2.5 pb-2.5 pt-4 w-44 h-11 text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-blue-500 focus:ring-blue-500 focus:border-blue-500 peer"
+                className="block px-2.5 py-2.5 w-44 h-11 text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-blue-500 focus:ring-blue-500 focus:border-blue-500 peer"
                 dateFormat="dd/MM/yyyy"
             />
             <label
