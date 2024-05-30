@@ -60,7 +60,7 @@ const ViajesShowPage = () => {
         <div className="p-10">
             {viaje &&
                 <>
-                    <div className="mt-5 flex items-center justify-between px-5 py-2 bg-slate-400 text-white rounded-t">
+                    <div className="mt-5 flex items-center justify-between px-5 py-2 bg-slate-700 text-white">
                         <h2>Paradas</h2>
                         <PrimaryButton onClick={() => setOpenFormCreate(true)}>+ Parada</PrimaryButton>
                         <div className={"absolute inset-0 grid place-content-center " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
@@ -68,11 +68,11 @@ const ViajesShowPage = () => {
                         </div>
                     </div>
 
-                    <div className="p-5 bg-gray-200 rounded-b">
+                    <div className="py-5 bg-white">
                         <table className="w-full text-center">
                             <thead>
                                 <tr>
-                                    <th className="text-start">Ciudad</th>
+                                    <th className="text-start pl-5">Ciudad</th>
                                     <th>Plataforma</th>
                                     <th>Fecha y Hora</th>
                                     <th>Acciones</th>
@@ -80,8 +80,8 @@ const ViajesShowPage = () => {
                             </thead>
                             <tbody>
                                 {viaje.paradas.map(parada =>
-                                    <tr className="hover:bg-slate-300" key={parada.id}>
-                                        <td className="py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
+                                    <tr className=" hover:bg-slate-300" key={parada.id}>
+                                        <td className="pl-5 py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
                                         <td className="">{parada.plataforma}</td>
                                         <td className="">{new DataHora(parada.dataHora).imprimir()}</td>
                                         <td className="">

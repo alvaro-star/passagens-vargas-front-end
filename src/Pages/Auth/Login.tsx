@@ -15,7 +15,17 @@ interface IUsuario {
     telefono: string
     idEmpresa: string | null
 }
-
+const tipoUsuario = (roles: string[]): string => {
+    if (roles.includes("ROLE_ADMIN"))
+        return "ROLE_ADMIN"
+    if (roles.includes("ROLE_EMPRESA_FUNCIONARIO"))
+        return "ROLE_EMPRESA_FUNCIONARIO"
+    if (roles.includes("ROLE_EMPRESA_ADMIN"))
+        return "ROLE_EMPRESA_ADMIN"
+    if (roles.includes("ROLE_CLIENTE"))
+        return "ROLE_CLIENTE"
+    return ""
+}
 const Login = () => {
     const navigate = useNavigate()
     const [login, setLogin] = useState<string>('')
@@ -33,11 +43,15 @@ const Login = () => {
                 sessionStorage.setItem("token", response.data.token)
 
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
+                    console.log(resposta);
+
                     setLogin('')
                     setContrasena('')
                     //Só será mandado um role, por enquanto
-                    sessionStorage.setItem("role", resposta.data.roles[0])
-                    switch (resposta.data.roles[0]) {
+                    const rolePadrao = tipoUsuario(resposta.data.roles)
+                    sessionStorage.setItem("role", rolePadrao)
+
+                    switch (rolePadrao) {
                         case "ROLE_ADMIN":
                             navigate("/admin")
                             break;
@@ -56,20 +70,21 @@ const Login = () => {
                         case "ROLE_CLIENTE":
                             navigate("/")
                             break;
+                        default:
+                            alert("Hubo un error en la consulta")
                     }
-                }).catch(erro => console.log(erro))
-            }).catch(erro => {
-                alert(erro.response.data.conteudo);
+                })
             })
     }
     return (
         <div className="h-full w-full grid place-content-center">
             <FormTemplate onSubmit={enviar} className="">
+                <h2 className="font-semibold text-xl">Escribe tus Datos</h2>
                 <div className="mt-2 w-full">
-                    <TextInput234 value={login} setValue={setLogin}  labelValue="E-mail"/>
+                    <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
                 </div>
                 <div className="mt-2 w-full">
-                    <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena"/>
+                    <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena" required />
                 </div>
             </FormTemplate>
         </div>

@@ -20,6 +20,7 @@ const AutobusesIndexPage = () => {
     const idEmpresa = sessionStorage.getItem('idEmpresa')
     const [empresa, setEmpresa] = useState<IEmpresa>()
     const [autobuses, setAutobuses] = useState<IAutobus[]>([])
+    const [nextPage, setNextPage] = useState<number | null>(null)
 
     const create = () => navigate(path + '/create')
     const verTrayectos = (idAutobus: number) => navigate(path + '/' + idAutobus)
@@ -33,15 +34,34 @@ const AutobusesIndexPage = () => {
             ]);
             setEmpresa(empresaResposta.data);
             setAutobuses(autobusesResposta.data.content);
-        };
+            if (autobusesResposta.data.totalPages > 1) {
+                setNextPage(1)
+            } else {
+                setNextPage(null)
+            }
+        }
 
         fetchData();
     }, [idEmpresa]);
 
+    const verMais = () => {
+        if (nextPage != null) {
+            http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}?page=${nextPage}`)
+                .then(resposta => {
+                    setAutobuses(autobuses.concat(resposta.data.content))
+                    if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
+                        setNextPage(null)
+                    } else {
+                        setNextPage(resposta.data.pageable.pageNumber + 1)
+                    }
+
+                })
+        }
+    }
     return (
         <>
-            <div className="py-10">
-                <div className="mx-10 mb-10 p-5 bg-gray-400 text-white rounded flex items-center justify-between">
+            <div className="my-10 pb-5 max-w-7xl mx-auto bg-white">
+                <div className="px-5 py-3 bg-slate-700 text-white flex items-center justify-between">
                     <div className="flex items-center">
                         <img src={empresa?.logo} alt="logo da empresa" className="h-14 rounded-lg" />
                         <p className="text-xl ml-2 font-semibold w-full">
@@ -51,18 +71,22 @@ const AutobusesIndexPage = () => {
                     <p>
                         Dinero disponible: Bs {empresa?.valorViajesWeb}
                     </p>
-                    <PrimaryButton onClick={create}>+ Autobus</PrimaryButton>
+                    <PrimaryButton onClick={create} className="rounded-none">+ Autobus</PrimaryButton>
                 </div>
-                <div className="mx-10 grid gap-4">
+                <div className="grid space-y-3 px-5 pt-3">
                     {autobuses.map(autobus =>
-                        <div key={autobus.id} className="p-5 bg-white rounded-lg flex justify-between items-center">
+                        <div key={autobus.id} className=" flex justify-between items-center">
                             <p>Placa: {autobus.placa}</p>
-                            <p>Dinero arrecadado en Efectivo: Bs {autobus.valorViajesEfectivo} </p>
                             <p>Dinero disponible web: Bs {autobus.valorViajesWeb} </p>
-                            <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500">Ver viajes</PrimaryButton>
+                            <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
                         </div>
                     )}
                 </div>
+                {nextPage != null &&
+                    <div className="w-full text-center mt-2">
+                        <PrimaryButton onClick={verMais} className="rounded-none bg-blue-500 hover:bg-blue-600">Ver Mas</PrimaryButton>
+                    </div>
+                }
             </div>
         </>
     )

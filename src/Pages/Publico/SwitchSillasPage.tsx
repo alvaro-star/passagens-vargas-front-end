@@ -84,16 +84,16 @@ const SwitchSillasPage = () => {
     }, [])
 
     return (
-        <div className="w-full bg-slate-100 flex flex-col items-center">
+        <div className="w-full bg-slate-100 flex flex-col">
             <header className="w-full h-64 bg-slate-500 p-2 flex flex-col items-center justify-center space-y-6">
                 <div className="text-white font-semibold text-4xl text-center">Header</div>
-                <FormInlineTemplate />
+                <FormInlineTemplate className="w-full" />
             </header>
             <div className="w-full">
                 <ProcessLine step={2} className="my-8 mx-10" />
             </div>
 
-            <section className="w-full">
+            <section className="w-full max-w-7xl mx-auto">
                 {viaje && <CardViaje className="m-5" viaje={viaje} />}
             </section>
 
@@ -101,8 +101,8 @@ const SwitchSillasPage = () => {
                 {precio?.piso &&
                     <Piso piso={precio.piso} clickSilla={clickSilla} sillasOcupadas={precio.sillasOcupadas} />}
             </section>
-            <section className="w-full px-20  mb-10 text-sky-900">
-                <div className="grid grid-cols-2 gap-3">
+            <section className="w-full mb-10 text-sky-900">
+                <div className="max-w-7xl mx-auto grid grid-cols-2 gap-3">
                     <section className="border-2 border-gray-300 p-5 rounded-lg">
                         <h2 className="text-xl font-bold">Preferências y Condiciones</h2>
                         <h3 className="mt-2 text-lg font-semibold uppercase">Reembolsos y cambios</h3>

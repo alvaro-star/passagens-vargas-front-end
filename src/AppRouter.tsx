@@ -7,7 +7,7 @@ import ViajesPage from "./Pages/Publico/ViajesPage";
 import SobrePage from "./Pages/Publico/SobrePage";
 import Dashboard from "./Pages/Admin/Dashboard";
 import EmpresasFormPage from "./Pages/Admin/Empresas/EmpresasFormPage";
-import EmpresaLayout from "./Pages/Layout/EmpresaLayout";
+import EmpresaAdminLayout from "./Pages/Layout/EmpresaAdminLayout";
 import Home from "./Pages/Publico/Home";
 import HomeEmpresaPage from "./Pages/Empresa/HomeEmpresaPage";
 import AutobusesIndexPage from "./Pages/Empresa/Autobuses/AutobusesIndexPage";
@@ -23,6 +23,8 @@ import ViajesShowPage from "./Pages/Empresa/Viajes/ViajesShowPage";
 import ViajesIndexPage from "./Pages/Empresa/Viajes/ViajesIndexPage";
 import SwitchSillasPage from "./Pages/Publico/SwitchSillasPage";
 import FuncionariosListPage from "./Pages/Empresa/Admin/FuncionariosListPage";
+import FuncionariosFormPage from "./Pages/Empresa/Admin/FuncionariosFormPage";
+import ViajesFuncionarioPage from "./Pages/Empresa/Viajes/ViajesFuncionarioPage";
 
 const AppRouter = () => {
     return (
@@ -53,7 +55,7 @@ const AppRouter = () => {
                         <Route path=":id/edit" element={<LugaresFormPage />} />
                     </Route>
                 </Route>
-                <Route path="/empresa" element={<EmpresaLayout />}>
+                <Route path="/empresa" element={<EmpresaAdminLayout />}>
                     <Route index element={<HomeEmpresaPage />} />
                     <Route path="admin">
                         <Route path="autobuses">
@@ -63,10 +65,14 @@ const AppRouter = () => {
                         </Route>
                         <Route path="funcionarios">
                             <Route index element={<FuncionariosListPage />} />
+                            <Route path="create" element={<FuncionariosFormPage />} />
+                        </Route>
+                        <Route path="viajes">
+                            <Route index element={<ViajesIndexPage />} />
                         </Route>
                     </Route>
                     <Route path="viajes">
-                        <Route index element={<ViajesIndexPage />} />
+                        <Route index element={<ViajesFuncionarioPage />} />
                         <Route path=":id" element={<ViajesShowPage />} />
                     </Route>
                 </Route>

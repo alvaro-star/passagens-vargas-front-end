@@ -41,8 +41,7 @@ const AutobusesShowPage = () => {
     }, [id, navigate])
 
     return (
-        <div className="p-10">
-
+        <div className="mx-auto max-w-7xl py-10">
             {autobus &&
                 <>
                     {openForm &&
@@ -50,16 +49,16 @@ const AutobusesShowPage = () => {
                             <ViajesFormPage setOpenForm={setOpenForm} addViaje={criarViaje} idAutobus={autobus.id} nPisos={autobus.pisos.length} />
                         </div>
                     }
-                    <div className="w-full rounded-lg p-5 bg-slate-500 text-white font-semibold text-xl flex justify-between items-center">
+                    <div className="w-full p-5 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
                         <p>{autobus.placa}</p>
                         <div className="space-x-4 flex items-center">
                             <PrimaryButton className="hidden">ver modelo</PrimaryButton>
                             <PrimaryButton onClick={() => { setOpenForm(true) }}> criar viaje</PrimaryButton>
                         </div>
                     </div>
-                    <div className="mt-5 space-y-3">
+                    <div className="space-y-3 bg-white py-3">
                         {autobus.viajes.map(viaje =>
-                            <div className="px-5 py-3 bg-gray-300 rounded flex items-center justify-between" key={viaje.codigo}>
+                            <div className="px-5 flex items-center justify-between" key={viaje.codigo}>
                                 <p className="font-mono">{viaje.codigo}</p>
                                 <p>Dinero Arrecadado en Efectivo Bs {viaje.valorArrecadadoEfectivo}</p>
                                 <p>Dinero disponible en la Web: Bs {viaje.valorArrecadadoWeb}</p>
@@ -67,7 +66,7 @@ const AutobusesShowPage = () => {
                             </div>
                         )}
                         {autobus.viajes.length == 0 &&
-                            <div className="px-5 py-3 bg-gray-300 rounded flex items-center justify-between">
+                            <div className="px-5 py-3 bg-gray-300 flex items-center justify-between">
                                 No hay Viajes Registrados
                             </div>
                         }

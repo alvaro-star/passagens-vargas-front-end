@@ -79,7 +79,7 @@ const ViajesPage = () => {
                 Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b>, para <b className="font-semibold">{ciudadDestino?.nombre}</b>
             </section>
 
-            <section className="w-full">
+            <section className="w-full pb-8">
                 <ProcessLine step={1} className="my-8 mx-10" />
 
                 <div className="max-w-7xl mx-auto">
