@@ -71,8 +71,8 @@ const ViajesPage = () => {
             <header className="w-full px-14 py-8">
                 <h1 className="text-5xl">Logo</h1>
                 {formData && ciudadSalida && ciudadDestino && <FormInlineTemplate
-                    ciudadSalidaProps={{ value: ciudadSalida.id, label: ciudadSalida.nombre }}
-                    ciudadDestinoProps={{ value: ciudadDestino.id, label: ciudadDestino.nombre }}
+                    ciudadSalidaProps={ciudadSalida}
+                    ciudadDestinoProps={ciudadDestino}
                     formData={formData} className="mt-8" />}
             </header>
             <section className="w-full text-center bg-gray-200 py-5 px-14 text-2xl">

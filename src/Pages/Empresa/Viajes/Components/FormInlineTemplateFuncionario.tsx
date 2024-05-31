@@ -2,17 +2,17 @@ import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FaSearch } from "react-icons/fa";
 import InputError from "@/Components/InputError"
-import IType from "@/Types/IType"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
 import IFormViajeFuncionario from "../Types/IFormViajeFuncionario";
-import SelectCiudad from "@/Components/SelectCiudad";
+import SelectCostumized from "@/Components/SelectCostumized";
+import ICiudad from "@/Types/ICiudad";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
     formData?: IFormViajeFuncionario
-    ciudadSalidaProps?: IType | null
-    ciudadDestinoProps?: IType | null
+    ciudadSalidaProps?: ICiudad | null
+    ciudadDestinoProps?: ICiudad | null
 }
 
 interface Erros {
@@ -23,8 +23,8 @@ interface Erros {
 
 const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, formData, className = '', ...props }: Props) => {
     const navigate = useNavigate();
-    const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null);
-    const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null);
+    const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
+    const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
     const [fechaIda, setFechaIda] = useState<Date | null>(new Date());
     const [errors, setErrors] = useState<Erros>({
         ciudadSalida: '',
@@ -40,15 +40,15 @@ const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, 
             fechaIda: !fechaIda ? 'Valor inválido' : ''
         };
 
-        if (ciudadSalida && ciudadDestino && ciudadSalida.value === ciudadDestino.value) {
+        if (ciudadSalida && ciudadDestino && ciudadSalida.id === ciudadDestino.id) {
             erros.ciudadSalida = 'La salida es igual al destino';
             erros.ciudadDestino = 'El destino es igual a la salida';
         }
 
         if (!Object.values(erros).some(error => !!error)) {
             const formViajes = {
-                idCiudadSalida: ciudadSalida!.value,
-                idCiudadDestino: ciudadDestino!.value,
+                idCiudadSalida: ciudadSalida!.id,
+                idCiudadDestino: ciudadDestino!.id,
                 fechaSalida: dataConvert(fechaIda!)
             };
 
@@ -72,11 +72,11 @@ const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, 
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
-                <SelectCiudad option={ciudadSalida} setOption={setCiudadSalida} labelValue="Salida" placeholder="Ciudad de Origen" />
+                <SelectCostumized ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} labelValue="Ciudad de Origen" />
                 <InputError message={errors.ciudadSalida} />
             </div>
             <div className="w-full">
-                <SelectCiudad option={ciudadDestino} setOption={setCiudadDestino} labelValue="Destino" placeholder="Ciudad de Destino" />
+                <SelectCostumized ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Ciudad de Destino" />
                 <InputError message={errors.ciudadDestino} />
             </div>
             <div>
