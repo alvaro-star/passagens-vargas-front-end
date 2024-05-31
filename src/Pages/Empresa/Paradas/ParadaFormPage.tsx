@@ -19,7 +19,7 @@ interface Props {
 const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, validarParada }: Props) => {
 
     const novoParadaForm = () => {
-        return { plataforma: '', dataHora: '', idLugar: '' }
+        return { plataforma: '', dataHora: '', idLugar: '', id: "" }
     }
     const [parada, setParada] = useState<IParadaForm>(novoParadaForm())
     const [paradaErros, setParadaErros] = useState<IParadaFormErro>(novoParadaForm())
@@ -28,7 +28,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
         e.preventDefault()
         let erros: IParadaFormErro = novoParadaForm();
         if (!validarParada(parada)) {
-            erros.dataHora = 'La fecha de partida esta fuera del limite'
+            erros.dataHora = 'La fecha esta fuera del limite'
         }
         let haErros = parada.dataHora === '' || parada.plataforma === '' || parada.idLugar === '' || !idViaje;
         if (!haErros) {
@@ -39,14 +39,17 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
                 })
                 .catch(erro => {
                     console.log(erro);
+
                     if (erro.response.data.errors) {
                         erro.response.data.errors.forEach((er: IError) => {
                             erros[er.name] = er.message;
                         })
                     }
+                    setParadaErros(erros)
                 })
+        } else {
+            setParadaErros(erros)
         }
-        setParadaErros(erros)
     }
 
     return (

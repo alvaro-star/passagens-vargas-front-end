@@ -25,6 +25,7 @@ import SwitchSillasPage from "./Pages/Publico/SwitchSillasPage";
 import FuncionariosListPage from "./Pages/Empresa/Admin/FuncionariosListPage";
 import FuncionariosFormPage from "./Pages/Empresa/Admin/FuncionariosFormPage";
 import ViajesFuncionarioPage from "./Pages/Empresa/Viajes/ViajesFuncionarioPage";
+import ParadaEditPage from "./Pages/Empresa/Paradas/ParadaEditPage";
 
 const AppRouter = () => {
     return (
@@ -70,6 +71,9 @@ const AppRouter = () => {
                         <Route path="viajes">
                             <Route index element={<ViajesIndexPage />} />
                         </Route>
+                    </Route>
+                    <Route path="paradas">
+                        <Route path=":id/edit" element={<ParadaEditPage/>}/>
                     </Route>
                     <Route path="viajes">
                         <Route index element={<ViajesFuncionarioPage />} />

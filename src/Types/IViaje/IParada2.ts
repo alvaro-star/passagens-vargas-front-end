@@ -7,5 +7,5 @@ export default interface IParada2 {
     ciudad: string,
     departamento: string,
     abreviacion: string,
-    idTrayecto: number
+    idViaje: string
 }

@@ -23,9 +23,9 @@ const ViajesIndexPage = () => {
                     </nav>
                 })}
             </header>
-            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={0} path={'empresa/viajes/from/' + idEmpresa + "/all"} order={"desc"} showViaje={showViaje} />
-            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={1} path={'empresa/viajes/from/' + idEmpresa + "/before"} order={"desc"} showViaje={showViaje} />
-            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={2} path={'empresa/viajes/from/' + idEmpresa + "/after"} order={"asc"} showViaje={showViaje} />
+            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={0} path={'empresa/viajes/from/' + idEmpresa + "/all"} order={"DESC"} showViaje={showViaje} />
+            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={1} path={'empresa/viajes/from/' + idEmpresa + "/before"} order={"DESC"} showViaje={showViaje} />
+            <ViajeTable numeroAbaAtual={aba} numeroAbaJanela={2} path={'empresa/viajes/from/' + idEmpresa + "/after"} order={"ASC"} showViaje={showViaje} />
         </div>
     )
 }

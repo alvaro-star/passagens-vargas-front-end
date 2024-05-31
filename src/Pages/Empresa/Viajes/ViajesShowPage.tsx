@@ -5,7 +5,7 @@ import IViaje from "@/Types/IViaje"
 import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import ParadaFormPage from "../Paradas/ParadaFormPage"
 import IParadaForm from "./Types/IParadaForm"
 
@@ -17,6 +17,7 @@ const ViajesShowPage = () => {
     const { id } = useParams()
     const [viaje, setViaje] = useState<IViajeExtends>()
     const [openFormCreate, setOpenFormCreate] = useState(false)
+    const [mostrarOptions, setMostrarOptions] = useState(true)
 
     useEffect(() => {
         if (id) {
@@ -24,9 +25,17 @@ const ViajesShowPage = () => {
                 .then(({ data }) => {
                     const viaje = data;
                     viaje.paradas = ordenarParadas(viaje.paradas);
+                    let dataAtual = new Date().getTime()
+                    let dataViaje = new Date(viaje.paradas[viaje.paradas.length - 1].dataHora).getTime()
+                    if (dataViaje <= dataAtual) {
+                        setMostrarOptions(false)
+                    } else {
+                        setMostrarOptions(true)
+                    }
                     setViaje(viaje);
                 });
         }
+
     }, [id]);
 
     const validarParada = (newParada: IParadaForm) => {
@@ -47,6 +56,24 @@ const ViajesShowPage = () => {
             return [];
         }
     };
+
+    const eliminarParada = (idParada: number) => {
+        http.delete("paradas/" + idParada)
+            .then(() => {
+                if (viaje) {
+                    let viajeParadas = viaje.paradas.filter(elemento => elemento.id != idParada)
+                    viaje.paradas = viajeParadas
+                    setViaje({
+                        ...viaje,
+                        paradas: viajeParadas
+                    });
+                }
+            })
+            .catch(erro => {
+                console.log(erro);
+                alert(erro.response.data.conteudo)
+            })
+    }
 
     const addParada = (newParada: IParada2) => {
         if (viaje) {
@@ -75,7 +102,8 @@ const ViajesShowPage = () => {
                                     <th className="text-start pl-5">Ciudad</th>
                                     <th>Plataforma</th>
                                     <th>Fecha y Hora</th>
-                                    <th>Acciones</th>
+                                    {mostrarOptions && <th>Acciones</th>}
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,16 +112,18 @@ const ViajesShowPage = () => {
                                         <td className="pl-5 py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
                                         <td className="">{parada.plataforma}</td>
                                         <td className="">{new DataHora(parada.dataHora).imprimir()}</td>
-                                        <td className="">
-                                            <div className="space-x-1 text-white">
-                                                <button disabled className="bg-yellow-400 rounded p-1.5 px-3 uppercase">
-                                                    Editar
-                                                </button>
-                                                <button disabled className="bg-red-500 rounded p-1.5 px-3 uppercase">
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                        </td>
+                                        {mostrarOptions &&
+                                            <td className="">
+                                                <div className="text-white flex items-center justify-center">
+                                                    <Link to={"/empresa/paradas/" + parada.id + "/edit"} className="bg-yellow-400 p-1.5 px-3 uppercase">
+                                                        Editar
+                                                    </Link>
+                                                    <button onClick={() => eliminarParada(parada.id)} className="bg-red-500 p-1.5 px-3 uppercase">
+                                                        Eliminar
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        }
                                     </tr>
                                 )}
                             </tbody>
