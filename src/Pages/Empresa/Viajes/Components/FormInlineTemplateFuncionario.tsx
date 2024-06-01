@@ -1,18 +1,17 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { FaSearch } from "react-icons/fa";
 import InputError from "@/Components/InputError"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
-import IFormViajeFuncionario from "../Types/IFormViajeFuncionario";
 import SelectCostumized from "@/Components/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
+import IFormViaje from "@/Pages/Publico/Types/IFormViaje";
+import http from "@/http";
+import IViaje from "../Types/IViajeIndex";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
-    formData?: IFormViajeFuncionario
-    ciudadSalidaProps?: ICiudad | null
-    ciudadDestinoProps?: ICiudad | null
+    setViajes: (ciudades: IViaje[]) => void
 }
 
 interface Erros {
@@ -21,8 +20,7 @@ interface Erros {
     fechaIda: string
 }
 
-const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, formData, className = '', ...props }: Props) => {
-    const navigate = useNavigate();
+const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: Props) => {
     const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
     const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
     const [fechaIda, setFechaIda] = useState<Date | null>(new Date());
@@ -34,9 +32,11 @@ const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, 
 
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault();
+        let cookie2 = sessionStorage.getItem("idEmpresa")
+        let idEmpresa = cookie2 ? cookie2 : ""
         let erros: Erros = {
             ciudadSalida: !ciudadSalida ? 'Escoje una ciudad válida' : '',
-            ciudadDestino: !ciudadDestino ? 'Escoje una ciudad válida' : '',
+            ciudadDestino: '',
             fechaIda: !fechaIda ? 'Valor inválido' : ''
         };
 
@@ -45,43 +45,73 @@ const FormInlineTemplateFuncionario = ({ ciudadSalidaProps, ciudadDestinoProps, 
             erros.ciudadDestino = 'El destino es igual a la salida';
         }
 
-        if (!Object.values(erros).some(error => !!error)) {
+        if (!Object.values(erros).some(error => !!error) && idEmpresa != "") {
             const formViajes = {
                 idCiudadSalida: ciudadSalida!.id,
-                idCiudadDestino: ciudadDestino!.id,
+                idCiudadDestino: ciudadDestino ? ciudadDestino.id : 0,
                 fechaSalida: dataConvert(fechaIda!)
             };
 
-            sessionStorage.setItem("formViaje", JSON.stringify(formViajes));
-            navigate('/viajes');
+            http.post<IViaje[]>("empresa/viajes/" + idEmpresa, formViajes)
+                .then(resposta => {
+                    console.log(resposta);
+
+                    setViajes(resposta.data)
+                })
+                .catch(erro => {
+                    setViajes([])
+                    alert("Ocurrio un error")
+                })
+            sessionStorage.setItem("formViajeFuncionarios", JSON.stringify(formViajes));
         }
 
         setErrors(erros);
     };
 
+    const findCiudadById = (id: number, setCiudad: (c: ICiudad | null) => void) => {
+        http.get<ICiudad>("ciudades/" + id)
+            .then(({ data }) => { setCiudad(data) })
+            .catch(() => setCiudad(null))
+    }
+
     useEffect(() => {
-        if (formData && ciudadSalidaProps && ciudadDestinoProps) {
-            setCiudadSalida(ciudadSalidaProps)
-            setCiudadDestino(ciudadDestinoProps)
-            setFechaIda(new Date(formData.fechaSalida + "T00:00:00"));
+        let cookie1 = sessionStorage.getItem("formViajeFuncionarios")
+        let cookie2 = sessionStorage.getItem("idEmpresa")
+        let formData = cookie1 ? cookie1 : ""
+        let idEmpresa = cookie2 ? cookie2 : ""
+        if (formData != "" && idEmpresa != "") {
+            let object: IFormViaje = JSON.parse(formData)
+            if (object.idCiudadDestino != 0) {
+                findCiudadById(object.idCiudadDestino, setCiudadDestino)
+            }
+            findCiudadById(object.idCiudadSalida, setCiudadSalida)
+            setFechaIda(new Date(object.fechaSalida + "T00:00:00"));
+            http.post<IViaje[]>("empresa/viajes/" + idEmpresa, object)
+                .then(resposta => {
+                    setViajes(resposta.data)
+                })
+                .catch(erro => {
+                    setViajes([])
+                    alert("Ocurrio un error")
+                })
         }
-    }, [formData, ciudadSalidaProps, ciudadDestinoProps, navigate]);
+    }, []);
 
     return (
         <form className={`max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5 rounded ${className}`}
             {...props}
             onSubmit={enviar}>
-            <div className="w-full">
+            <div className="w-full relative">
                 <SelectCostumized ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} labelValue="Ciudad de Origen" />
-                <InputError message={errors.ciudadSalida} />
+                <InputError className="absolute pl-2" message={errors.ciudadSalida} />
             </div>
-            <div className="w-full">
+            <div className="w-full relative">
                 <SelectCostumized ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Ciudad de Destino" />
-                <InputError message={errors.ciudadDestino} />
+                <InputError className="absolute pl-2" message={errors.ciudadDestino} />
             </div>
-            <div>
+            <div className="relative">
                 <DatePickerCostumized dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
-                <InputError message={errors.fechaIda} />
+                <InputError className="absolute pl-2" message={errors.fechaIda} />
             </div>
             <div className="flex items-center h-full justify-center">
                 <button className="h-9 w-9 rounded bg-cyan-500 text-white grid place-content-center">
