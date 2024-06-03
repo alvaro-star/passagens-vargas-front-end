@@ -5,11 +5,12 @@ import Piso from "@/Pages/Publico/Components/Piso";
 import SillaSquare from "@/Pages/Publico/Components/SillaSquare";
 import IPiso from "@/Types/IPiso";
 import ISilla from "@/Types/ISilla";
-import IViaje from "@/Types/IViaje";
 import IParada2 from "@/Types/IViaje/IParada2";
 import { MouseEvent, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom"
+import ISillaFromViajeFuncionario from "./Types/ISillaFromViajeFuncionario";
+import IViaje from "./Types/IViajeIndex";
 interface IViajeExtends extends IViaje {
     paradas: IParada2[]
 }
@@ -38,16 +39,17 @@ const ViajesVentaPage = () => {
 
     useEffect(() => {
         const cookie1 = sessionStorage.getItem("viajeSelectFuncionario")
-        let viajeCookie = JSON.parse(cookie1 ? cookie1 : "")
-        if (id && viajeCookie != "") {
+        if (id && cookie1) {
+            let viajeCookie: IViaje = JSON.parse(cookie1)
             http.get<IViajeExtends>(`viajes/${id}`)
                 .then(({ data }) => {
                     const viajeResponse = data;
                     viajeResponse.paradas = ordenarParadas(viajeResponse.paradas);
                     data.paradas.forEach(paf => {
-                        if (viajeCookie.idLugarSalida === paf.idLugar)
+                        console.log();
+                        if (viajeCookie.salida.idLugar === paf.idLugar)
                             setParadaSalida(paf)
-                        if (viajeCookie.idLugarDestino === paf.idLugar)
+                        if (viajeCookie.destino.idLugar === paf.idLugar)
                             setParadaDestino(paf)
                     })
                     setViaje(viajeResponse);
@@ -68,7 +70,7 @@ const ViajesVentaPage = () => {
                 });
         }
     }, [id]);
-    const getPisoApi = (idPrecio: number | null, setPrecioParam: (precio: IPrecio) => void) => {
+    const getPisoApi = (idPrecio: string | null, setPrecioParam: (precio: IPrecio) => void) => {
         if (idPrecio) {
             http.get(`precios/${idPrecio}/vender`)
                 .then(resposta => {
@@ -76,7 +78,6 @@ const ViajesVentaPage = () => {
                     let posicionesBloqueadas: number[] = []
                     if (posicionesString != '')
                         posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
-
                     resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
                     setPrecioParam(resposta.data)
                 })
@@ -109,9 +110,9 @@ const ViajesVentaPage = () => {
     }
 
     const mandarLista = () => {
-        const form = {
+        const form: ISillaFromViajeFuncionario = {
             sillas: sillasEscogidas,
-            precio1: precio1?.precio,
+            precio1: precio1 ? precio1.precio : -1,
             precio2: precio2 ? precio2.precio : -1,
             nSillaMedio: precio2 ? precio2.piso.primeraSilla : -1
         }

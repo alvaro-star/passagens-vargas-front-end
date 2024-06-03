@@ -25,7 +25,7 @@ const EmpresaAdminLayout = () => {
         label: 'Autobuses',
         url: '/empresa/admin/autobuses'
     }, {
-        label: 'Viajes Administrador',
+        label: 'Viajes',
         url: '/empresa/viajes'
     }]
 

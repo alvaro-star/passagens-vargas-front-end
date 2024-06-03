@@ -63,7 +63,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
                     setViajes([])
                     alert("Ocurrio un error")
                 })
-            sessionStorage.setItem("formViajeFuncionarios", JSON.stringify(formViajes));
+            localStorage.setItem("formViajeFuncionarios", JSON.stringify(formViajes));
         }
 
         setErrors(erros);
@@ -76,7 +76,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
     }
 
     useEffect(() => {
-        let cookie1 = sessionStorage.getItem("formViajeFuncionarios")
+        let cookie1 = localStorage.getItem("formViajeFuncionarios")
         let cookie2 = sessionStorage.getItem("idEmpresa")
         let formData = cookie1 ? cookie1 : ""
         let idEmpresa = cookie2 ? cookie2 : ""

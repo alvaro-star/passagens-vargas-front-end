@@ -23,8 +23,7 @@ const ViajesFuncionarioPage = () => {
     }
 
     const selectViaje = (viaje: IViaje) => {
-        const viajeSelect = { id: viaje.id, idLugarSalida: viaje.salida.idLugar, idLugarDestino: viaje.destino.idLugar }
-        sessionStorage.setItem("viajeSelectFuncionario", JSON.stringify(viajeSelect))
+        sessionStorage.setItem("viajeSelectFuncionario", JSON.stringify(viaje))
         navigate(viaje.id + "/vender")
     }
 
