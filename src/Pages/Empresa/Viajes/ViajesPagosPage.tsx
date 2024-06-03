@@ -34,6 +34,7 @@ interface Erros {
 
 
 const PassagensList = () => {
+    /*
     const parametros = useParams()
     const metodos = ['QR', 'DEB', 'CRE']
     const [pasajes, setPasajes] = useState<IPasaje[]>([])
@@ -255,7 +256,8 @@ const PassagensList = () => {
                 }
             </section>
         </div>
-    )
+    )*/
+    return <div>Teste</div>
 }
 
 export default PassagensList
