@@ -5,12 +5,12 @@ import IVIajeResponse from "../Types/IViajeResponse"
 import { MdTimer } from "react-icons/md";
 interface Props {
     viaje: IVIajeResponse
-    index?: number
+    indexViaje?: number
     escojerViaje?: (indexViaje: number | undefined, idViaje: string, idPrecio: string) => void
     className?: string
 }
 
-const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
+const CardViaje = ({ viaje, indexViaje, escojerViaje, className = '' }: Props) => {
     const getDataHora = (dataHora: string) => {
         let hora = dataHora.split('T')[1];
         let partes = hora.split(':')
@@ -50,15 +50,15 @@ const CardViaje = ({ viaje, escojerViaje, className = '' }: Props) => {
                 {(viaje.precios?.length != 0 && escojerViaje) &&
                     <section className="flex flex-col items-end w-full">
                         {viaje.precios?.map(
-                            (precio, index) => !precio.lleno &&
-                                <div className="p-1 flex items-center space-x-3" key={index}>
+                            precio => !precio.lleno &&
+                                <div className="p-1 flex items-center space-x-3" key={precio.id}>
                                     <p>
                                         <b className="font-semibold">Piso</b>: {precio.nPiso}
                                     </p>
                                     <p className="font-semibold">
                                         Bs. {precio.precio}
                                     </p>
-                                    <button className="py-1.5 px-2 bg-blue-500 rounded text-white" onClick={() => escojerViaje(index, viaje.id, precio.id)}>COMPRAR</button>
+                                    <button className="py-1.5 px-2 bg-blue-500 rounded text-white" onClick={() => escojerViaje(indexViaje, viaje.id, precio.id)}>COMPRAR</button>
                                 </div>
                         )}
                     </section>

@@ -26,6 +26,8 @@ import FuncionariosListPage from "./Pages/Empresa/Admin/FuncionariosListPage";
 import FuncionariosFormPage from "./Pages/Empresa/Admin/FuncionariosFormPage";
 import ViajesFuncionarioPage from "./Pages/Empresa/Viajes/ViajesFuncionarioPage";
 import ParadaEditPage from "./Pages/Empresa/Paradas/ParadaEditPage";
+import ViajesVentaPage from "./Pages/Empresa/Viajes/ViajesVentaPage";
+import ViajesPagosPage from "./Pages/Empresa/Viajes/ViajesPagosPage";
 
 const AppRouter = () => {
     return (
@@ -73,11 +75,13 @@ const AppRouter = () => {
                         </Route>
                     </Route>
                     <Route path="paradas">
-                        <Route path=":id/edit" element={<ParadaEditPage/>}/>
+                        <Route path=":id/edit" element={<ParadaEditPage />} />
                     </Route>
                     <Route path="viajes">
                         <Route index element={<ViajesFuncionarioPage />} />
                         <Route path=":id" element={<ViajesShowPage />} />
+                        <Route path=":id/vender" element={<ViajesVentaPage />} />
+                        <Route path=":id/pagar" element={<ViajesPagosPage />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />

@@ -63,6 +63,14 @@ const ViajesPage = () => {
                 sessionStorage.setItem('idPrecio', idPrecio)
                 navigate(`/viaje`)
             }
+            else {
+                console.log("O id do viaje e o id Passado sao diferentes");
+                console.log("Id del index" + viajes[indexViaje].id);
+                console.log("Id del viaje" + idViaje);
+            }
+        } else {
+            console.log("O indice nao existe");
+
         }
     }
 
@@ -88,7 +96,7 @@ const ViajesPage = () => {
                 <div className="grid grid-cols-1 gap-5 my-5 mx-auto max-w-7xl">
                     {viajes.map((viaje, index) =>
                         <CardViaje key={viaje.id}
-                            index={index}
+                            indexViaje={index}
                             viaje={viaje}
                             escojerViaje={escojerViaje}
                         />

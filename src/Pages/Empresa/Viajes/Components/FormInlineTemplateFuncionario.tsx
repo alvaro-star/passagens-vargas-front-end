@@ -59,6 +59,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
                     setViajes(resposta.data)
                 })
                 .catch(erro => {
+                    console.log(erro);
                     setViajes([])
                     alert("Ocurrio un error")
                 })
@@ -91,6 +92,8 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
                     setViajes(resposta.data)
                 })
                 .catch(erro => {
+                    console.log(erro);
+
                     setViajes([])
                     alert("Ocurrio un error")
                 })

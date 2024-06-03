@@ -35,9 +35,8 @@ const SwitchSillasPage = () => {
         if (silla.numero != -1 && silla.ocupado == false && sillasEscogidas.includes(silla.numero)) {
             setSillasEscogidas(sillasEscogidas.filter(value => value != silla.numero).sort((a, b) => a - b))
         } else {
-            if (sillasEscogidas.length < 5) {
+            if (sillasEscogidas.length < 5)
                 setSillasEscogidas([...sillasEscogidas, silla.numero].sort((a, b) => a - b))
-            }
         }
     }
 

@@ -25,8 +25,8 @@ interface Props {
 
 const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => {
 
-    const [salida, setSalida] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '' })
-    const [destino, setDestino] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '' })
+    const [salida, setSalida] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
+    const [destino, setDestino] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
 
     const [precio1, setPrecio1] = useState('')
     const [precio2, setPrecio2] = useState('')

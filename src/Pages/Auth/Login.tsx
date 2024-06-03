@@ -64,7 +64,8 @@ const Login = () => {
                         case "ROLE_EMPRESA_FUNCIONARIO":
                             if (resposta.data.idEmpresa) {
                                 sessionStorage.setItem("idEmpresa", resposta.data.idEmpresa)
-                                navigate("/empresa")
+                                navigate("/empresa/viajes")
+
                             }
                             break;
                         case "ROLE_CLIENTE":
