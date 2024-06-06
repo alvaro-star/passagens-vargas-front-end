@@ -90,10 +90,10 @@ const ViajesVentaPage = () => {
     };
     const clickSilla = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, silla: ISilla) => {
         eve.preventDefault()
-        if (silla.numero != -1 && silla.ocupado == false && sillasEscogidas.includes(silla.numero)) {
+        if (silla.numero != -1 && !silla.ocupado && sillasEscogidas.includes(silla.numero))
             setSillasEscogidas(sillasEscogidas.filter(value => value != silla.numero).sort((a, b) => a - b))
-        } else {
-            if (sillasEscogidas.length < 7)
+        else {
+            if (sillasEscogidas.length < 7 && !silla.ocupado)
                 setSillasEscogidas([...sillasEscogidas, silla.numero].sort((a, b) => a - b))
         }
     }

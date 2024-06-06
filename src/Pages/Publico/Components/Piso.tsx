@@ -27,7 +27,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
 
         let contador = piso.primeraSilla - 1
 
-        if (piso.inicioContagem === 'IZQUIERDA') {
+        if (piso.inicioContagem == 'IZQUIERDA') {
             let nQuadrados = piso.nLinhas * piso.nColunas
             for (let index = 0; index < nQuadrados; index++) {
                 if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
@@ -57,13 +57,11 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
             }
         }
 
-
         sillasOcupadas.forEach(sillaOcupada => {
-            SillasDisponibles[HashMapNSillaIndex[sillaOcupada - 1]].ocupado = true
+            SillasDisponibles[HashMapNSillaIndex[sillaOcupada - piso.primeraSilla]].ocupado = true
         })
 
         setSillas(SillasDisponibles)
-
     }, [piso])
     return (
         <div className="rounded min-h-60 flex justify-center items-center">
@@ -72,22 +70,23 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                 </div>
                 <div className="p-5 bg-gray-200 grid grid-cols-4 gap-3 place-content-center">
                     <div></div>
-                    {(piso.nColunas == 3 && piso.distribuicaoFileira == 'DERECHA') ?
-                        <div style={{ gridRow: `span ${piso.nLinhas + 1} / span ${piso.nLinhas + 1}` }}></div>
+                    {(piso.nColunas == 3 && piso.distribuicaoFileira == 'DERECHA')
+                        ? <div style={{ gridRow: `span ${piso.nLinhas + 1} / span ${piso.nLinhas + 1}` }}></div>
                         : <div></div>
                     }
-                    {(piso.nColunas == 3 && piso.distribuicaoFileira == 'IZQUIERDA') ?
-                        <div style={{ gridRow: `span ${piso.nLinhas + 1} / span ${piso.nLinhas + 1}` }}></div>
+                    {(piso.nColunas == 3 && piso.distribuicaoFileira == 'IZQUIERDA')
+                        ? <div style={{ gridRow: `span ${piso.nLinhas + 1} / span ${piso.nLinhas + 1}` }}></div>
                         : <div></div>
                     }
                     <div></div>
                     {sillas.map((silla, index) =>
                         <SillaSquare
                             key={index}
+                            disabled={silla.ocupado}
                             nSilla={silla.numero}
                             transparent={silla.numero == -1}
                             onClick={(eve) => clickSilla(eve, silla)}
-                            className={`${silla.ocupado ? 'bg-gray-100' : 'bg-gray-400'} lg:rotate-90`}
+                            className={`${silla.ocupado ? 'bg-gray-100 text-gray-500' : 'bg-gray-400 hover:bg-white'} lg:rotate-90`}
                         />
                     )}
                 </div>

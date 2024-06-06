@@ -4,10 +4,12 @@ import IViaje from "../Types/IViajeIndex"
 interface Props {
     viaje: IViaje
     factura: IFactura
+    metodo: string
+    setMetodo: (metodo: string) => void
     metodos: string[]
     className?: string
 }
-const FacturaComponent = ({ viaje, metodos, factura, className = "" }: Props) => {
+const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, className = "" }: Props) => {
     const getDataHora = (dataHora: string) => {
         let hora = dataHora.split('T')[1];
         let partes = hora.split(':')
@@ -91,9 +93,12 @@ const FacturaComponent = ({ viaje, metodos, factura, className = "" }: Props) =>
                 Método de Pago
             </p>
             <div className="flex justify-center gap-2">
-                {metodos.map((metodo, index) =>
-                    <div key={index} className="w-10 h-10 cursor-pointer bg-slate-300 rounded  font-bold flex items-center justify-center hover:bg-black hover:text-white">
-                        {metodo}
+                {metodos.map((metodoFo, index) =>
+                    <div key={index}
+                        className={"w-10 h-10 cursor-pointer rounded  font-bold flex items-center justify-center hover:bg-black hover:text-white "+ (metodoFo.toUpperCase() === metodo ? 'bg-slate-500 text-white border-2 border-gray-700' : 'bg-slate-300')}
+                        onClick={() => setMetodo(metodoFo)}
+                    >
+                        {metodoFo}
                     </div>
                 )}
             </div>

@@ -7,6 +7,7 @@ import ISillaFromViajeFuncionario from "./Types/ISillaFromViajeFuncionario"
 import IViaje from "./Types/IViajeIndex"
 import IFactura from "./Types/IFactura";
 import FacturaComponent from "./Components/FacturaComponent";
+import http from "@/http"
 
 interface IPasaje {
     carnet: string;
@@ -19,10 +20,11 @@ const tasaServicio = 0.1
 
 const PassagensList = () => {
     const { id } = useParams()
-    const metodos = ['QR', 'EFEC']
+    const metodos = ['EFEC']
     const [viaje, setViaje] = useState<IViaje>()
     const [pasajes, setPasajes] = useState<IPasaje[]>([])
 
+    const [metodo, setMetodo] = useState('EFEC')
     const [factura, setFactura] = useState<IFactura>()
     const [email, setEmail] = useState<string>('')
     const [nombre, setNombre] = useState<string>('')
@@ -34,17 +36,13 @@ const PassagensList = () => {
         let pasajesF = [...pasajes]
         pasajesF[indexPasaje][campo] = value
         setPasajes(pasajesF)
-
     }
 
     useEffect(() => {
         let cookie2 = sessionStorage.getItem("sillaFromViajeFuncionario")
-        console.log(cookie2);
-
         let cookie1 = sessionStorage.getItem("viajeSelectFuncionario")
         if (!cookie1 || !cookie2) {
             console.log("Nao ha nada");
-
         }
 
         const viajeSelectFuncionario: IViaje = JSON.parse(cookie1!)
@@ -63,8 +61,6 @@ const PassagensList = () => {
             pasajes: []
         }
 
-        console.log(sillasFromViajeFuncionario);
-
         sillasFromViajeFuncionario.sillas.forEach(nSilla => {
             pasajesF.push({
                 carnet: '',
@@ -73,53 +69,48 @@ const PassagensList = () => {
                 nSilla: nSilla
             })
             if (sillasFromViajeFuncionario.nSillaMedio != -1 && nSilla >= sillasFromViajeFuncionario.nSillaMedio) {
-                factura.pasajes.push({
-                    nSilla: nSilla,
-                    precio: sillasFromViajeFuncionario.precio2
-                })
+                factura.pasajes.push({ nSilla: nSilla, precio: sillasFromViajeFuncionario.precio2 })
                 factura.total += sillasFromViajeFuncionario.precio2
             } else {
-                factura.pasajes.push({
-                    nSilla: nSilla,
-                    precio: sillasFromViajeFuncionario.precio1
-                })
+                factura.pasajes.push({ nSilla: nSilla, precio: sillasFromViajeFuncionario.precio1 })
                 factura.total += sillasFromViajeFuncionario.precio1
             }
         })
         factura.tasaServicio = factura.total * tasaServicio
-
         setFactura(factura)
         setPasajes(pasajesF)
     }, [id])
 
     const enviar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        console.log("Ainda nao configurado ");
+        if (viaje) {
+            const pedido = {
+                idViaje: viaje?.id,
+                descuento: 0,
+                /*contacto: {
+                    nombre,
+                    email,
+                    telefono
+                },*/
+                idLugarSalida: viaje?.salida.idLugar,
+                idLugarDestino: viaje?.destino.idLugar,
+                pasajes: pasajes,
+                metodo: "EFECTIVO"//Cambiara de forma dinamica
+            }
 
-        return/*
-        const pasaje = {
-            idPrecio: precio?.id,
-            descuento: 0,
-            contacto: {
-                nombre,
-                email,
-                telefono
-            },
-            idLugarSalida: viaje?.salida.idLugar,
-            idLugarDestino: viaje?.destino.idLugar,
-            pasajes: pasajes
-        }
-
-        http.post('pasajes', pasaje).then(response => {
-            if (response.status == 200 || response.status == 201) {
-                sessionStorage.removeItem('sillasFromViaje')
-                sessionStorage.removeItem('viajeData')
+            http.post('pasajes/vender', pedido).then(response => {
+                /*sessionStorage.removeItem('sillasFromViaje')
+                sessionStorage.removeItem('viajeData')*/
                 console.log(response.data);
                 alert("Registrado con exito")
-            }
-        }).catch(erro => {
-            console.log(erro);
-        })*/
+            }).catch(erro => {
+                console.log(erro);
+            })
+        } else {
+            console.log("Nao foi possivel configurar o metodo");
+
+        }
+
     }
     return (
         <div className="text-gray-900 flex flex-col max-w-7xl mx-auto lg:flex-row justify-center py-10 bg-gray-100 gap-4">
@@ -139,7 +130,7 @@ const PassagensList = () => {
                         </div>
                         <div className="w-full mt-2 grid grid-cols-2 gap-5">
                             <TextInputObject className="rounded-lg" placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} labelValue="N° Carnet" />
-                            <TextInputObject className="rounded-lg" type="text" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} labelValue="Nascimiento dd/mm/aaaa" />
+                            <TextInputObject className="rounded-lg" type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} labelValue="Nascimiento dd/mm/aaaa" />
                         </div>
                     </section>
                 )}
@@ -163,7 +154,7 @@ const PassagensList = () => {
                     </PrimaryButton>
                 </section>
             </section>
-            {viaje && factura && <FacturaComponent viaje={viaje} metodos={metodos} factura={factura} className="w-full lg:w-96" />}
+            {viaje && factura && <FacturaComponent viaje={viaje} metodos={metodos} metodo={metodo} setMetodo={setMetodo} factura={factura} className="w-full lg:w-96" />}
             <section className="lg:hidden mt-5 text-center">
                 <PrimaryButton onClick={enviar} className="rounded-none">
                     Comprar Viajes
