@@ -14,9 +14,9 @@ const EmpresaIndexPage = () => {
             })
     }, [])
     return (
-        <div className="w-full bg-slate-100 p-5">
+        <div className="max-w-7xl mx-auto">
             <div className="">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-5">
                     <h2 className="text-2xl font-semibold ">
                         Lista de empresas
                     </h2>
@@ -25,30 +25,48 @@ const EmpresaIndexPage = () => {
                         Criar Empresa
                     </Link>
                 </div>
-                <div className="flex flex-col gap-5 mt-5">
-                    <div className="bg-white rounded p-5 flex items-center justify-between">
-                        <p>Logo</p>
-                        <p> Nombre</p>
-                        <p>NCuenta</p>
-                        <p className="pr-3">Mai Info</p>
-                    </div>
-                    {empresas.map(empresa =>
-                        <div key={empresa.id} className="bg-white rounded p-5 flex items-center justify-between">
-                            <img src={empresa.logo} alt="" className="h-10 rounded-full" />
-                            <h2 className="font-semibold text-lg">
-                                {empresa.nombre}
-                            </h2>
-                            <h2>
-                                {empresa.numeroCuenta}
-                            </h2>
-                            <Link
-                                to={`/admin/empresas/${empresa.id}`}
-                                className="bg-gray-500 text-white p-2 rounded"
-                            >
-                                VER MAS
-                            </Link>
-                        </div>
-                    )}
+                <div className="w-full">
+                    <table className="w-full text-center">
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th className="text-start">Nombre</th>
+                                <th>NCuenta</th>
+                                <th>Mai Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {empresas.map(empresa =>
+                                <tr key={empresa.id} className="bg-white rounded p-5">
+                                    <td className="py-1.5">
+                                        <img src={empresa.logo} alt="" className="h-10  mx-auto" />
+                                    </td>
+                                    <td className="text-start">{empresa.nombre}</td>
+                                    <td>{empresa.numeroCuenta ? empresa.numeroCuenta : "nn"}</td>
+                                    <td>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Link
+                                                to={empresa.id}
+                                                className="bg-gray-500 text-sm font-semibold text-white p-2 rounded"
+                                            >
+                                                VER MAS
+                                            </Link>
+                                            <button disabled
+                                                className="bg-gray-500 text-sm font-semibold uppercase text-white p-2 rounded"
+                                            >
+                                                Assumir papel
+                                            </button>
+                                            <button disabled
+                                                className="bg-gray-500 text-sm font-semibold uppercase text-white p-2 rounded"
+                                            >
+                                                ANULAR SUSCRIPCION
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

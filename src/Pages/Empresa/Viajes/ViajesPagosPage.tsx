@@ -1,7 +1,6 @@
 import PrimaryButton from "@/Components/PrimaryButton"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import TextInput234 from "@/Components/TextInput234"
 import TextInputObject from "@/Pages/Publico/Components/TextInputObject"
 import ISillaFromViajeFuncionario from "./Types/ISillaFromViajeFuncionario"
 import IViaje from "./Types/IViajeIndex"
@@ -26,10 +25,6 @@ const PassagensList = () => {
 
     const [metodo, setMetodo] = useState('EFEC')
     const [factura, setFactura] = useState<IFactura>()
-    const [email, setEmail] = useState<string>('')
-    const [nombre, setNombre] = useState<string>('')
-    const [telefono, setTelefono] = useState<string>('')
-    const [confirmarEmail, setConfirmarEmail] = useState<string>('')
     const navigate = useNavigate()
 
     const editar = (indexPasaje: number, campo: string, value: string) => {
@@ -41,9 +36,8 @@ const PassagensList = () => {
     useEffect(() => {
         let cookie2 = sessionStorage.getItem("sillaFromViajeFuncionario")
         let cookie1 = sessionStorage.getItem("viajeSelectFuncionario")
-        if (!cookie1 || !cookie2) {
+        if (!cookie1 || !cookie2)
             console.log("Nao ha nada");
-        }
 
         const viajeSelectFuncionario: IViaje = JSON.parse(cookie1!)
         setViaje(viajeSelectFuncionario)
@@ -87,11 +81,6 @@ const PassagensList = () => {
             const pedido = {
                 idViaje: viaje?.id,
                 descuento: 0,
-                /*contacto: {
-                    nombre,
-                    email,
-                    telefono
-                },*/
                 idLugarSalida: viaje?.salida.idLugar,
                 idLugarDestino: viaje?.destino.idLugar,
                 pasajes: pasajes,
@@ -134,20 +123,6 @@ const PassagensList = () => {
                         </div>
                     </section>
                 )}
-
-                <section className="w-full bg-white">
-                    <div className="border border-gray-700 p-5">
-                        <p className="text-2xl font-semibold mb-2">
-                            Detalhes del contacto
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                            <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
-                            <TextInput234 value={telefono} setValue={setTelefono} labelValue="Telefono" />
-                            <TextInput234 value={email} setValue={setEmail} labelValue="E-mail" />
-                            <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} labelValue="Confirmar Email" />
-                        </div>
-                    </div>
-                </section>
                 <section className="hidden lg:block my-5">
                     <PrimaryButton onClick={enviar} className="rounded-none">
                         Comprar Viajes

@@ -1,101 +1,87 @@
 import FormTemplate from "@/Components/FormTemplate"
 import InputError from "@/Components/InputError"
-import InputLabel from "@/Components/InputLabel"
-import TextInput from "@/Components/TextInput"
-import ICampo from "@/Types/ICampo"
+import TextInput234 from "@/Components/TextInput234"
 import IError from "@/Types/IError"
 import http from "@/http"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+interface IErros {
+    nombre: string
+    login: string
+    telefono: string
+    contrasena: string,
+    contrasena2: string
+    [key: string]: string
+}
+
 const Register = () => {
     const navigate = useNavigate()
-    const construtorCampoString = { value: "", erro: '' }
+    const [nombre, setNombre] = useState<string>("")
+    const [login, setLogin] = useState<string>("")
+    const [telefono, setTelefono] = useState<string>("")
+    const [contrasena, setContrasena] = useState<string>("")
+    const [contrasena2, setContrasena2] = useState<string>("")
 
-    const [nombre, setNombre] = useState<ICampo<string>>(construtorCampoString)
-    const [login, setLogin] = useState<ICampo<string>>(construtorCampoString)
-    const [telefono, setTelefono] = useState<ICampo<string>>(construtorCampoString)
-    const [contrasena, setContrasena] = useState<ICampo<string>>(construtorCampoString)
-    const [contrasena2, setContrasena2] = useState<ICampo<string>>(construtorCampoString)
+    const newErros = () => {
+        return {
+            nombre: "",
+            login: "",
+            telefono: "",
+            contrasena: "",
+            contrasena2: ""
+        }
+    }
 
+    const [erros, setErros] = useState<IErros>(newErros())
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
-        setContrasena({ value: contrasena.value, erro: '' })
-        setContrasena2({ value: contrasena2.value, erro: '' })
-        if (contrasena.value === contrasena2.value && contrasena.value != "") {
-            const role = "ROLE_CLIENTE";
-            const usuario = { login, nombre, telefono, contrasena, role }
-            setNombre({ value: nombre.value, erro: '' })
-            setLogin({ value: login.value, erro: '' })
-            setTelefono({ value: telefono.value, erro: '' })
-            setContrasena({ value: contrasena.value, erro: '' })
-            setContrasena2({ value: contrasena2.value, erro: '' })
+        let errosValidation: IErros = newErros()
+        if (contrasena === contrasena2 && contrasena != "") {
+            const usuario = { login, nombre, telefono, contrasena }
             http.post('auth/register', usuario)
-                .then(resposta => {
-                    if (resposta.request.status == 201) {
-                        alert("Cadastrado com sucesso!!!");
-                        navigate("/login")
-                    } else { // Provisorio
-                        console.log(resposta.data.message);
-                    }
+                .then(() => {
+                    navigate("/validar")
                 })
                 .catch(erro => {
                     if (erro?.response?.data?.errors) {
                         let erros: IError[] = erro?.response?.data?.errors
-                        erros.forEach(erro => {
-                            switch (erro.name) {
-                                case "nombre":
-                                    setNombre({ value: nombre.value, erro: erro.message })
-                                    break;
-                                case "login":
-                                    setLogin({ value: login.value, erro: erro.message })
-                                    break;
-                                case "telefono":
-                                    setTelefono({ value: telefono.value, erro: erro.message })
-                                    break;
-                                case "contrasena":
-                                    setContrasena({ value: contrasena.value, erro: erro.message })
-                                    break;
-                            }
-                        })
-                    } else {
-                        console.log("Houve um erro durante a solicitação");
-                    }
+                        erros.forEach(erro => errosValidation[erro.name] = erro.message)
+                    } else
+                        alert("Houve um erro durante a solicitação");
+                    setErros(errosValidation)
                 })
         } else {
-            setContrasena({ value: contrasena.value, erro: "La contrasenha es distinta" })
-            setContrasena2({ value: contrasena2.value, erro: "La contrasenha es distinta" })
+            errosValidation.contrasena = "La contrasenha es distinta"
+            errosValidation.contrasena2 = "La contrasenha es distinta"
+            setErros(errosValidation)
         }
     }
 
     return (
-        <div className="mt-10 flex justify-center items-center ">
+        <div className="mt-20 flex justify-center items-center ">
             <FormTemplate onSubmit={enviar}>
-                <h2 className="text-xl font-bold">Registrar</h2>
+                <h2 className="text-xl font-bold">Registrar-se</h2>
+                <p className="w-full text-sm">Ingresa tus datos y create una cuenta...</p>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Nombre" />
-                    <TextInput campo={nombre} setCampo={setNombre} />
-                    <InputError message={nombre.erro} />
+                    <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" required />
+                    <InputError message={erros.nombre} />
                 </div>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Email" />
-                    <TextInput campo={login} setCampo={setLogin} />
-                    <InputError message={login.erro} />
+                    <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
+                    <InputError message={erros.login} />
                 </div>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Telefono" />
-                    <TextInput campo={telefono} setCampo={setTelefono} />
-                    <InputError message={telefono.erro} />
+                    <TextInput234 value={telefono} setValue={setTelefono} labelValue="Telefono" required />
+                    <InputError message={erros.telefono} />
                 </div>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Contrasenha" />
-                    <TextInput campo={contrasena} setCampo={setContrasena} />
-                    <InputError message={contrasena.erro} />
+                    <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasenha" required />
+                    <InputError message={erros.contrasena} />
                 </div>
                 <div className="mt-2 w-full">
-                    <InputLabel value="Repita la Contrasenha" />
-                    <TextInput campo={contrasena2} setCampo={setContrasena2} />
-                    <InputError message={contrasena2.erro} />
+                    <TextInput234 value={contrasena2} setValue={setContrasena2} labelValue="Repita la Contrasenha" required />
+                    <InputError message={erros.contrasena2} />
                 </div>
             </FormTemplate>
         </div>

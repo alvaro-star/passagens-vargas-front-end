@@ -89,9 +89,7 @@ const FuncionariosListPage = () => {
                     </tbody>
                 </table>
                 <div className="w-full text-center mt-2">
-                    {
-                        nextPage != null && <PrimaryButton onClick={verMais} className="bg-blue-500 rounded-none hover:bg-blue-600">Ver Mas</PrimaryButton>
-                    }
+                    {nextPage != null && <PrimaryButton onClick={verMais} className="bg-blue-500 rounded-none hover:bg-blue-600">Ver Mas</PrimaryButton>}
                 </div>
             </div>
         </div>

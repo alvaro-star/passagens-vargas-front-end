@@ -18,10 +18,10 @@ interface IUsuario {
 const tipoUsuario = (roles: string[]): string => {
     if (roles.includes("ROLE_ADMIN"))
         return "ROLE_ADMIN"
-    if (roles.includes("ROLE_EMPRESA_FUNCIONARIO"))
-        return "ROLE_EMPRESA_FUNCIONARIO"
     if (roles.includes("ROLE_EMPRESA_ADMIN"))
         return "ROLE_EMPRESA_ADMIN"
+    if (roles.includes("ROLE_EMPRESA_FUNCIONARIO"))
+        return "ROLE_EMPRESA_FUNCIONARIO"
     if (roles.includes("ROLE_CLIENTE"))
         return "ROLE_CLIENTE"
     return ""
@@ -43,8 +43,6 @@ const Login = () => {
                 sessionStorage.setItem("token", response.data.token)
 
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
-                    console.log(resposta);
-
                     setLogin('')
                     setContrasena('')
                     //Só será mandado um role, por enquanto
@@ -65,7 +63,6 @@ const Login = () => {
                             if (resposta.data.idEmpresa) {
                                 sessionStorage.setItem("idEmpresa", resposta.data.idEmpresa)
                                 navigate("/empresa/viajes")
-
                             }
                             break;
                         case "ROLE_CLIENTE":

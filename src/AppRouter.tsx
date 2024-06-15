@@ -28,6 +28,9 @@ import ViajesFuncionarioPage from "./Pages/Empresa/Viajes/ViajesFuncionarioPage"
 import ParadaEditPage from "./Pages/Empresa/Paradas/ParadaEditPage";
 import ViajesVentaPage from "./Pages/Empresa/Viajes/ViajesVentaPage";
 import ViajesPagosPage from "./Pages/Empresa/Viajes/ViajesPagosPage";
+import ValidarUser from "./Pages/Auth/ValidarUser";
+import AdminEmpresaShowPage from "./Pages/Admin/Empresas/AdminEmpresaShowPage";
+import AdminForm from "./Pages/Admin/Empresas/AdminForm";
 
 const AppRouter = () => {
     return (
@@ -37,6 +40,7 @@ const AppRouter = () => {
                     <Route index element={<Home />} />
                     <Route path="login" element={<Login />} />
                     <Route path="registrar" element={<Register />} />
+                    <Route path="validar" element={<ValidarUser />} />
                     <Route path="viajes" element={<ViajesPage />} />
                     <Route path="viaje" element={<SwitchSillasPage />} />
                     <Route path="viaje/step3/:id" element={<PassagensList />} />
@@ -47,6 +51,8 @@ const AppRouter = () => {
                     <Route path="empresas">
                         <Route index element={<EmpresaIndexPage />} />
                         <Route path="create" element={<EmpresasFormPage />} />
+                        <Route path=":id" element={<AdminEmpresaShowPage />} />
+                        <Route path=":id/create" element={<AdminForm />} />
                     </Route>
                     <Route path="ciudades">
                         <Route index element={<CiudadesIndexPage />} />
