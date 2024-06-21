@@ -122,24 +122,26 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
 
     return (
         <form className="bg-gray-200 p-5 rounded-lg flex flex-col" onSubmit={enviar}>
-            <div className="relative">
-                <h1 className="text-2xl my-4 font-semibold text-center">Registre los datos del nuevo Viaje</h1>
-                <button className="absolute top-0 right-0 bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setOpenForm(false)}>
+            <div className="flex my-2 items-center justify-between">
+                <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje</h1>
+                <button className="bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setOpenForm(false)}>
                     <IoClose className="text-xl" />
                 </button>
             </div>
-            <section>
-                <p className="text-lg font-semibold">
-                    Datos dela Salida
-                </p>
-                <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
-            </section>
-            <section className="mt-3">
-                <p className="text-lg font-semibold">
-                    Datos del destino
-                </p>
-                <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
-            </section>
+            <div className="grid grid-cols-2 gap-2">
+                <section>
+                    <p className="text-lg font-semibold">
+                        Datos dela Salida
+                    </p>
+                    <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
+                </section>
+                <section className="">
+                    <p className="text-lg font-semibold">
+                        Datos del destino
+                    </p>
+                    <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
+                </section>
+            </div>
             <section className="">
                 <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>
                 <div className="flex gap-2">

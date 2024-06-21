@@ -4,7 +4,7 @@ import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import ParadaForm from "../Viajes/Components/ParadaForm"
 import PrimaryButton from "@/Components/PrimaryButton"
 import http from "@/http"
-import IError from "@/Types/IError"
+import IError from "@/Types/IErrors/IError"
 import { IoClose } from "react-icons/io5"
 import IParada2 from "@/Types/IViaje/IParada2"
 
@@ -54,14 +54,14 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
 
     return (
         <div className={"w-full grid place-content-center " + className}>
-            <form onSubmit={enviar} className="w-full flex justify-center flex-col p-5 bg-gray-300 rounded-lg">
+            <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 bg-gray-300 rounded-lg">
                 <div className="my-2 w-full flex justify-between items-center">
                     <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
                     <button
                         className="flex items-center justify-center rounded h-8 w-8 bg-red-500"
                         onClick={() => setOpenForm(false)}
                     >
-                        <IoClose className="text-xl text-center" />
+                        <IoClose className="text-xl text-center text-white" />
                     </button>
                 </div>
                 <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />

@@ -50,10 +50,10 @@ const AutobusesShowPage = () => {
                         </div>
                     }
                     <div className="w-full p-5 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
-                        <p>{autobus.placa}</p>
+                        <p>Lista de viajes del autobus {autobus.placa}</p>
                         <div className="space-x-4 flex items-center">
                             <PrimaryButton className="hidden">ver modelo</PrimaryButton>
-                            <PrimaryButton onClick={() => { setOpenForm(true) }}> criar viaje</PrimaryButton>
+                            <PrimaryButton onClick={() => { setOpenForm(true) }}> registrar un viaje</PrimaryButton>
                         </div>
                     </div>
                     <div className="space-y-3 bg-white py-3">
@@ -62,7 +62,7 @@ const AutobusesShowPage = () => {
                                 <p className="font-mono">{viaje.codigo}</p>
                                 <p>Dinero Arrecadado en Efectivo Bs {viaje.valorArrecadadoEfectivo}</p>
                                 <p>Dinero disponible en la Web: Bs {viaje.valorArrecadadoWeb}</p>
-                                <PrimaryButton onClick={() => showViaje(viaje.codigo)} className="bg-blue-500">Ver viaje</PrimaryButton>
+                                <PrimaryButton onClick={() => showViaje(viaje.codigo)} className="bg-blue-500 rounded-none">Ver viaje</PrimaryButton>
                             </div>
                         )}
                         {autobus.viajes.length == 0 &&

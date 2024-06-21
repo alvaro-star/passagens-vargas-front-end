@@ -11,7 +11,10 @@ const ViajesIndexPage = () => {
     const showViaje = (codigo: string) => navigate('/empresa/viajes/' + codigo)
 
     return (
-        <div className="max-w-7xl m-auto py-10">
+        <div className="max-w-7xl m-auto py-3">
+            <h2 className="ml-5 text-2xl font-semibold py-2">
+                Lista de Viajes
+            </h2>
             <header className="flex space-x-1">
                 {abas.map((abafor, index) => {
                     let classSelect = (index === aba) ? 'bg-slate-300' : ''

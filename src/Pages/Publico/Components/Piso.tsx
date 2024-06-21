@@ -33,9 +33,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                 if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
                     contador++
                     SillasDisponibles[index] = {
-                        numero: contador,
-                        ocupado: false,
-                        posicion: index + 1
+                        numero: contador, ocupado: false, posicion: index + 1
                     }
                     HashMapNSillaIndex.push(index)
                 }
@@ -47,9 +45,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                     if (!SillasDisponibles[index]) { // se não existe então não é indisponivel
                         contador++
                         SillasDisponibles[index] = {
-                            numero: contador,
-                            ocupado: false,
-                            posicion: index + 1
+                            numero: contador, ocupado: false, posicion: index + 1
                         }
                         HashMapNSillaIndex.push(index)
                     }

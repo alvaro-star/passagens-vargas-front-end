@@ -19,23 +19,30 @@ const ViajesPage = () => {
     const [fechaSalidaSelecionada, setFechaSalidaSelecionada] = useState<Date>(new Date());
 
     const [formData, setFormData] = useState<IFormViaje>()
-    useEffect(() => {
-        let cookie1 = sessionStorage.getItem("formViaje")
-        const formViaje: IFormViaje = cookie1 ? JSON.parse(cookie1) : {}
-        setFormData(formViaje)
+    const fetchData = async () => {
+        try {
+            let cookie1 = sessionStorage.getItem("formViaje");
+            const formViaje = cookie1 ? JSON.parse(cookie1) : {};
 
-        const solicitacao = {
-            idCiudadSalida: formViaje.idCiudadSalida,
-            idCiudadDestino: formViaje.idCiudadDestino,
-            fechaSalida: formViaje.fechaSalida,
+            setFormData(formViaje);
+
+            // Garantir que formViaje tenha os valores necessários antes de fazer a solicitação
+            if (formViaje.idCiudadSalida && formViaje.idCiudadDestino && formViaje.fechaSalida) {
+                const solicitacao = {
+                    idCiudadSalida: formViaje.idCiudadSalida,
+                    idCiudadDestino: formViaje.idCiudadDestino,
+                    fechaSalida: formViaje.fechaSalida,
+                };
+
+                const resposta = await http.post("viajes", solicitacao);
+                setViajes(resposta.data);
+            }
+        } catch (error) {
+            alert("Um erro ocorreu");
         }
-
-        http.post<IVIajeResponse[]>("viajes", solicitacao)
-            .then(resposta => {
-                setViajes(resposta.data)
-            }).catch(() => {
-                alert("Um erro")
-            })
+    };
+    useEffect(() => {
+        fetchData()
     }, [])
 
     useEffect(() => {
@@ -70,7 +77,6 @@ const ViajesPage = () => {
             }
         } else {
             console.log("O indice nao existe");
-
         }
     }
 
@@ -78,10 +84,12 @@ const ViajesPage = () => {
         <div className="w-full">
             <header className="w-full px-14 py-8">
                 <h1 className="text-5xl">Logo</h1>
-                {formData && ciudadSalida && ciudadDestino && <FormInlineTemplate
-                    ciudadSalidaProps={ciudadSalida}
-                    ciudadDestinoProps={ciudadDestino}
-                    formData={formData} className="mt-8" />}
+                {formData && ciudadSalida && ciudadDestino &&
+                    <FormInlineTemplate
+                        ciudadSalidaProps={ciudadSalida}
+                        ciudadDestinoProps={ciudadDestino}
+                        formData={formData} className="mt-8" />
+                }
             </header>
             <section className="w-full text-center bg-gray-200 py-5 px-14 text-2xl">
                 Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b>, para <b className="font-semibold">{ciudadDestino?.nombre}</b>

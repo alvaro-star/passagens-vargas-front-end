@@ -7,6 +7,9 @@ import IViaje from "./Types/IViajeIndex"
 import IFactura from "./Types/IFactura";
 import FacturaComponent from "./Components/FacturaComponent";
 import http from "@/http"
+import IErrorList from "@/Types/IErrors/IErrorList"
+import InputError from "@/Components/InputError"
+
 
 interface IPasaje {
     carnet: string;
@@ -15,52 +18,71 @@ interface IPasaje {
     nSilla: number;
     [key: string]: string | number;
 }
+
+interface IPasajeError {
+    carnet: string;
+    nombre: string;
+    nascimento: string;
+    nSilla: string;
+    [key: string]: string;
+}
+
+interface IPasajeList {
+    values: IPasaje
+    errors: IPasajeError
+}
+
 const tasaServicio = 0.1
 
 const PassagensList = () => {
     const { id } = useParams()
     const metodos = ['EFEC']
     const [viaje, setViaje] = useState<IViaje>()
-    const [pasajes, setPasajes] = useState<IPasaje[]>([])
+    const [pasajes, setPasajes] = useState<IPasajeList[]>([])
 
     const [metodo, setMetodo] = useState('EFEC')
     const [factura, setFactura] = useState<IFactura>()
     const navigate = useNavigate()
 
     const editar = (indexPasaje: number, campo: string, value: string) => {
-        let pasajesF = [...pasajes]
-        pasajesF[indexPasaje][campo] = value
-        setPasajes(pasajesF)
+        const updatedPasajes = [...pasajes];
+        updatedPasajes[indexPasaje].values[campo] = value;
+        setPasajes(updatedPasajes);
     }
 
     useEffect(() => {
         let cookie2 = sessionStorage.getItem("sillaFromViajeFuncionario")
         let cookie1 = sessionStorage.getItem("viajeSelectFuncionario")
-        if (!cookie1 || !cookie2)
+        if (!cookie1 || !cookie2) {
+
             console.log("Nao ha nada");
+            //return;
+        }
 
         const viajeSelectFuncionario: IViaje = JSON.parse(cookie1!)
         setViaje(viajeSelectFuncionario)
 
         const sillasFromViajeFuncionario: ISillaFromViajeFuncionario = JSON.parse(cookie2!)
 
-        if (sillasFromViajeFuncionario.sillas.length == 0)
+        if (sillasFromViajeFuncionario.sillas.length == 0) {
             navigate('/empresa/' + viajeSelectFuncionario.id + "/vender")
+            return;
+        }
 
-        let pasajesF: IPasaje[] = []
+        let pasajesF: IPasajeList[] = []
 
         let factura: IFactura = {
-            total: 0,
-            tasaServicio: 0,
-            pasajes: []
+            total: 0, tasaServicio: 0, pasajes: []
         }
 
         sillasFromViajeFuncionario.sillas.forEach(nSilla => {
             pasajesF.push({
-                carnet: '',
-                nombre: '',
-                nascimento: '',
-                nSilla: nSilla
+                values: {
+                    carnet: '', nombre: '', nascimento: '', nSilla: nSilla
+                },
+                errors: {
+                    carnet: '', nombre: '', nascimento: '', nSilla: ''
+                }
             })
             if (sillasFromViajeFuncionario.nSillaMedio != -1 && nSilla >= sillasFromViajeFuncionario.nSillaMedio) {
                 factura.pasajes.push({ nSilla: nSilla, precio: sillasFromViajeFuncionario.precio2 })
@@ -73,31 +95,68 @@ const PassagensList = () => {
         factura.tasaServicio = factura.total * tasaServicio
         setFactura(factura)
         setPasajes(pasajesF)
-    }, [id])
+    }, [id, navigate])
+    const primeiraLetraMayuscula = (palavra: string) => palavra.charAt(0).toUpperCase() + palavra.slice(1);
 
     const enviar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         if (viaje) {
+            let hasErro = 0
+            let pasajeError: IPasajeError
+            let updatedPasajes: IPasajeList[] = pasajes.map(pasaje => {
+                pasajeError = { carnet: '', nombre: '', nascimento: '', nSilla: '' }
+                if (pasaje.values.carnet === '') {
+                    pasajeError.carnet = 'El carnet no puede ser nulo'
+                    hasErro = 1
+                }
+                if (pasaje.values.nombre === '') {
+                    pasajeError.nombre = 'El nombre no puede ser nulo'
+                    hasErro = 1
+                }
+                if (pasaje.values.nascimento === '') {
+                    pasajeError.nascimento = 'La fecha no puede ser nulo'
+                    hasErro = 1
+                }
+                if (!pasaje.values.nSilla) {
+                    pasajeError.carnet = 'Hubo un error con el numero dela Silla'
+                    hasErro = 1
+                }
+                return ({
+                    ...pasaje, errors: pasajeError
+                })
+            });
+            if (hasErro) {
+                setPasajes(updatedPasajes)
+                return;
+            }
             const pedido = {
                 idViaje: viaje?.id,
                 descuento: 0,
                 idLugarSalida: viaje?.salida.idLugar,
                 idLugarDestino: viaje?.destino.idLugar,
-                pasajes: pasajes,
+                pasajes: pasajes.map(p => p.values),
                 metodo: "EFECTIVO"//Cambiara de forma dinamica
             }
-
             http.post('pasajes/vender', pedido).then(response => {
                 /*sessionStorage.removeItem('sillasFromViaje')
                 sessionStorage.removeItem('viajeData')*/
                 console.log(response.data);
                 alert("Registrado con exito")
-            }).catch(erro => {
-                console.log(erro);
+            }).catch(error => {
+                if (error.response.data.errorsList.length != 0) {
+                    const errorsList: IErrorList = error.response.data.errorsList[0];
+                    if (errorsList.name === 'pasajes') {
+                        errorsList.itens.forEach(item => {
+                            item.errors.forEach(errInItem => {
+                                updatedPasajes[item.index].errors[errInItem.name] = primeiraLetraMayuscula(errInItem.message);
+                            });
+                        });
+                    }
+                    setPasajes(updatedPasajes);
+                }
             })
         } else {
             console.log("Nao foi possivel configurar o metodo");
-
         }
 
     }
@@ -111,15 +170,22 @@ const PassagensList = () => {
                         <div className="flex items-center justify-between gap-4">
                             <p className="text-2xl font-semibold">Pasagero {index + 1}</p>
                             <div className="p-2 bg-blue-300 w-10 h-10 grid place-content-center rounded border border-blue-500">
-                                {pasaje.nSilla}
+                                {pasaje.values.nSilla}
                             </div>
                         </div>
-                        <div className="mt-2">
-                            <TextInputObject className="rounded-lg" value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} labelValue="Nombre" />
+                        <div className="mt-2 relative">
+                            <TextInputObject className="rounded" value={pasaje.values.nombre} onChange={e => editar(index, 'nombre', e.target.value)} labelValue="Nombre" required />
+                            <InputError className="absolute" message={pasaje.errors.nombre} />
                         </div>
-                        <div className="w-full mt-2 grid grid-cols-2 gap-5">
-                            <TextInputObject className="rounded-lg" placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} labelValue="N° Carnet" />
-                            <TextInputObject className="rounded-lg" type="date" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} labelValue="Nascimiento dd/mm/aaaa" />
+                        <div className="w-full mt-5 grid grid-cols-2 gap-5">
+                            <div className="relative">
+                                <TextInputObject className="rounded" placeholder="N° de carnet" value={pasaje.values.carnet} onChange={e => editar(index, 'carnet', e.target.value)} labelValue="N° Carnet" required />
+                                <InputError className="absolute" message={pasaje.errors.carnet} />
+                            </div>
+                            <div className="relative">
+                                <TextInputObject className="rounded" type="date" value={pasaje.values.nascimento} onChange={e => editar(index, 'nascimento', e.target.value)} labelValue="Nascimiento" required />
+                                <InputError className="absolute" message={pasaje.errors.nascimento} />
+                            </div>
                         </div>
                     </section>
                 )}

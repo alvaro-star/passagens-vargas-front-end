@@ -4,8 +4,11 @@ import http from "@/http"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import TextInput234 from "@/Components/TextInput234"
-import IVIajeResponse from "./Types/IViajeResponse"
+import IViajeResponse from "./Types/IViajeResponse"
 import TextInputObject from "./Components/TextInputObject"
+import IError from "@/Types/IErrors/IError"
+import IErrorList from "@/Types/IErrors/IErrorList"
+import InputError from "@/Components/InputError"
 
 interface IPasaje {
     carnet: string;
@@ -13,6 +16,27 @@ interface IPasaje {
     nascimento: string;
     nSilla: number;
     [key: string]: string | number;
+}
+
+interface IPasajeError {
+    carnet: string;
+    nombre: string;
+    nascimento: string;
+    nSilla: string;
+    [key: string]: string;
+}
+
+interface IPasajeList {
+    values: IPasaje
+    errors: IPasajeError
+}
+
+interface IContactoError {
+    email: string
+    nombre: string
+    telefono: string
+    confirmarEmail: string
+    [key: string]: string;
 }
 
 interface IPrecio {
@@ -25,143 +49,182 @@ interface IPrecio {
     sillasOcupadas: number[],
     idViaje: number
 }
-/*
-interface Erros {
-    email: string
-    nombre: string
-    telefono: string
-    confirmarEmail: string
-}*/
-
 
 const PassagensList = () => {
-    const parametros = useParams()
-    const metodos = ['QR', 'DEB', 'CRE']
-    const [viaje, setViaje] = useState<IVIajeResponse>()
-    const [pasajes, setPasajes] = useState<IPasaje[]>([])
-    const [precio, setPrecio] = useState<IPrecio>()
+    const { id } = useParams();
+    const metodos = ['QR', 'DEB', 'CRE'];
+    const [viaje, setViaje] = useState<IViajeResponse | null>(null);
+    const [pasajes, setPasajes] = useState<IPasajeList[]>([]);
+    const [precio, setPrecio] = useState<IPrecio | null>(null);
+    const navigate = useNavigate();
 
-    const [email, setEmail] = useState<string>('')
-    const [nombre, setNombre] = useState<string>('')
-    const [telefono, setTelefono] = useState<string>('')
-    const [confirmarEmail, setConfirmarEmail] = useState<string>('')
-    const navigate = useNavigate()
+    const initialContactoError = () => ({
+        email: '', nombre: '', telefono: '', confirmarEmail: ''
+    });
 
-    const editar = (indexPasaje: number, campo: string, value: string) => {
-        let pasajesF = [...pasajes]
-        pasajesF[indexPasaje][campo] = value
-        setPasajes(pasajesF)
+    const [contactoError, setContactoError] = useState<IContactoError>(initialContactoError);
+    const [email, setEmail] = useState<string>('');
+    const [nombre, setNombre] = useState<string>('');
+    const [telefono, setTelefono] = useState<string>('');
+    const [confirmarEmail, setConfirmarEmail] = useState<string>('');
 
-    }
+    const handleEdit = (indexPasaje: number, campo: string, value: string) => {
+        const updatedPasajes = [...pasajes];
+        updatedPasajes[indexPasaje].values[campo] = value;
+        setPasajes(updatedPasajes);
+    };
 
-    const getDataHora = (dataHora: string) => {
-        let hora = dataHora.split('T')[1];
-        let partes = hora.split(':')
-        return `${partes[0]}:${partes[1]}`
-    }
+    const formatDate = (dateTime: string) => {
+        const [hora, minutos] = dateTime.split('T')[1].split(':');
+        return `${hora}:${minutos}`;
+    };
 
     useEffect(() => {
-        let cookie2 = sessionStorage.getItem("sillasFromViaje")
-        let cookie1 = sessionStorage.getItem("viajeData")
-        let sillasEscogidas = cookie2 ? cookie2 : ''
-        let cookieJSON = cookie1 ? cookie1 : ''
-        if (cookie1 === '') {
-            navigate('/')
+        const savedSillas = sessionStorage.getItem("sillasFromViaje");
+        const savedViaje = sessionStorage.getItem("viajeData");
+
+        if (!savedViaje) {
+            navigate('/');
+            return;
         }
 
-        const viajeS = JSON.parse(cookieJSON)
-        setViaje(viajeS)
+        const viajeData = JSON.parse(savedViaje);
+        setViaje(viajeData);
 
+        if (!savedSillas) {
+            navigate('/');
+        } else {
+            const sillasList = savedSillas.split(',');
+            const pasajesData: IPasajeList[] = sillasList.map(nSilla => ({
+                values: { carnet: '', nombre: '', nascimento: '', nSilla: parseInt(nSilla) },
+                errors: { carnet: '', nombre: '', nascimento: '', nSilla: '' }
+            }));
+            setPasajes(pasajesData);
 
-        if (sillasEscogidas == '') {
-            navigate('/')
+            if (id)
+                http.get<IPrecio>(`precios/${id}/vender`).then(response => setPrecio(response.data));
+            else
+                navigate('/');
         }
-        else {
-            let pasajesF: IPasaje[] = []
-            sillasEscogidas.split(',').forEach(nSilla => {
-                pasajesF.push({
-                    carnet: '',
-                    nombre: '',
-                    nascimento: '',
-                    nSilla: parseInt(nSilla)
-                })
-            })
+    }, [id, navigate]);
 
-            setPasajes(pasajesF)
-            if (parametros.id) {
-                http.get<IPrecio>(`precios/${parametros.id}/vender`)
-                    .then(resposta => {
-                        setPrecio(resposta.data)
-                    })
-            } else {
-                navigate('/')
-            }
-        }
-    }, [])
-
-    const enviar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
-        const pasaje = {
-            idPrecio: precio?.id,
-            descuento: 0,
-            contacto: {
-                nombre,
-                email,
-                telefono
-            },
-            idLugarSalida: viaje?.salida.idLugar,
-            idLugarDestino: viaje?.destino.idLugar,
-            pasajes: pasajes
-        }
-        http.post('pasajes', pasaje).then(response => {
-            if (response.status == 200 || response.status == 201) {
-                sessionStorage.removeItem('sillasFromViaje')
-                sessionStorage.removeItem('viajeData')
-                console.log(response.data);
-                alert("Registrado con exito")
-            }
-        }).catch(erro => {
-            console.log(erro);
-        })
+    const primeiraLetraMayuscula = (palavra: string) => {
+        return palavra.charAt(0).toUpperCase() + palavra.slice(1);
     }
+
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+
+        let updatedPasajes: IPasajeList[] = pasajes.map(pasaje => ({
+            ...pasaje,
+            errors: { carnet: '', nombre: '', nascimento: '', nSilla: '' }
+        }));
+
+        let hasError = false;
+        const newContactoError = initialContactoError();
+
+        if (email !== confirmarEmail) {
+            newContactoError.confirmarEmail = "El email es distinto";
+            hasError = true;
+        }
+
+        if (!precio || !viaje || hasError) return;
+
+        const pasajeData = {
+            idPrecio: precio.id,
+            descuento: 0,
+            contacto: { nombre, email, telefono },
+            idLugarSalida: viaje.salida.idLugar,
+            idLugarDestino: viaje.destino.idLugar,
+            pasajes: pasajes.map(p => p.values)
+        };
+        console.log("Cheguei");
+
+        console.log(pasajeData);
+
+        http.post('pasajes', pasajeData).then(() => {
+            setContactoError(newContactoError);
+            sessionStorage.removeItem('sillasFromViaje');
+            sessionStorage.removeItem('viajeData');
+            alert("Registrado con exito");
+        }).catch(error => {
+
+            const newContactoError: IContactoError = initialContactoError();
+            if (error.response.data.errors) {
+                error.response.data.errors.forEach((err: IError) => {
+                    if (err.name.startsWith("contacto.")) {
+                        newContactoError[err.name.substring(9)] = primeiraLetraMayuscula(err.message);
+                    }
+                });
+                setContactoError(newContactoError);
+            }
+            if (error.response.data.errorsList.length != 0) {
+                const errorsList: IErrorList = error.response.data.errorsList[0];
+                if (errorsList.name === 'pasajes') {
+                    errorsList.itens.forEach(item => {
+                        item.errors.forEach(errInItem => {
+                            updatedPasajes[item.index].errors[errInItem.name] = primeiraLetraMayuscula(errInItem.message);
+                        });
+                    });
+                }
+                setPasajes(updatedPasajes);
+            }
+        });
+    };
+
     return (
         <div className="text-gray-900 flex justify-center px-20 py-10 bg-gray-100 gap-4">
             <section className="w-3/4 flex flex-col items-center gap-10">
-                {pasajes.map((pasaje, index) =>
-                    <section
-                        key={index}
-                        className="w-full border-2 border-gray-300 rounded-lg p-5">
+                {pasajes.map((pasaje, index) => (
+                    <section key={index} className="w-full border-2 border-gray-300 rounded-lg p-5">
                         <div className="flex items-center justify-between gap-4">
                             <p className="text-2xl font-semibold">Pasagero</p>
                             <div className="p-2 bg-blue-300 w-10 h-10 grid place-content-center rounded border border-blue-500">
-                                {pasaje.nSilla}
+                                {pasaje.values.nSilla}
                             </div>
                         </div>
-                        <div className="mt-2">
-                            <TextInputObject className="rounded-lg" value={pasaje.nombre} onChange={eve => editar(index, 'nombre', eve.target.value)} labelValue="Nombre" />
+                        <div className="mt-2 relative">
+                            <TextInputObject className="rounded-lg" value={pasaje.values.nombre} onChange={e => handleEdit(index, 'nombre', e.target.value)} labelValue="Nombre" />
+                            <InputError className="absolute" message={pasaje.errors.nombre} />
                         </div>
-                        <div className="w-full mt-2 grid grid-cols-2 gap-5">
-                            <TextInputObject className="rounded-lg" placeholder="N° de carnet" value={pasaje.carnet} onChange={eve => editar(index, 'carnet', eve.target.value)} labelValue="N° Carnet" />
-                            <TextInputObject className="rounded-lg" type="text" value={pasaje.nascimento} onChange={eve => editar(index, 'nascimento', eve.target.value)} labelValue="Nascimiento" />
+                        <div className="w-full mt-5 grid grid-cols-2 gap-5">
+                            <div className="relative">
+                                <TextInputObject className="rounded-lg" placeholder="N° de carnet" value={pasaje.values.carnet} onChange={e => handleEdit(index, 'carnet', e.target.value)} labelValue="N° Carnet" />
+                                <InputError className="absolute" message={pasaje.errors.carnet} />
+                            </div>
+                            <div className="relative">
+                                <TextInputObject className="rounded-lg" type="date" value={pasaje.values.nascimento} onChange={e => handleEdit(index, 'nascimento', e.target.value)} labelValue="Nascimiento" />
+                                <InputError className="absolute" message={pasaje.errors.nascimento} />
+                            </div>
                         </div>
                     </section>
-                )}
+                ))}
 
                 <section className="w-full">
                     <div className="border-2 border-gray-300 rounded-lg p-5">
-                        <p className="text-2xl font-semibold mb-2">
-                            Detalhes del contacto
-                        </p>
+                        <p className="text-2xl font-semibold mb-2">Detalles del contacto</p>
                         <div className="grid grid-cols-2 gap-4">
-                            <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
-                            <TextInput234 value={telefono} setValue={setTelefono} labelValue="Telefono" />
-                            <TextInput234 value={email} setValue={setEmail} labelValue="E-mail" />
-                            <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} labelValue="Confirmar Email" />
+                            <div className="mt-2 relative">
+                                <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" />
+                                <InputError className="absolute" message={contactoError.nombre} />
+                            </div>
+                            <div className="mt-2 relative">
+                                <TextInput234 value={email} setValue={setEmail} labelValue="E-mail" />
+                                <InputError className="absolute" message={contactoError.email} />
+                            </div>
+                            <div className="mt-2 relative">
+                                <TextInput234 value={telefono} setValue={setTelefono} labelValue="Telefono" />
+                                <InputError className="absolute" message={contactoError.telefono} />
+                            </div>
+                            <div className="mt-2 relative">
+                                <TextInput234 value={confirmarEmail} setValue={setConfirmarEmail} labelValue="Confirmar Email" />
+                                <InputError className="absolute" message={contactoError.confirmarEmail} />
+                            </div>
                         </div>
                     </div>
                 </section>
                 <section className="my-5">
-                    <PrimaryButton onClick={enviar}>
+                    <PrimaryButton onClick={handleSubmit}>
                         Mandar Dados
                     </PrimaryButton>
                 </section>
@@ -172,7 +235,7 @@ const PassagensList = () => {
                     <section className="px-6 py-4 border-x-2 border-gray-300">
                         <div className="w-full flex flex-col">
                             <div className="flex items-center">
-                                <p className="w-20 text-black text-3xl font-bold">{getDataHora(viaje?.salida.dataHora)}</p>
+                                <p className="w-20 text-black text-3xl font-bold">{formatDate(viaje?.salida.dataHora)}</p>
                                 <div className="w-10 flex justify-center">
                                     <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
                                 </div>
@@ -190,7 +253,7 @@ const PassagensList = () => {
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                <p className="w-20 text-black text-3xl font-bold">{getDataHora(viaje?.destino.dataHora)}</p>
+                                <p className="w-20 text-black text-3xl font-bold">{formatDate(viaje?.destino.dataHora)}</p>
                                 <div className="w-10 flex justify-center">
                                     <div className="h-3 w-3 bg-gray-600 rounded-full"></div>
                                 </div>
@@ -220,7 +283,7 @@ const PassagensList = () => {
                             <div className="border-b-2 border-gray-300 text-lg py-2">
                                 {pasajes.map((pasajero, index) => <div key={index} className="font-semibold flex justify-between">
                                     <p>
-                                        Pasajero {index + 1} - Silla {pasajero.nSilla}
+                                        Pasajero {index + 1} - Silla {pasajero.values.nSilla}
                                     </p>
                                     <p>Bs {precio.precio.toFixed(2)}</p>
                                 </div>)}

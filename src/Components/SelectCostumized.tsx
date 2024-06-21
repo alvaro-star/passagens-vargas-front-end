@@ -89,7 +89,7 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
                 <label onClick={handleLabelClick}
                     className="absolute text-sm text-gray-500 rounded-t bg-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">{labelValue}</label>
             </div>
-            <div hidden={!isInputFocused} className='absolute options text-gray-500 shadow bg-white rounded w-full -ml-2.5 mt-5'>
+            <div hidden={!isInputFocused} className='absolute options z-20 text-gray-500 shadow bg-white rounded w-full -ml-2.5 mt-5'>
                 {ciudades.map(ciudad =>
                     <div onMouseDown={e => clicou(e, ciudad)} className='px-2.5 p-2 hover:bg-slate-200 cursor-pointer' key={ciudad.id}>
                         {ciudad.nombre}

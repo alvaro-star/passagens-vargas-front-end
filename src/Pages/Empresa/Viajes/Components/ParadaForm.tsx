@@ -34,30 +34,30 @@ const ParadaForm = ({ parada, paradaErros, setParada }: Props) => {
         paradaAux[campo] = value
         setParada(paradaAux)
     }
-    return <div className="flex items-center space-x-4">
-        <div className="w-24">
+    return <div className="w-full space-y-4">
+        <div className="">
             <TextInputObject className="text-center" type="text" min={1} value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Plataforma" />
             <InputError message={paradaErros.plataforma} />
         </div>
-        <div className="relative">
+        <div className="">
             <TextInputObject type="datetime-local" value={parada.dataHora} onChange={(eve) => editar('dataHora', eve.target.value)} labelValue="Fecha de llegada" />
-            <InputError className="absolute w-full ml-2" message={paradaErros.dataHora} />
+            <InputError className="w-full ml-2" message={paradaErros.dataHora} />
         </div>
-        <div className="w-64 text-black">
-            <SelectCostumized ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre Dela Ciudad"/>
+        <div className="text-black">
+            <SelectCostumized ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre Dela Ciudad" />
         </div>
 
-        <div className="relative">
+        <div className="relative w-full">
             <select disabled={ciudad == null}
                 value={parada.idLugar} onChange={eve => editar('idLugar', eve.target.value)}
-                className="w-64 block px-2.5 py-2.5 h-11 text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-blue-500 focus:ring-blue-500 focus:border-blue-500 peer">
+                className="block w-full px-2.5 py-2.5 h-11 text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-blue-500 focus:ring-blue-500 focus:border-blue-500 peer">
                 {lugares.map(lugar =>
                     <option key={lugar.id} value={lugar.id}>{lugar.nombre}</option>
                 )}
             </select>
             <label
                 className="absolute text-sm text-gray-500 rounded-t bg-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Elije un lugar</label>
-            <InputError className="absolute w-full" message={paradaErros.idLugar} />
+            <InputError className="w-full" message={paradaErros.idLugar} />
         </div>
     </div>
 }

@@ -63,15 +63,14 @@ const AutobusesIndexPage = () => {
             <div className="my-10 pb-5 max-w-7xl mx-auto bg-white">
                 <div className="px-5 py-3 bg-slate-700 text-white flex items-center justify-between">
                     <div className="flex items-center">
-                        <img src={empresa?.logo} alt="logo da empresa" className="h-14 rounded-lg" />
                         <p className="text-xl ml-2 font-semibold w-full">
-                            {empresa?.nombre}
+                            Lista de autobuses
                         </p>
                     </div>
                     <p>
                         Dinero disponible: Bs {empresa?.valorViajesWeb}
                     </p>
-                    <PrimaryButton onClick={create} className="rounded-none">+ Autobus</PrimaryButton>
+                    <PrimaryButton onClick={create} className="rounded-none">registrar un Autobus</PrimaryButton>
                 </div>
                 <div className="grid space-y-3 px-5 pt-3">
                     {autobuses.map(autobus =>
