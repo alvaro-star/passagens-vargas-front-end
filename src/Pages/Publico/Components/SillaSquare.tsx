@@ -1,21 +1,26 @@
 import { ButtonHTMLAttributes } from "react"
+import { IoClose } from "react-icons/io5"
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     nSilla: number
+    ocupado?: boolean
     transparent?: boolean
     className?: string
     hover?: boolean
 }
 
-const SillaSquare = ({ nSilla, className = '', hover = true, transparent = false, ...props }: Props) => {
+const SillaSquare = ({ nSilla, className = '', hover = true, ocupado = false, transparent = false, ...props }: Props) => {
 
 
     return (
         <button {...props}
             className={transparent ?
-                `h-12 w-12 p-2 rounded ${hover ? 'hover:bg-white' : ''}` :
-                `font-bold text-xl border-2 border-gray-500 h-12 w-12 bg-gray-300 flex justify-center items-center p-2 rounded ${className}`}>
-            {!transparent && nSilla}
+                `h-14 w-14 rounded ${hover ? 'hover:bg-white' : ''}` :
+                `font-bold text-2xl border-2 border-gray-500 h-14 w-14 bg-gray-300 flex justify-center items-center p-2 rounded ${className}`}>
+            {!transparent && !ocupado
+                ? nSilla :
+                <IoClose className="text-6xl font-extrabold" />
+            }
         </button>
     )
 }

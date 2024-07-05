@@ -79,6 +79,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                         <SillaSquare
                             key={index}
                             disabled={silla.ocupado}
+                            ocupado={silla.ocupado}
                             nSilla={silla.numero}
                             transparent={silla.numero == -1}
                             onClick={(eve) => clickSilla(eve, silla)}

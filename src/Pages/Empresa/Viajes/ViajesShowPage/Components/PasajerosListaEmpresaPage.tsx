@@ -1,32 +1,17 @@
 import DataHora from "@/Classes/DataHora";
 import PrimaryButton from "@/Components/PrimaryButton";
 import IPiso from "@/Types/IPiso";
-import IParada2 from "@/Types/IViaje/IParada2";
 import http from "@/http";
 import { useEffect, useState } from "react";
-import { IoClose, IoInformation } from "react-icons/io5";
-
+import { IoInformation } from "react-icons/io5";
+import ISillaType from "../Types/ISillaType";
+import IPasajeComplete from "../Types/IPasajeComplete";
+import PasajeroCard from "./PasajeroCard";
 interface Props {
     idPrecio: number | string
 }
-interface ISilla {
-    numero: number
-    ocupado: boolean
-    posicion: number
-    pasajero: IPasajeComplete | null
-}
-interface IPasajeComplete {
-    id: string,
-    carnet: string,
-    nombre: string,
-    nascimento: string,
-    nSilla: 0,
-    salida: IParada2
-    destino: IParada2
-}
-
 const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
-    const [sillas, setSillas] = useState<ISilla[]>([])
+    const [sillas, setSillas] = useState<ISillaType[]>([])
     const [pisoModel, setPisoModel] = useState<IPiso | null>(null)
     const [pasajeros, setPasajeros] = useState<IPasajeComplete[]>([])
 
@@ -46,7 +31,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
     useEffect(() => {
         if (!pisoModel) return
         if (!pisoModel.nLinhas || !pisoModel.nColunas) return;
-        let SillasDisponibles: ISilla[] = []
+        let SillasDisponibles: ISillaType[] = []
         pisoModel.posicoesBloqueadas.forEach((nIndisponivel: number) => {
             SillasDisponibles[nIndisponivel - 1] = {
                 numero: -1, ocupado: false, posicion: nIndisponivel, pasajero: null
@@ -92,7 +77,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
     }, [pisoModel, pasajeros])
     const [mostrarLista, setMostrarLista] = useState(true)
     const [aba, setAba] = useState(2)
-    const [sillaElegido, setSillaElegido] = useState<ISilla | null>(null)
+    const [sillaElegido, setSillaElegido] = useState<ISillaType | null>(null)
     return (
         <div className="mt-3">
             <div className="bg-gray-700 text-white px-5 p-3 flex items-center justify-between">
@@ -117,38 +102,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
                 </section>
                 <section className={(aba != 2 ? 'hidden' : 'flex') + " relative flex flex-col justify-center items-center bg-white"} >
                     {sillaElegido != null &&
-                        <div className="absolute z-30 inset-0 grid place-content-center">
-                            <div className="w-64 bg-slate-300 p-5">
-                                <div className="flex items-center justify-between">
-                                    <p className="font-semibold text-lg">
-                                        Datos del pasajero
-                                    </p>
-                                    <button className="bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setSillaElegido(null)}>
-                                        <IoClose className="text-xl" />
-                                    </button>
-                                </div>
-                                <p>
-                                    Asiento: {sillaElegido.numero}
-                                </p>
-                                <p>
-                                    Nombre: {sillaElegido.pasajero?.nombre}
-                                </p>
-                                <p>
-                                    Carnet: {sillaElegido.pasajero?.carnet}
-                                </p>
-                                <p>
-                                    Salida: {sillaElegido.pasajero?.salida.ciudad}
-                                </p>
-                                <p>
-                                    Destino: {sillaElegido.pasajero?.destino.ciudad}
-                                </p>
-                                <div className="w-full text-center">
-                                    <PrimaryButton className="rounded-none">
-                                        DESCARGAR pasaje
-                                    </PrimaryButton>
-                                </div>
-                            </div>
-                        </div>
+                        <PasajeroCard className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
                     }
                     <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
                         <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">

@@ -5,8 +5,8 @@ import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import ParadaFormPage from "../Paradas/ParadaFormPage"
-import IParadaForm from "./Types/IParadaForm"
+import ParadaFormPage from "../../Paradas/ParadaFormPage"
+import IParadaForm from "../Types/IParadaForm"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import PasajerosListaEmpresaPage from "./Components/PasajerosListaEmpresaPage"
 
@@ -155,7 +155,6 @@ const ViajesShowPage = () => {
                             <PasajerosListaEmpresaPage idPrecio={precioItem.id} key={precioItem.id} />
                         )
                     }
-
                 </div>
             </>}
         </div>
