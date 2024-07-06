@@ -1,8 +1,9 @@
 import FormTemplate from "@/Components/FormTemplate"
 import InputError from "@/Components/InputError"
 import TextInput234 from "@/Components/TextInput234"
-import IError from "@/Types/IError"
+
 import http from "@/http"
+import IError from "@/Types/IErrors/IError"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -48,7 +49,7 @@ const Register = () => {
                         let erros: IError[] = erro?.response?.data?.errors
                         erros.forEach(erro => errosValidation[erro.name] = erro.message)
                     } else
-                        alert("Houve um erro durante a solicitação");
+                        alert("Hubo un error en la solicitud");
                     setErros(errosValidation)
                 })
         } else {
@@ -61,7 +62,7 @@ const Register = () => {
     return (
         <div className="mt-20 flex justify-center items-center ">
             <FormTemplate onSubmit={enviar}>
-                <h2 className="text-xl font-bold">Registrar-se</h2>
+                <h2 className="text-xl font-bold w-full">Registrate</h2>
                 <p className="w-full text-sm">Ingresa tus datos y create una cuenta...</p>
                 <div className="mt-2 w-full">
                     <TextInput234 value={nombre} setValue={setNombre} labelValue="Nombre" required />

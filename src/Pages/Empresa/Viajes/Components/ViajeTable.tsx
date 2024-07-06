@@ -66,7 +66,7 @@ const ViajeTable = ({ numeroAbaAtual, numeroAbaJanela, path, order, showViaje }:
                 {viajes.map(viaje =>
                     <tr key={viaje.id} className={viaje.isCobrado ? "text-green-600" : "text-red-500"}>
                         <td className="py-2">{viaje.salida.ciudad + ", " + viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
-                        <td className="py-2 text-center">{viaje.destino.ciudad + ", " + viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
+                        <td className="py-2 text-start">{viaje.destino.ciudad + ", " + viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
                         <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
                         <td className="text-center">Bs {viaje.valorArrecadadoWeb}</td>
                         <td className="text-center">

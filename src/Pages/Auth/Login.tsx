@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import http from "@/http"
 import FormTemplate from "@/Components/FormTemplate"
 import TextInput234 from "@/Components/TextInput234"
@@ -77,13 +77,16 @@ const Login = () => {
     return (
         <div className="h-full w-full grid place-content-center">
             <FormTemplate onSubmit={enviar} className="">
-                <h2 className="font-semibold text-xl">Escribe tus Datos</h2>
+                <h2 className="font-semibold text-xl">Inicia sesion</h2>
                 <div className="mt-2 w-full">
                     <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
                 </div>
                 <div className="mt-2 w-full">
                     <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena" required />
                 </div>
+                <Link to="/reset/password" className="w-full text-xs mt-1 text-end mr-3 text-blue-500 hover:text-blue-600 cursor-pointer">
+                    Olvidaste tu contrasena?
+                </Link>
             </FormTemplate>
         </div>
     )

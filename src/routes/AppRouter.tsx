@@ -32,6 +32,7 @@ import ValidarUser from "../Pages/Auth/ValidarUser";
 import AdminEmpresaShowPage from "../Pages/Admin/Empresas/AdminEmpresaShowPage";
 import AdminForm from "../Pages/Admin/Empresas/AdminForm";
 import ViajesCreatePage from "@/Pages/Empresa/Autobuses/ViajesCreatePage";
+import ResetPassword from "@/Pages/Auth/ResetPassword";
 
 const AppRouter = () => {
     return (
@@ -39,6 +40,7 @@ const AppRouter = () => {
             <Routes>
                 <Route path="/">
                     <Route index element={<Home />} />
+                    <Route path="reset/password" element={<ResetPassword />} />
                     <Route path="login" element={<Login />} />
                     <Route path="registrar" element={<Register />} />
                     <Route path="validar" element={<ValidarUser />} />
