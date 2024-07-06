@@ -17,42 +17,36 @@ const ViajeTable = ({ numeroAbaAtual, numeroAbaJanela, path, order, showViaje }:
     const [nextPage, setNextPage] = useState<null | number>(null)
 
     useEffect(() => {
-        let url=""
-        if (order === "ASC" || order === "asc") {
-            url = path+"?sort=dataHoraSalida"
-        }else{
+        let url = ""
+        if (order === "ASC" || order === "asc")
+            url = path + "?sort=dataHoraSalida"
+        else
             url = path
-        }
 
         http.get<IPage<IViaje>>(url)
             .then(resposta => {
-                console.log(resposta);
-
                 setViajes(resposta.data.content)
-                if (resposta.data.totalPages > 1) {
+                if (resposta.data.totalPages > 1)
                     setNextPage(1)
-                } else {
+                else
                     setNextPage(null)
-                }
             })
     }, [])
 
     const verMais = () => {
         let url = ""
-        if (order === "ASC" || order === "asc") {
+        if (order === "ASC" || order === "asc")
             url = `${path}?sort=dataHoraSalida&page=${nextPage}`
-        }else{
+        else
             url = `${path}?page=${nextPage}`
-        }
+
         if (nextPage != null) {
             http.get<IPage<IViaje>>(url)
                 .then(resposta => {
                     setViajes(viajes.concat(resposta.data.content))
                     if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
                         setNextPage(null)
-                    } else {
-                        setNextPage(resposta.data.pageable.pageNumber + 1)
-                    }
+                    } else setNextPage(resposta.data.pageable.pageNumber + 1)
                 })
         }
     }

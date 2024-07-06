@@ -1,12 +1,12 @@
+import { useEffect, useState } from "react"
 import InputError from "@/Components/InputError"
 import TextInput234 from "@/Components/TextInput234"
-import IViaje from "@/Types/IViaje"
 import http from "@/http"
-import { useState } from "react"
-import IParadaForm from "./Types/IParadaForm"
-import IParadaFormErro from "./Types/IParadaFormErro"
-import ParadaForm from "./Components/ParadaForm"
-import { IoClose } from "react-icons/io5"
+import { useNavigate, useParams } from "react-router-dom"
+import ParadaForm from "../Viajes/Components/ParadaForm"
+import IParadaForm from "../Viajes/Types/IParadaForm"
+import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
+import IAutobusExtends from "./AutobusesShowPage/Types/IAutobusExtends"
 
 interface IErros {
     idAutobus: string,
@@ -16,39 +16,24 @@ interface IErros {
     destino: IParadaFormErro
 }
 
-interface Props {
-    idAutobus: number
-    nPisos: number
-    addViaje: (novo: IViaje) => void
-    setOpenForm: (value: boolean) => void
-}
-
-const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => {
+const ViajesCreatePage = () => {
+    const { id } = useParams()
+    const navigate = useNavigate()
 
     const [salida, setSalida] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
     const [destino, setDestino] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
-
+    const [autobus, setAutobus] = useState<IAutobusExtends>()
     const [precio1, setPrecio1] = useState('')
     const [precio2, setPrecio2] = useState('')
 
     const construirParadaErro = () => {
-        return {
-            plataforma: '',
-            dataHora: '',
-            idLugar: ''
-        }
+        return { plataforma: '', dataHora: '', idLugar: '' }
     }
 
     const construirViajeErro = () => {
         let salida = construirParadaErro()
         let destino = construirParadaErro()
-        return {
-            idAutobus: '',
-            precioPiso1: '',
-            precioPiso2: '',
-            salida: salida,
-            destino: destino
-        }
+        return { idAutobus: '', precioPiso1: '', precioPiso2: '', salida: salida, destino: destino }
     }
 
     const validarParada = (parada: IParadaForm, errosParada: IParadaFormErro) => {
@@ -71,6 +56,13 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
         return valido;
     }
 
+    useEffect(() => {
+        if (id) {
+            http.get<IAutobusExtends>(`autobuses/${id}`)
+                .then(resposta => setAutobus(resposta.data))
+        }
+    }, [id])
+
     const [erros, setErros] = useState<IErros>(construirViajeErro())
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,7 +71,13 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
         let podeEnviar = true;
         podeEnviar = validarParada(salida, errosInFuncton.salida)
         podeEnviar = validarParada(destino, errosInFuncton.destino)
+        const dataSaida = new Date(salida.dataHora)
+        const dataDestino = new Date(destino.dataHora)
 
+        if (dataSaida >= dataDestino) {
+            podeEnviar = false
+            errosInFuncton.destino.dataHora = 'El destino tiene una fecha anterior ala dela salida'
+        }
         if (!parseFloat(precio1)) {
             podeEnviar = false
             errosInFuncton.precioPiso1 = 'Valor inválido'
@@ -88,7 +86,7 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
             errosInFuncton.precioPiso1 = 'Valor inválido'
         }
 
-        if (nPisos == 2) {
+        if (autobus?.pisos.length == 2) {
             if (!parseFloat(precio2)) {
                 podeEnviar = false
                 errosInFuncton.precioPiso2 = 'Valor inválido'
@@ -102,33 +100,27 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
 
         if (podeEnviar) {
             let formData = {
-                idAutobus: idAutobus,
+                idAutobus: id,
                 salida: salida,
                 destino: destino,
                 precioPiso1: parseFloat(precio1),
                 precioPiso2: 0
             }
 
-            if (nPisos == 2) {
+            if (autobus?.pisos.length == 2) {
                 formData["precioPiso2"] = parseFloat(precio2)
             }
 
             http.post('empresa/viajes/create', formData)
-                .then(resposta => {
-                    addViaje({ idAutobus: idAutobus, codigo: resposta.data.codigo, isCobrado: false, valorArrecadadoEfectivo: 0, valorArrecadadoWeb: 0, precios: [] })
-                })
+                .then(() => navigate(-1))
+                .catch(erro => console.log(erro))
         }
     }
 
-    return (
+    return <div className="max-w-2xl mx-auto mt-10">
         <form className="bg-gray-200 p-5 rounded-lg flex flex-col" onSubmit={enviar}>
-            <div className="flex my-2 items-center justify-between">
-                <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje</h1>
-                <button className="bg-red-500 h-8 w-8 text-white rounded flex items-center justify-center" onClick={() => setOpenForm(false)}>
-                    <IoClose className="text-xl" />
-                </button>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
+            <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje para {autobus?.placa}</h1>
+            <div className="grid sm:grid-cols-2 gap-4">
                 <section>
                     <p className="text-lg font-semibold">
                         Datos dela Salida
@@ -149,21 +141,18 @@ const ViajesFormPage = ({ setOpenForm, addViaje, idAutobus, nPisos }: Props) => 
                         <TextInput234 value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)" />
                         <InputError message={erros.precioPiso1} />
                     </div>
-                    {nPisos == 2 &&
-                        <div className="w-full">
-                            <TextInput234 value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
-                            <InputError message={erros.precioPiso2} />
-                        </div>
-                    }
+                    {autobus?.pisos.length == 2 && <div className="w-full">
+                        <TextInput234 value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
+                        <InputError message={erros.precioPiso2} />
+                    </div>}
                 </div>
             </section>
             <div className="text-center mt-5">
-                <button className="bg-black py-1.5 px-3 rounded-lg font-semibold text-white" type="submit">
+                <button className="bg-black py-1.5 px-3 rounded font-semibold text-white" type="submit">
                     ENVIAR
                 </button>
             </div>
         </form>
-    )
+    </div>
 }
-
-export default ViajesFormPage
+export default ViajesCreatePage

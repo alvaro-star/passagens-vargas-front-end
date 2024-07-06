@@ -74,8 +74,7 @@ const AutobusesFormPage = () => {
         }
 
         http.post('autobuses', autobusForm)
-            .then(resposta => {
-                console.log(resposta);
+            .then(() => {
                 autobusForm = null
                 setPiso1(construtorPiso)
                 setPiso2(construtorPiso)
@@ -155,7 +154,7 @@ const AutobusesFormPage = () => {
                 </PrimaryButton>
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
-                        <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa"/>
+                        <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa" />
                     </div>
                 </section>
                 <div>

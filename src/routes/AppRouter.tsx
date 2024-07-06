@@ -1,36 +1,37 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Pages/Auth/Login";
-import Register from "./Pages/Auth/Register";
-import NotFound from "./Pages/NotFound";
-import PassagensList from "./Pages/Publico/PassagensList";
-import ViajesPage from "./Pages/Publico/ViajesPage";
-import SobrePage from "./Pages/Publico/SobrePage";
-import Dashboard from "./Pages/Admin/Dashboard";
-import EmpresasFormPage from "./Pages/Admin/Empresas/EmpresasFormPage";
-import EmpresaAdminLayout from "./Pages/Layout/EmpresaAdminLayout";
-import Home from "./Pages/Publico/Home";
-import HomeEmpresaPage from "./Pages/Empresa/HomeEmpresaPage";
-import AutobusesIndexPage from "./Pages/Empresa/Autobuses/AutobusesIndexPage";
-import CiudadesIndexPage from "./Pages/Admin/Ciudades/CiudadesIndexPage";
-import EmpresaIndexPage from "./Pages/Admin/Empresas/EmpresaIndexPage";
-import AdminLayout from "./Pages/Layout/AdminLayout";
-import CiudadesFormPage from "./Pages/Admin/Ciudades/CiudadesFormPage";
-import CiudadesShowPage from "./Pages/Admin/Ciudades/CiudadesShowPage";
-import AutobusesFormPage from "./Pages/Empresa/Autobuses/AutobusFormPage";
-import AutobusesShowPage from "./Pages/Empresa/Autobuses/AutobusesShowPage";
-import LugaresFormPage from "./Pages/Admin/Lugares/LugaresFormPage";
-import ViajesShowPage from "./Pages/Empresa/Viajes/ViajesShowPage";
-import ViajesIndexPage from "./Pages/Empresa/Viajes/ViajesIndexPage";
-import SwitchSillasPage from "./Pages/Publico/SwitchSillasPage";
-import FuncionariosListPage from "./Pages/Empresa/Admin/FuncionariosListPage";
-import FuncionariosFormPage from "./Pages/Empresa/Admin/FuncionariosFormPage";
-import ViajesFuncionarioPage from "./Pages/Empresa/Viajes/ViajesFuncionarioPage";
-import ParadaEditPage from "./Pages/Empresa/Paradas/ParadaEditPage";
-import ViajesVentaPage from "./Pages/Empresa/Viajes/ViajesVentaPage";
-import ViajesPagosPage from "./Pages/Empresa/Viajes/ViajesPagosPage";
-import ValidarUser from "./Pages/Auth/ValidarUser";
-import AdminEmpresaShowPage from "./Pages/Admin/Empresas/AdminEmpresaShowPage";
-import AdminForm from "./Pages/Admin/Empresas/AdminForm";
+import Login from "../Pages/Auth/Login";
+import Register from "../Pages/Auth/Register";
+import NotFound from "../Pages/NotFound";
+import PassagensList from "../Pages/Publico/PassagensList";
+import ViajesPage from "../Pages/Publico/ViajesPage";
+import SobrePage from "../Pages/Publico/SobrePage";
+import Dashboard from "../Pages/Admin/Dashboard";
+import EmpresasFormPage from "../Pages/Admin/Empresas/EmpresasFormPage";
+import EmpresaAdminLayout from "../Pages/Layout/EmpresaAdminLayout";
+import Home from "../Pages/Publico/Home";
+import HomeEmpresaPage from "../Pages/Empresa/HomeEmpresaPage";
+import AutobusesIndexPage from "../Pages/Empresa/Autobuses/AutobusesIndexPage";
+import CiudadesIndexPage from "../Pages/Admin/Ciudades/CiudadesIndexPage";
+import EmpresaIndexPage from "../Pages/Admin/Empresas/EmpresaIndexPage";
+import AdminLayout from "../Pages/Layout/AdminLayout";
+import CiudadesFormPage from "../Pages/Admin/Ciudades/CiudadesFormPage";
+import CiudadesShowPage from "../Pages/Admin/Ciudades/CiudadesShowPage";
+import AutobusesFormPage from "../Pages/Empresa/Autobuses/AutobusFormPage";
+import AutobusesShowPage from "../Pages/Empresa/Autobuses/AutobusesShowPage";
+import LugaresFormPage from "../Pages/Admin/Lugares/LugaresFormPage";
+import ViajesShowPage from "../Pages/Empresa/Viajes/ViajesShowPage";
+import ViajesIndexPage from "../Pages/Empresa/Viajes/ViajesIndexPage";
+import SwitchSillasPage from "../Pages/Publico/SwitchSillasPage";
+import FuncionariosListPage from "../Pages/Empresa/Admin/FuncionariosListPage";
+import FuncionariosFormPage from "../Pages/Empresa/Admin/FuncionariosFormPage";
+import ViajesFuncionarioPage from "../Pages/Empresa/Viajes/ViajesFuncionarioPage";
+import ParadaEditPage from "../Pages/Empresa/Paradas/ParadaEditPage";
+import ViajesVentaPage from "../Pages/Empresa/Viajes/ViajesVentaPage";
+import ViajesPagosPage from "../Pages/Empresa/Viajes/ViajesPagosPage";
+import ValidarUser from "../Pages/Auth/ValidarUser";
+import AdminEmpresaShowPage from "../Pages/Admin/Empresas/AdminEmpresaShowPage";
+import AdminForm from "../Pages/Admin/Empresas/AdminForm";
+import ViajesCreatePage from "@/Pages/Empresa/Autobuses/ViajesCreatePage";
 
 const AppRouter = () => {
     return (
@@ -71,6 +72,7 @@ const AppRouter = () => {
                             <Route index element={<AutobusesIndexPage />} />
                             <Route path="create" element={<AutobusesFormPage />} />
                             <Route path=":id" element={<AutobusesShowPage />} />
+                            <Route path=":id/viaje/create" element={<ViajesCreatePage />} />
                         </Route>
                         <Route path="funcionarios">
                             <Route index element={<FuncionariosListPage />} />
