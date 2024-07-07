@@ -3,6 +3,7 @@ import ICiudad from '@/Types/ICiudad';
 import IPage from '@/Types/IPage';
 import { IoClose } from "react-icons/io5"
 import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes, useState } from 'react';
+import capitalizeFirstLetter from '@/Helpers/CapitalizeFirstLetter';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     isFocused?: boolean
@@ -26,9 +27,7 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
     };
 
     useEffect(() => {
-        if (isFocused) {
-            localRef.current?.focus();
-        }
+        if (isFocused) localRef.current?.focus();
         if (ciudadElejida != null) {
             setValor(ciudadElejida.nombre)
         }
@@ -44,7 +43,10 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
         if (valor.length > 2) {
             http.get<IPage<ICiudad>>(`ciudades/${valor}/like`)
                 .then(resposta => {
-                    setCiudades(resposta.data.content)
+                    setCiudades(resposta.data.content.map(ciudadMap => ({
+                        ...ciudadMap,
+                        nombre: capitalizeFirstLetter(ciudadMap.nombre)
+                    })));
                 })
         }
     }, [valor])

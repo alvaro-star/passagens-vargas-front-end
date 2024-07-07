@@ -1,5 +1,6 @@
 import DataHora from "@/Classes/DataHora";
 import PrimaryButton from "@/Components/PrimaryButton";
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 import http from "@/http";
 import Piso from "@/Pages/Publico/Components/Piso";
 import SillaSquare from "@/Pages/Publico/Components/SillaSquare";
@@ -141,11 +142,11 @@ const ViajesVentaPage = () => {
             {paradaSalida && paradaDestino && <>
                 <div>
                     <h2 className="font-semibold">Salida</h2>
-                    {paradaSalida.lugar}, {paradaSalida.abreviacion} - {paradaSalida.departamento} {new DataHora(paradaSalida.dataHora).imprimir()}
+                    {capitalizeFirstLetter(paradaSalida.lugar)}, {paradaSalida.abreviacion} - {capitalizeFirstLetter(paradaSalida.departamento)} {new DataHora(paradaSalida.dataHora).imprimir()}
                 </div>
                 <div>
                     <h2 className="font-semibold">Destino</h2>
-                    {paradaDestino.lugar}, {paradaDestino.abreviacion} - {paradaDestino.departamento} {new DataHora(paradaDestino.dataHora).imprimir()}
+                    {capitalizeFirstLetter(paradaDestino.lugar)}, {paradaDestino.abreviacion} - {capitalizeFirstLetter(paradaDestino.departamento)} {new DataHora(paradaDestino.dataHora).imprimir()}
                 </div>
             </>}
         </section>

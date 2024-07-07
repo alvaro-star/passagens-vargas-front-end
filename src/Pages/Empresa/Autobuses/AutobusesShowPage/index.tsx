@@ -5,6 +5,7 @@ import IAutobusExtends from "./Types/IAutobusExtends"
 import IViajeEmpresa from "../../Types/IViajeEmpresa"
 import InputRelatorioComponent from "./Components/InputRelatorioComponent"
 import DataHora from "@/Classes/DataHora"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -45,8 +46,8 @@ const AutobusesShowPage = () => {
                     <tbody className="">
                         {viajes.map(viaje =>
                             <tr className="hover:bg-slate-200" key={viaje.id}>
-                                <td className="py-2">{viaje.salida.ciudad}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
-                                <td className="text-start">{viaje.destino.ciudad}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
+                                <td className="py-2">{capitalizeFirstLetter(viaje.salida.ciudad)}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
+                                <td className="text-start">{capitalizeFirstLetter(viaje.destino.ciudad)}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
                                 <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
                                 <td className="text-center">Bs {viaje.valorArrecadadoWeb}</td>
                                 <td className="text-center">

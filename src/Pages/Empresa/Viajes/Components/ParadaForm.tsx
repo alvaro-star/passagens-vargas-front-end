@@ -7,6 +7,7 @@ import TextInputObject from "@/Pages/Publico/Components/TextInputObject"
 import http from "@/http"
 import SelectCostumized from "@/Components/SelectCostumized"
 import ICiudad from "@/Types/ICiudad"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 interface Props {
     parada: IParadaForm
     paradaErros: IParadaFormErro
@@ -21,7 +22,7 @@ const ParadaForm = ({ parada, paradaErros, setParada }: Props) => {
         if (ciudad) {
             http.get<ILugar[]>('ciudades/' + ciudad.id + '/lugares')
                 .then(resposta => {
-                    setLugares(resposta.data)
+                    setLugares(resposta.data.map(lugar => ({ ...lugar, nombre: capitalizeFirstLetter(lugar.nombre) })))
                     if (resposta.data.length > 0) {
                         editar('idLugar', resposta.data[0].id.toString())
                     }
@@ -44,7 +45,7 @@ const ParadaForm = ({ parada, paradaErros, setParada }: Props) => {
             <InputError className="w-full ml-2" message={paradaErros.dataHora} />
         </div>
         <div className="text-black">
-            <SelectCostumized ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre Dela Ciudad" />
+            <SelectCostumized ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre dela Ciudad" />
         </div>
 
         <div className="relative w-full">

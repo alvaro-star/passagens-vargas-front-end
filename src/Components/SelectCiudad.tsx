@@ -4,6 +4,7 @@ import IType from '@/Types/IType';
 import http from '@/http';
 import { useState } from 'react';
 import Select, { StylesConfig } from 'react-select';
+import capitalizeFirstLetter from '@/Helpers/CapitalizeFirstLetter';
 
 
 const customStyles: StylesConfig<IType, false> = {
@@ -29,7 +30,7 @@ const SelectCiudad = ({ placeholder = '', labelValue = 'Value', option, setOptio
         if (inputValue.length > 2) {
             http.get<IPage<ICiudad>>(`ciudades/${inputValue}/like`)
                 .then(resposta => {
-                    setCiudades(resposta.data.content.map(ciudad => ({ value: ciudad.id, label: ciudad.nombre })))
+                    setCiudades(resposta.data.content.map(ciudad => ({ value: ciudad.id, label: capitalizeFirstLetter(ciudad.nombre) })))
                 })
         }
     };

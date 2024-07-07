@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import http from "@/http"
 import FormTemplate from "@/Components/FormTemplate"
 import TextInput234 from "@/Components/TextInput234"
+import InputError from "@/Components/InputError"
 
 interface ILogin {
     token: string
@@ -15,6 +16,7 @@ interface IUsuario {
     telefono: string
     idEmpresa: string | null
 }
+
 const tipoUsuario = (roles: string[]): string => {
     if (roles.includes("ROLE_ADMIN"))
         return "ROLE_ADMIN"
@@ -30,13 +32,14 @@ const Login = () => {
     const navigate = useNavigate()
     const [login, setLogin] = useState<string>('')
     const [contrasena, setContrasena] = useState<string>('')
+    const [messageError, setMessageError] = useState("")
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
+        let message = ""
         const usuario = {
             login: login,
             contrasena: contrasena
         }
-
         http.post<ILogin>("auth/login", usuario)
             .then(response => {
                 response.data.token
@@ -72,12 +75,21 @@ const Login = () => {
                             alert("Hubo un error en la consulta")
                     }
                 })
+            }).catch((erro) => {
+                if (erro.response.data.conteudo != null) {
+                    message = erro.response.data.conteudo
+                } else {
+                    message = "Hubo un error en la solicitud. Intente de nevo..."
+                }
+                setMessageError(message)
             })
+        setMessageError(message)
     }
     return (
         <div className="h-full w-full grid place-content-center">
             <FormTemplate onSubmit={enviar} className="">
                 <h2 className="font-semibold text-xl">Inicia sesion</h2>
+                <InputError message={messageError} />
                 <div className="mt-2 w-full">
                     <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
                 </div>

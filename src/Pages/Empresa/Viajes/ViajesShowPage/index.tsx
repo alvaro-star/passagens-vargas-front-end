@@ -9,6 +9,7 @@ import ParadaFormPage from "../../Paradas/ParadaFormPage"
 import IParadaForm from "../Types/IParadaForm"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import PasajerosListaEmpresaPage from "./Components/PasajerosListaEmpresaPage"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 
 
 interface IViajeExtends {
@@ -122,7 +123,7 @@ const ViajesShowPage = () => {
                         <tbody>
                             {viaje.paradas.map(parada =>
                                 <tr className=" hover:bg-slate-300" key={parada.id}>
-                                    <td className="pl-5 py-2 text-start">{parada.ciudad}, {parada.abreviacion} - {parada.lugar}</td>
+                                    <td className="pl-5 py-2 text-start"> {capitalizeFirstLetter(parada.ciudad)}, {parada.abreviacion} - {capitalizeFirstLetter(parada.lugar)}</td>
                                     <td className="">{parada.plataforma}</td>
                                     <td className="">{new DataHora(parada.dataHora).imprimir()}</td>
                                     {mostrarOptions &&

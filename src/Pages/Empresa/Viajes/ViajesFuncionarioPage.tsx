@@ -1,5 +1,6 @@
 import DataHora from "@/Classes/DataHora"
 import PrimaryButton from "@/Components/PrimaryButton"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -46,10 +47,10 @@ const ViajesFuncionarioPage = () => {
                         {viajes.map(viaje =>
                             <tr key={viaje.id} className="hover:bg-slate-100">
                                 <td className="py-2 pl-5">
-                                    {viaje.salida.ciudad}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}
+                                    {capitalizeFirstLetter(viaje.salida.ciudad)}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}
                                 </td>
                                 <td>
-                                    {viaje.destino.ciudad}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}
+                                    {capitalizeFirstLetter(viaje.destino.ciudad)}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}
                                 </td>
                                 <td className="text-center">
                                     {ordenarPisos(viaje.precios).map(piso =>

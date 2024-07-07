@@ -1,4 +1,5 @@
-import { FaArrowRight } from "react-icons/fa"
+import { useState } from "react"
+import { FaAngleDown, FaArrowRight } from "react-icons/fa"
 import IFactura from "../Types/IFactura"
 import IViaje from "../Types/IViajeIndex"
 interface Props {
@@ -15,9 +16,20 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
         let partes = hora.split(':')
         return `${partes[0]}:${partes[1]}`
     }
+    const [mostrarViaje, setMostrarViaje] = useState(true)
+    const [mostrarPrecio, setMostrarPrecio] = useState(true)
     return <section className={className}>
-        <div className="w-full bg-white p-5 text-2xl font-semibold border border-gray-700">Datos del Viaje</div>
-        <section className="px-6 py-4 bg-white border-x border-gray-700">
+        <div className="w-full flex justify-between items-center bg-white p-5 text-2xl font-semibold border-t border-x border-gray-700">
+            <p>Datos del Viaje</p>
+            <p>
+                <FaAngleDown
+                    onClick={() => setMostrarViaje(!mostrarViaje)}
+                    fontSize={28}
+                    className={(!mostrarViaje ? "rotate-90" : "") + " cursor-pointer"}
+                />
+            </p>
+        </div>
+        <section hidden={!mostrarViaje} className="px-6 py-4 bg-white border-x border-t border-gray-700">
             <div className="w-full flex flex-col">
                 <div className="flex items-center">
                     <p className="w-20 text-black text-3xl font-bold">{getDataHora(viaje.salida.dataHora)}</p>
@@ -55,11 +67,17 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
                 </div>
             </div>
         </section>
-        <div className="w-full p-5 bg-white text-2xl font-semibold border border-gray-700">
-            Resumen de Factura
+        <div className="w-full p-5 bg-white flex items-center justify-between text-2xl font-semibold border-x border-t border-gray-700">
+            <p>Resumen de Factura</p>
+            <p>
+                <FaAngleDown
+                    onClick={() => setMostrarPrecio(!mostrarPrecio)}
+                    fontSize={28}
+                    className={(!mostrarPrecio ? "rotate-90" : "") + " cursor-pointer"}
+                />
+            </p>
         </div>
-
-        <section className="border-x px-5 py-3 border-gray-700 bg-white">
+        <section hidden={!mostrarPrecio} className="border-x border-t px-5 py-3 border-gray-700 bg-white">
             <div className="text-2xl font-semibold flex items-center space-x-3">
                 <p>{viaje?.salida.ciudad}</p>
                 <FaArrowRight />
@@ -67,12 +85,8 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
             </div>
             <div className="border-b-2 border-gray-700 text-lg py-2">
                 {factura.pasajes.map((pasajero, index) => <div key={index} className="font-semibold flex justify-between">
-                    <p>
-                        Pasajero {index + 1} - Silla {pasajero.nSilla}
-                    </p>
-                    <p>
-                        Bs {pasajero.precio}
-                    </p>
+                    <p>Pasajero {index + 1} - Silla {pasajero.nSilla}</p>
+                    <p>Bs {pasajero.precio}</p>
                 </div>)}
             </div>
             <div className="text-lg font-semibold flex justify-between">
@@ -95,7 +109,7 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
             <div className="flex justify-center gap-2">
                 {metodos.map((metodoFo, index) =>
                     <div key={index}
-                        className={"w-10 h-10 cursor-pointer rounded  font-bold flex items-center justify-center hover:bg-black hover:text-white "+ (metodoFo.toUpperCase() === metodo ? 'bg-slate-500 text-white border-2 border-gray-700' : 'bg-slate-300')}
+                        className={"w-10 h-10 cursor-pointer rounded  font-bold flex items-center justify-center hover:bg-black hover:text-white " + (metodoFo.toUpperCase() === metodo ? 'bg-slate-500 text-white border-2 border-gray-700' : 'bg-slate-300')}
                         onClick={() => setMetodo(metodoFo)}
                     >
                         {metodoFo}

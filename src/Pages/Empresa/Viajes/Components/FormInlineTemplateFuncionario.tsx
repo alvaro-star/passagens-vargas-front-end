@@ -8,6 +8,7 @@ import ICiudad from "@/Types/ICiudad";
 import IFormViaje from "@/Pages/Publico/Types/IFormViaje";
 import http from "@/http";
 import IViaje from "../Types/IViajeIndex";
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
@@ -71,7 +72,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
 
     const findCiudadById = (id: number, setCiudad: (c: ICiudad | null) => void) => {
         http.get<ICiudad>("ciudades/" + id)
-            .then(({ data }) => { setCiudad(data) })
+            .then(({ data }) => { setCiudad(({ ...data, nombre: capitalizeFirstLetter(data.nombre) })) })
             .catch(() => setCiudad(null))
     }
 
@@ -93,7 +94,6 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
                 })
                 .catch(erro => {
                     console.log(erro);
-
                     setViajes([])
                     alert("Ocurrio un error")
                 })
