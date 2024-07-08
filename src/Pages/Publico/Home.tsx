@@ -1,7 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import FormInlineTemplate from "./Components/FormInlineTemplate"
-
-
+import FormInlineTemplateIndependent from "./Components/FormInlineTemplateIndependent"
 
 
 const Home = () => {
@@ -20,13 +18,12 @@ const Home = () => {
                     <div className="text-2xl font-semibold">
                         Logo
                     </div>
-                    {!token ?
-                        <div className="flex items-center gap-4">
+                    {!token
+                        ? <div className="flex items-center gap-4">
                             <Link to='/registrar' className="rounded px-3 py-1.5 hover:bg-white hover:text-black">REGISTRAR</Link>
                             <Link to='/login' className="rounded bg-white text-black px-3 py-1.5">ENTRAR</Link>
                         </div>
-                        :
-                        <div className="flex items-center gap-4">
+                        : <div className="flex items-center gap-4">
                             <button onClick={logout} className="rounded bg-white text-black px-3 py-1.5">Log Out</button>
                         </div>
                     }
@@ -39,7 +36,7 @@ const Home = () => {
                     </div>
                 </header>
                 <section className="w-full h-16 -mt-9 absolute text-black bg-white bg-opacity-0">
-                    <FormInlineTemplate />
+                    <FormInlineTemplateIndependent />
                 </section>
 
                 <section className="w-full mt-24 px-24">

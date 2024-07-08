@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Piso from "./Components/Piso";
 import CardViaje from "./Components/CardViaje";
 import ProcessLine from "./Components/ProcessLine";
-import FormInlineTemplate from "./Components/FormInlineTemplate";
 import http from "@/http";
 import IPiso from "@/Types/IPiso";
 import ISilla from "@/Types/ISilla";
 import PrimaryButton from "@/Components/PrimaryButton";
 import IVIajeResponse from "./Types/IViajeResponse";
+import FormInlineTemplateIndependent from "./Components/FormInlineTemplateIndependent";
 
 interface IPrecio {
     id: string,
@@ -86,7 +86,7 @@ const SwitchSillasPage = () => {
         <div className="w-full bg-slate-100 flex flex-col">
             <header className="w-full h-64 bg-slate-500 p-2 flex flex-col items-center justify-center space-y-6">
                 <div className="text-white font-semibold text-4xl text-center">Header</div>
-                <FormInlineTemplate className="w-full" />
+                <FormInlineTemplateIndependent className="w-full" />
             </header>
             <div className="w-full">
                 <ProcessLine step={2} className="my-8 mx-10" />

@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CardViaje from "./Components/CardViaje"
-import IFormViaje from "./Types/IFormViaje"
 import { useNavigate } from "react-router-dom"
-import FormInlineTemplate from "./Components/FormInlineTemplate"
 import ProcessLine from "./Components/ProcessLine"
-import http from "@/http"
 import IVIajeResponse from "./Types/IViajeResponse"
 import ICiudad from "@/Types/ICiudad"
 import TimeLine from "./Components/TimeLine"
+import FormInlineTemplateDependent from "./Components/FormInlineTemplateDependent"
+import http from "@/http"
+import dataConvert from "@/Helpers/Date/dateConvert"
 
 
 const ViajesPage = () => {
@@ -16,50 +16,27 @@ const ViajesPage = () => {
 
     const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
     const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
-    const [fechaSalidaSelecionada, setFechaSalidaSelecionada] = useState<Date>(new Date());
+    const [fechaSalida, setFechaSalida] = useState<Date | null>(null);
 
-    const [formData, setFormData] = useState<IFormViaje>()
-    const fetchData = async () => {
-        try {
-            let cookie1 = sessionStorage.getItem("formViaje");
-            const formViaje = cookie1 ? JSON.parse(cookie1) : {};
-
-            setFormData(formViaje);
-
-            // Garantir que formViaje tenha os valores necessários antes de fazer a solicitação
-            if (formViaje.idCiudadSalida && formViaje.idCiudadDestino && formViaje.fechaSalida) {
-                const solicitacao = {
-                    idCiudadSalida: formViaje.idCiudadSalida,
-                    idCiudadDestino: formViaje.idCiudadDestino,
-                    fechaSalida: formViaje.fechaSalida,
-                };
-
-                const resposta = await http.post("viajes", solicitacao);
-                setViajes(resposta.data);
-            }
-        } catch (error) {
-            alert("Um erro ocorreu");
-        }
+    const datasIguais = (data1: Date, data2: Date): boolean => {
+        return data1.getFullYear() == data2.getFullYear() && data1.getMonth() == data2.getMonth() && data1.getDate() == data2.getDate()
+    }
+    const fetchViajes = async (idCiudadSalida: number, idCiudadDestino: number, fechaIda: string) => {
+        const solicitacao = {
+            idCiudadSalida: idCiudadSalida,
+            idCiudadDestino: idCiudadDestino,
+            fechaSalida: fechaIda,
+        };
+        await http.post("viajes", solicitacao)
+            .then(resposta => { setViajes(resposta.data) })
+            .catch(() => alert("Hubo un error"))
     };
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-    useEffect(() => {
-        if (formData) {
-            const fetchCiudad = (idCiudad: number, setter: React.Dispatch<React.SetStateAction<ICiudad | null>>) => {
-                http.get<ICiudad>(`ciudades/${idCiudad}`)
-                    .then(resposta => {
-                        setter(resposta.data);
-                    });
-            };
-
-            fetchCiudad(formData.idCiudadSalida, setCiudadSalida);
-            fetchCiudad(formData.idCiudadDestino, setCiudadDestino);
-            setFechaSalidaSelecionada(new Date(formData.fechaSalida + "T00:00:00"));
+    const clickOtherDay = (fechaNueva: Date | null) => {
+        if (fechaNueva && fechaSalida && ciudadSalida && ciudadDestino && !datasIguais(fechaNueva, fechaSalida)) {
+            setFechaSalida(fechaNueva)
+            fetchViajes(ciudadSalida.id, ciudadDestino.id, dataConvert(fechaNueva))
         }
-    }, [formData]);
-
+    }
     const escojerViaje = (indexViaje: number | undefined, idViaje: string, idPrecio: string) => {
         if (indexViaje != null) {
             if (viajes[indexViaje].id === idViaje) {
@@ -72,8 +49,6 @@ const ViajesPage = () => {
             }
             else {
                 console.log("O id do viaje e o id Passado sao diferentes");
-                console.log("Id del index" + viajes[indexViaje].id);
-                console.log("Id del viaje" + idViaje);
             }
         } else {
             console.log("O indice nao existe");
@@ -84,12 +59,13 @@ const ViajesPage = () => {
         <div className="w-full">
             <header className="w-full px-14 py-8">
                 <h1 className="text-5xl">Logo</h1>
-                {formData && ciudadSalida && ciudadDestino &&
-                    <FormInlineTemplate
-                        ciudadSalidaProps={ciudadSalida}
-                        ciudadDestinoProps={ciudadDestino}
-                        formData={formData} className="mt-8" />
-                }
+                <FormInlineTemplateDependent
+                    className="mt-8"
+                    fetchViajes={fetchViajes}
+                    setCiudadSalidaProp={setCiudadSalida}
+                    setCiudadDestinoProp={setCiudadDestino}
+                    setFechaIdaProp={setFechaSalida}
+                />
             </header>
             <section className="w-full text-center bg-gray-200 py-5 px-14 text-2xl">
                 Pasajes de Autobus de <b className="font-semibold">{ciudadSalida?.nombre}</b>, para <b className="font-semibold">{ciudadDestino?.nombre}</b>
@@ -99,22 +75,14 @@ const ViajesPage = () => {
                 <ProcessLine step={1} className="my-8 mx-10" />
 
                 <div className="max-w-7xl mx-auto">
-                    <TimeLine fechaSalida={fechaSalidaSelecionada} />
+                    {fechaSalida && <TimeLine clickOtherDay={clickOtherDay} fechaSalida={fechaSalida} />}
                 </div>
                 <div className="grid grid-cols-1 gap-5 my-5 mx-auto max-w-7xl">
                     {viajes.map((viaje, index) =>
-                        <CardViaje key={viaje.id}
-                            indexViaje={index}
-                            viaje={viaje}
-                            escojerViaje={escojerViaje}
-                        />
+                        <CardViaje key={viaje.id} indexViaje={index} viaje={viaje} escojerViaje={escojerViaje} />
                     )}
 
-                    {viajes.length == 0 &&
-                        <div>
-                            No hay viajes disponibles
-                        </div>
-                    }
+                    {viajes.length == 0 && <div> No hay viajes disponibles</div>}
                 </div>
             </section>
         </div>

@@ -2,17 +2,16 @@ import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FaSearch } from "react-icons/fa";
 import InputError from "@/Components/InputError"
-import IFormViaje from "../Types/IFormViaje"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
 import SelectCostumized from "@/Components/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
+import http from "@/http";
+import IFormViaje from "../Types/IFormViaje";
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
-    formData?: IFormViaje
-    ciudadSalidaProps?: ICiudad | null
-    ciudadDestinoProps?: ICiudad | null
 }
 
 interface Erros {
@@ -22,7 +21,7 @@ interface Erros {
     fechaVuelta: string
 }
 
-const FormInlineTemplate = ({ ciudadSalidaProps, ciudadDestinoProps, formData, className = '', ...props }: Props) => {
+const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
     const navigate = useNavigate();
     const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
     const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
@@ -64,14 +63,24 @@ const FormInlineTemplate = ({ ciudadSalidaProps, ciudadDestinoProps, formData, c
         setErrors(erros);
     };
 
+
+    const fetchCiudad = (idCiudad: number, setter: React.Dispatch<React.SetStateAction<ICiudad | null>>) => {
+        http.get<ICiudad>(`ciudades/${idCiudad}`)
+            .then(resposta => {
+                setter({ ...resposta.data, nombre: capitalizeFirstLetter(resposta.data.nombre) })
+            });
+    };
     useEffect(() => {
-        if (formData && ciudadSalidaProps && ciudadDestinoProps) {
-            setCiudadSalida(ciudadSalidaProps)
-            setCiudadDestino(ciudadDestinoProps)
-            setFechaIda(new Date(formData.fechaSalida + "T00:00:00"));
-            setFechaVuelta(new Date(formData.fechaVuelta + "T00:00:00"));
+        let cookie1 = sessionStorage.getItem("formViaje");
+        const formViaje: IFormViaje = cookie1 ? JSON.parse(cookie1) : {};
+        if (formViaje && formViaje.idCiudadSalida && formViaje.idCiudadDestino) {
+            fetchCiudad(formViaje.idCiudadSalida, setCiudadSalida)
+            fetchCiudad(formViaje.idCiudadDestino, setCiudadDestino)
+            let dataSalida = new Date(formViaje.fechaSalida + "T00:00:00")
+            setFechaIda(dataSalida);
+            setFechaVuelta(new Date(formViaje.fechaVuelta + "T00:00:00"));
         }
-    }, [formData, ciudadSalidaProps, ciudadDestinoProps, navigate]);
+    }, []);
 
     return (
         <form className={`max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5 rounded ${className}`}
@@ -103,4 +112,4 @@ const FormInlineTemplate = ({ ciudadSalidaProps, ciudadDestinoProps, formData, c
 };
 
 
-export default FormInlineTemplate
+export default FormInlineTemplateIndependent

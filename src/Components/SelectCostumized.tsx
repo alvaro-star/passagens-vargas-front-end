@@ -40,7 +40,7 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
     }, [ciudadElejida]);
 
     useEffect(() => {
-        if (valor.length > 2) {
+        if (valor.length > 2 && valor !== ciudadElejida?.nombre) {
             http.get<IPage<ICiudad>>(`ciudades/${valor}/like`)
                 .then(resposta => {
                     setCiudades(resposta.data.content.map(ciudadMap => ({
@@ -55,6 +55,7 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
         await setCiudadElejida(option)
         localRef.current?.blur();
     }
+
     const clear = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault()
         setCiudades([])
