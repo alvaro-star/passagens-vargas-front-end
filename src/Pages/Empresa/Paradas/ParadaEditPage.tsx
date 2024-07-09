@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import IParadaForm from "../Viajes/Types/IParadaForm";
 import IParadaFormErro from "../Viajes/Types/IParadaFormErro";
 import http from "@/http";
-import IError from "@/Types/IError";
+
 import IParada2 from "@/Types/IViaje/IParada2";
 import { useNavigate, useParams } from "react-router-dom";
 import TextInputObject from "@/Pages/Publico/Components/TextInputObject";
@@ -11,6 +11,7 @@ import SelectCostumized from "@/Components/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
 import ILugar from "@/Types/ILugar";
 import PrimaryButton from "@/Components/PrimaryButton";
+import IError from "@/Types/IErrors/IError";
 
 const ParadaEditPage = () => {
     const novoParadaForm = () => {

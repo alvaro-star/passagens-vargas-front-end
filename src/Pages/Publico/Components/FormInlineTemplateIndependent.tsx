@@ -83,7 +83,7 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
     }, []);
 
     return (
-        <form className={`max-w-5xl p-5 mx-auto shadow-xl bg-white flex items-center justify-between gap-5 rounded ${className}`}
+        <form className={`max-w-5xl p-5 mx-auto shadow-xl bg-white flex flex-col sm:flex-row items-center justify-between gap-5 rounded ${className}`}
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
@@ -94,11 +94,11 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
                 <SelectCostumized ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Ciudad de Destino" />
                 <InputError message={errors.ciudadDestino} />
             </div>
-            <div>
+            <div className="w-44">
                 <DatePickerCostumized dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
                 <InputError message={errors.fechaIda} />
             </div>
-            <div>
+            <div className="w-44">
                 <DatePickerCostumized dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
                 <InputError message={errors.fechaVuelta} />
             </div>
