@@ -91,21 +91,25 @@ const ViajesVentaPage = () => {
     };
     const clickSilla = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, silla: ISilla) => {
         eve.preventDefault()
-        if (silla.numero != -1 && !silla.ocupado && sillasEscogidas.includes(silla.numero))
-            setSillasEscogidas(sillasEscogidas.filter(value => value != silla.numero).sort((a, b) => a - b))
-        else {
-            if (sillasEscogidas.length < 7 && !silla.ocupado)
-                setSillasEscogidas([...sillasEscogidas, silla.numero].sort((a, b) => a - b))
+        if (silla.numero > 0) {
+            if (!silla.ocupado && sillasEscogidas.includes(silla.numero))
+                setSillasEscogidas(sillasEscogidas.filter(value => value != silla.numero).sort((a, b) => a - b))
+            else {
+                if (sillasEscogidas.length < 7 && !silla.ocupado)
+                    setSillasEscogidas([...sillasEscogidas, silla.numero].sort((a, b) => a - b))
+            }
         }
     }
 
     const remover = (eve: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, nSilla: number) => {
         eve.preventDefault()
-        if (nSilla != -1 && sillasEscogidas.includes(nSilla)) {
-            setSillasEscogidas(sillasEscogidas.filter(value => value != nSilla).sort((a, b) => a - b))
-        } else {
-            if (sillasEscogidas.length < 7) {
-                setSillasEscogidas([...sillasEscogidas, nSilla].sort((a, b) => a - b))
+        if (nSilla > 0) {
+            if (sillasEscogidas.includes(nSilla)) {
+                setSillasEscogidas(sillasEscogidas.filter(value => value != nSilla).sort((a, b) => a - b))
+            } else {
+                if (sillasEscogidas.length < 7) {
+                    setSillasEscogidas([...sillasEscogidas, nSilla].sort((a, b) => a - b))
+                }
             }
         }
     }

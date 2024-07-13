@@ -6,10 +6,11 @@ import SillaSquare from "./SillaSquare"
 interface Props {
     piso: IPiso,
     sillasOcupadas: number[],
+    hidden?: boolean
     clickSilla?: (eve: React.MouseEvent<HTMLButtonElement, MouseEvent>, nSilla: ISilla) => void
 }
 
-const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
+const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { } }: Props) => {
     const [sillas, setSillas] = useState<ISilla[]>([])
     useEffect(() => {
         if (!piso.nLinhas || !piso.nColunas) return;
@@ -60,7 +61,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
         setSillas(SillasDisponibles)
     }, [piso])
     return (
-        <div className="rounded min-h-60 flex justify-center items-center">
+        <div className={(hidden ? 'hidden' : 'flex') + " rounded min-h-60 justify-center items-center"}>
             <div className="lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
                 <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
                 </div>
@@ -76,8 +77,7 @@ const Piso = ({ piso, sillasOcupadas = [], clickSilla = () => { } }: Props) => {
                     }
                     <div></div>
                     {sillas.map((silla, index) =>
-                        <SillaSquare
-                            key={index}
+                        <SillaSquare key={index}
                             disabled={silla.ocupado}
                             ocupado={silla.ocupado}
                             nSilla={silla.numero}

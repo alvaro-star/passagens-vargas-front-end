@@ -1,32 +1,22 @@
 import PrimaryButton from "@/Components/PrimaryButton"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import { IoClose } from "react-icons/io5"
 import ISillaType from "../Types/ISillaType"
-import http from "@/http"
+
 
 interface Props {
     className?: string
     silla: ISillaType
+    downloadPasaje: (id: string | number) => void
     setSillaElegido: (pasajero: null | ISillaType) => void
 }
-const PasajeroCard = ({ silla,className="", setSillaElegido }: Props) => {
-    const downloadPasaje = () => {
-        if (!silla.pasajero)
-            return
-        http.get(`pasajes/${silla.pasajero.id}/download`, { responseType: 'blob' })
-            .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'pasajero.pdf');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            })
-            .catch(error => {
-                console.error('Erro ao baixar o PDF:', error);
-            });
+const PasajeroCard = ({ silla, className = "", setSillaElegido, downloadPasaje }: Props) => {
+    const clickButton = (silla: ISillaType) => {
+        if (silla.pasajero) {
+            downloadPasaje(silla.pasajero.id)
+        }
     }
-    return <div className={"w-64 bg-slate-300 p-5 " +className}>
+    return <div className={"w-96 bg-slate-300 p-5 " + className}>
         <div className="flex items-center justify-between">
             <p className="font-semibold text-lg">
                 Datos del pasajero
@@ -35,23 +25,36 @@ const PasajeroCard = ({ silla,className="", setSillaElegido }: Props) => {
                 <IoClose className="text-xl" />
             </button>
         </div>
+
+        <table className="w-full p-2">
+            <tbody>
+                <tr>
+                    <td>N Asiento:</td>
+                    <td className="text-end">{silla.numero}</td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td className="text-end">{silla.pasajero?.nombre}</td>
+                </tr>
+                <tr>
+                    <td>Carnet:</td>
+                    <td className="text-end"> {silla.pasajero?.carnet}</td>
+                </tr>
+                <tr>
+                    <td>Salida:</td>
+                    <td className="text-end"> {capitalizeFirstLetter(silla.pasajero!.salida.ciudad)}</td>
+                </tr>
+                <tr>
+                    <td>Destino:</td>
+                    <td className="text-end"> {capitalizeFirstLetter(silla.pasajero!.destino.ciudad)}</td>
+                </tr>
+            </tbody>
+        </table>
         <p>
-            Asiento: {silla.numero}
+
         </p>
-        <p>
-            Nombre: {silla.pasajero?.nombre}
-        </p>
-        <p>
-            Carnet: {silla.pasajero?.carnet}
-        </p>
-        <p>
-            Salida: {silla.pasajero?.salida.ciudad}
-        </p>
-        <p>
-            Destino: {silla.pasajero?.destino.ciudad}
-        </p>
-        <div className="w-full text-center">
-            <PrimaryButton className="rounded-none" onClick={downloadPasaje}>
+        <div className="w-full text-center mt-2">
+            <PrimaryButton className="rounded-none" onClick={() => clickButton(silla)}>
                 DESCARGAR pasaje
             </PrimaryButton>
         </div>

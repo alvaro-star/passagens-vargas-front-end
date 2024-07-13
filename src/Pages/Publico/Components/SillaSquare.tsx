@@ -15,9 +15,9 @@ const SillaSquare = ({ nSilla, className = '', hover = true, ocupado = false, tr
             className={transparent
                 ? `h-12 w-12 rounded ${hover ? 'hover:bg-white' : ''}`
                 : `font-bold text-2xl border-2 border-gray-500 h-12 w-12 bg-gray-300 flex justify-center items-center rounded ${className}`}>
-            {!transparent && !ocupado
-                ? nSilla
-                : <IoClose style={{ width: '100%', height: '100%', fontSize: 72 }} className="font-extrabold" />
+            {!transparent && !ocupado && nSilla}
+            {!transparent && ocupado &&
+                 <IoClose style={{ width: '100%', height: '100%', fontSize: 72 }} className="font-extrabold" />
             }
         </button>
     )

@@ -33,8 +33,6 @@ const ViajesShowPage = () => {
         if (id) {
             http.get<IViajeExtends>(`viajes/${id}`)
                 .then(({ data }) => {
-                    console.log(data);
-
                     const viaje = data;
                     viaje.paradas = ordenarParadas(viaje.paradas);
                     let dataAtual = new Date().getTime()
@@ -102,9 +100,7 @@ const ViajesShowPage = () => {
                 <div className="mt-5 flex items-center justify-between px-5 py-3 bg-slate-700 text-white">
                     <h2>Paradas</h2>
                     <div className="flex items-center space-x-2">
-                        <p>
-                            Mostrar Lista
-                        </p>
+                        <p>Mostrar Lista</p>
                         <input checked={mostrarParadas} onChange={() => setMostrarParadas(!mostrarParadas)} type="checkbox" className="rounded" />
                     </div>
                 </div>
@@ -143,7 +139,9 @@ const ViajesShowPage = () => {
                         </tbody>
                     </table>
                     <div className="pt-2 text-center">
-                        <PrimaryButton className="rounded-none" onClick={() => setOpenFormCreate(true)}>registrar una parada</PrimaryButton>
+                        {mostrarOptions &&
+                            <PrimaryButton className="rounded-none" onClick={() => setOpenFormCreate(true)}>registrar una parada</PrimaryButton>
+                        }
                     </div>
                     <div className={"absolute inset-0 mt-36 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
                         <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
@@ -153,7 +151,7 @@ const ViajesShowPage = () => {
                     {viaje.precios.length == 0
                         ? <div>Carregando</div>
                         : viaje.precios.map(precioItem =>
-                            <PasajerosListaEmpresaPage idPrecio={precioItem.id} key={precioItem.id} />
+                            <PasajerosListaEmpresaPage setMostrarOptions={setMostrarOptions} idPrecio={precioItem.id} key={precioItem.id} />
                         )
                     }
                 </div>

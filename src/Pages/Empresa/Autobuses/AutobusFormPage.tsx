@@ -57,7 +57,7 @@ const AutobusesFormPage = () => {
             pisos: [{
                 distribuicaoFileira: piso1.distribuicaoFileira,
                 inicioContagem: piso1.inicioContagem,
-                posicoesBloqueadas: piso1.posicoesBloqueadas,
+                posicionesBloqueadas: piso1.posicoesBloqueadas,
                 ncolunas: piso1.nColunas,
                 nlinhas: piso1.nLinhas
             }]
@@ -67,7 +67,7 @@ const AutobusesFormPage = () => {
             autobusForm.pisos.push({
                 distribuicaoFileira: piso2.distribuicaoFileira,
                 inicioContagem: piso2.inicioContagem,
-                posicoesBloqueadas: piso2.posicoesBloqueadas,
+                posicionesBloqueadas: piso2.posicoesBloqueadas,
                 ncolunas: piso2.nColunas,
                 nlinhas: piso2.nLinhas
             })

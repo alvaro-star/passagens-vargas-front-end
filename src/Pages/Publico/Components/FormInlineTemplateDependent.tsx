@@ -113,11 +113,11 @@ const FormInlineTemplateDependent = ({ className = '', fetchViajes, setCiudadSal
                 <InputError message={errors.ciudadDestino} />
             </div>
             <div>
-                <DatePickerCostumized dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
+                <DatePickerCostumized minDate={new Date()} dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
                 <InputError message={errors.fechaIda} />
             </div>
             <div>
-                <DatePickerCostumized dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
+                <DatePickerCostumized minDate={new Date()} dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
                 <InputError message={errors.fechaVuelta} />
             </div>
             <div className="flex items-center h-full justify-center">

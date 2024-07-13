@@ -95,11 +95,11 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
                 <InputError message={errors.ciudadDestino} />
             </div>
             <div className="w-44">
-                <DatePickerCostumized dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
+                <DatePickerCostumized minDate={new Date()} dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
                 <InputError message={errors.fechaIda} />
             </div>
             <div className="w-44">
-                <DatePickerCostumized dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
+                <DatePickerCostumized minDate={new Date()} dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
                 <InputError message={errors.fechaVuelta} />
             </div>
             <div className="flex items-center h-full justify-center">

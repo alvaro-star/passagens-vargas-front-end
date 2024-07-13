@@ -6,6 +6,7 @@ import IViajeEmpresa from "../../Types/IViajeEmpresa"
 import InputRelatorioComponent from "./Components/InputRelatorioComponent"
 import DataHora from "@/Classes/DataHora"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
+import AutobusModelShowPage from "./Components/AutobusModelShowPage"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -18,17 +19,24 @@ const AutobusesShowPage = () => {
 
     const showViaje = (id: string) => navigate(path + '/viajes/' + id)
 
+    const [showModel, setShowModel] = useState(false)
     return (
         <div className="mx-auto max-w-7xl py-10">
             {autobus && <>
                 <div className="w-full px-5 py-3 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
                     <p>Lista de viajes del autobus {autobus.placa}</p>
                     <div className="space-x-4 flex items-center">
-                        <PrimaryButton className="hidden">ver modelo</PrimaryButton>
+                        <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
                         <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> registrar un viaje</PrimaryButton>
                     </div>
                 </div>
             </>}
+            <div hidden={!showModel} className="bg-white p-5">
+                <div className="ml-4">
+                    Modelo
+                </div>
+                {autobus && <AutobusModelShowPage autobus={autobus} />}
+            </div>
 
             <InputRelatorioComponent idAutobus={id} viajes={viajes} setViajes={setViajes} setAutobus={setAutobus} />
 
@@ -39,7 +47,6 @@ const AutobusesShowPage = () => {
                             <th>Origen</th>
                             <th>Destino</th>
                             <th>Dinero en Efectivo</th>
-                            <th>Dinero dela Web</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -49,7 +56,6 @@ const AutobusesShowPage = () => {
                                 <td className="py-2">{capitalizeFirstLetter(viaje.salida.ciudad)}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
                                 <td className="text-start">{capitalizeFirstLetter(viaje.destino.ciudad)}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
                                 <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
-                                <td className="text-center">Bs {viaje.valorArrecadadoWeb}</td>
                                 <td className="text-center">
                                     <PrimaryButton onClick={() => showViaje(viaje.id)} className="bg-blue-500 rounded-none">Ver viaje</PrimaryButton>
                                 </td>

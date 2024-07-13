@@ -5,11 +5,12 @@ import { es } from 'date-fns/locale/es';
 registerLocale('es', es)
 interface Props {
     labelValue?: string
+    minDate?: Date
     dataExtern: Date | null
     setDataExtern: (dateNew: Date | null) => void
 }
 
-const DatePickerCostumized = ({ labelValue = "value", dataExtern, setDataExtern }: Props) => {
+const DatePickerCostumized = ({ labelValue = "value", minDate, dataExtern, setDataExtern }: Props) => {
 
     return (
         <div className="relative">
@@ -17,7 +18,7 @@ const DatePickerCostumized = ({ labelValue = "value", dataExtern, setDataExtern 
                 selected={dataExtern}
                 onChange={setDataExtern}
                 locale="es"
-                minDate={new Date()}
+                minDate={minDate}
                 className="block px-2.5 py-2.5 w-44 h-11 text-gray-900 bg-white rounded border border-gray-400 appearance-none focus:outline-blue-500 focus:ring-blue-500 focus:border-blue-500 peer"
                 dateFormat="dd/MM/yyyy"
             />

@@ -1,11 +1,13 @@
 import PrimaryButton from "@/Components/PrimaryButton"
 import http from "@/http"
 import IPage from "@/Types/IPage"
+import IPiso from "@/Types/IPiso"
 import { useEffect, useState } from "react"
 import { IoSearch } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import IViajeEmpresa from "../../../Types/IViajeEmpresa"
 import IAutobusExtends from "../Types/IAutobusExtends"
+import IAutobusExtendsApi from "../Types/IAutobusExtendsApi"
 
 interface Props {
     idAutobus: undefined | string | number
@@ -27,8 +29,29 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
 
             setMes((dateNow.getMonth() + 1).toString())
             setAno(dateNow.getFullYear().toString())
-            http.get<IAutobusExtends>(`autobuses/${idAutobus}`)
-                .then(resposta => { setAutobus(resposta.data) })
+            http.get<IAutobusExtendsApi>(`autobuses/${idAutobus}`)
+                .then(resposta => {
+                    let autobus: IAutobusExtends = { ...resposta.data, pisos: [] }
+                    let pisoResposta: IPiso;
+                    
+                    
+
+                    for (let i = 0; i < resposta.data.pisos.length; i++) {
+                        let pisoApi = resposta.data.pisos[i];
+                        let posicionesString: string = pisoApi.posicoesBloqueadas;
+                        let posicionesBloqueadas: number[] = [];
+
+                        if (posicionesString !== '')
+                            posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString.trim(), 10));
+
+                        pisoResposta = { ...pisoApi, posicoesBloqueadas: posicionesBloqueadas }
+                        autobus.pisos = [...autobus.pisos, pisoResposta]
+                    }
+
+                    console.log(autobus);
+
+                    setAutobus(autobus)
+                })
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
                 dataAnalise: dateNow,
                 idAutobus: idAutobus
@@ -70,7 +93,7 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
     return <div className="w-full flex justify-between items-center py-2 px-2">
         <section className="flex items-center">
             <p className="mr-2">
-                Fecha del relatorio
+                Viajes del mes
             </p>
             <select value={mes} onChange={e => setMes(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l focus:ring-blue-500 focus:border-blue-500 block p-2.5">

@@ -1,7 +1,7 @@
-interface IPisoForm {
+export default interface IPisoForm {
     distribuicaoFileira: string,
     inicioContagem: string,
-    posicoesBloqueadas: number[],
+    posicionesBloqueadas: number[],
     ncolunas: number,
     nlinhas: number
 }

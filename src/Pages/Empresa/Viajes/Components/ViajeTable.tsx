@@ -59,17 +59,15 @@ const ViajeTable = ({ numeroAbaAtual, numeroAbaJanela, path, order, showViaje }:
                     <th className="text-start">Salida</th>
                     <th>Destino</th>
                     <th>Saldo en Efectivo</th>
-                    <th>Saldo en Web</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {viajes.map(viaje =>
-                    <tr key={viaje.id} className={viaje.isCobrado ? "text-green-600" : "text-red-500"}>
+                    <tr key={viaje.id} className="">
                         <td className="py-2">{capitalizeFirstLetter(viaje.salida.ciudad) + ", " + viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
                         <td className="py-2 text-start">{capitalizeFirstLetter(viaje.destino.ciudad) + ", " + viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
                         <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
-                        <td className="text-center">Bs {viaje.valorArrecadadoWeb}</td>
                         <td className="text-center">
                             <PrimaryButton className="rounded-none" onClick={() => showViaje(viaje.id)}>ver mais</PrimaryButton>
                         </td>

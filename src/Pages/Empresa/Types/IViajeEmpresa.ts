@@ -7,6 +7,7 @@ export default interface IViajeEmpresa {
     id: string
     idAutobus: number
     valorArrecadadoEfectivo: number
+    valorArrecadadoNoWeb: number
     valorArrecadadoWeb: number
     isCobrado:boolean
     precios: IPiso[]

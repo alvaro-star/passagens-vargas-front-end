@@ -9,11 +9,28 @@ import IPasajeComplete from "../Types/IPasajeComplete";
 import PasajeroCard from "./PasajeroCard";
 interface Props {
     idPrecio: number | string
+    setMostrarOptions: (value: boolean) => void
 }
-const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
+const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
     const [sillas, setSillas] = useState<ISillaType[]>([])
     const [pisoModel, setPisoModel] = useState<IPiso | null>(null)
     const [pasajeros, setPasajeros] = useState<IPasajeComplete[]>([])
+
+    const downloadPasaje = (id: string | number) => {
+        http.get(`pasajes/${id}/download`, { responseType: 'blob' })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'pasajero.pdf');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Erro ao baixar o PDF:', error);
+            });
+    }
 
     useEffect(() => {
         http.get(`precios/${idPrecio}/vender`).then(({ data }) => {
@@ -25,7 +42,11 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
             data.piso.posicoesBloqueadas = posicionesBloqueadas
             setPisoModel(data.piso)
         })
-        http.get(`pasajes/from/${idPrecio}`).then(({ data }) => setPasajeros(data))
+        http.get(`pasajes/from/${idPrecio}`).then(({ data }) => {
+            setPasajeros(data)
+            if (data.length > 0)
+                setMostrarOptions(false)
+        })
     }, [idPrecio])
 
     useEffect(() => {
@@ -102,7 +123,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
                 </section>
                 <section className={(aba != 2 ? 'hidden' : 'flex') + " relative flex flex-col justify-center items-center bg-white"} >
                     {sillaElegido != null &&
-                        <PasajeroCard className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
+                        <PasajeroCard downloadPasaje={downloadPasaje} className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
                     }
                     <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
                         <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
@@ -121,8 +142,8 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
                                 <div></div>
                             </>}
                             {sillas.map((silla, index) =>
-                                <div key={index} className={"lg:rotate-90 bg-white relative w-14 h-14 grid place-content-center font-semibold text-xl rounded border-2 border-gray-400"}>
-                                    {silla.numero}
+                                <div key={index} className={silla.numero != -1 ? "lg:rotate-90 bg-white relative w-12 h-12 grid place-content-center font-bold text-xl rounded border-2 border-gray-400" : ''}>
+                                    {silla.numero != -1 && silla.numero}
                                     {silla.ocupado &&
                                         <button disabled={!silla.ocupado} onClick={() => setSillaElegido(silla)} className="absolute text-center disabled:bg-yellow-300 top-0.5 right-0.5 bg-yellow-500 rounded">
                                             <IoInformation className="text-sm font-bold" />
@@ -170,7 +191,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio }: Props) => {
                                         {sillaElemento.pasajero!.destino.ciudad} - {sillaElemento.pasajero!.destino.abreviacion}
                                     </td>
                                     <td className="text-center">
-                                        <PrimaryButton className="rounded-none">descargar pasaje</PrimaryButton>
+                                        <PrimaryButton className="rounded-none" onClick={() => downloadPasaje(sillaElemento.pasajero!.id)}>descargar pasaje</PrimaryButton>
                                     </td>
                                 </tr>
                             ))}
