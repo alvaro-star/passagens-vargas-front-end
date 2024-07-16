@@ -118,7 +118,7 @@ const ViajesCreatePage = () => {
     }
 
     return <div className="max-w-2xl mx-auto mt-10">
-        <form className="bg-gray-200 p-5 rounded-lg flex flex-col" onSubmit={enviar}>
+        <form className="bg-white border p-5 flex flex-col" onSubmit={enviar}>
             <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje para {autobus?.placa}</h1>
             <div className="grid sm:grid-cols-2 gap-4">
                 <section>

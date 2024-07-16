@@ -35,16 +35,13 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
             http.post<IParada2>('paradas', { ...parada, idViaje: idViaje })
                 .then(resposta => {
                     addParada(resposta.data)
+                    setParada(novoParadaForm())
+                    setParadaErros(erros)
                     setOpenForm(false)
                 })
                 .catch(erro => {
-                    console.log(erro);
-
-                    if (erro.response.data.errors) {
-                        erro.response.data.errors.forEach((er: IError) => {
-                            erros[er.name] = er.message;
-                        })
-                    }
+                    if (erro.response.data.errors)
+                        erro.response.data.errors.forEach((er: IError) => erros[er.name] = er.message)
                     setParadaErros(erros)
                 })
         } else {
@@ -55,7 +52,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
     return (
         <div className={"w-full grid place-content-center " + className}>
             <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 bg-gray-300 rounded-lg">
-                <div className="my-2 w-full flex justify-between items-center">
+                <div className="mb-2 w-full flex justify-between items-center">
                     <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
                     <button
                         className="flex items-center justify-center rounded h-8 w-8 bg-red-500"
@@ -65,7 +62,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
                     </button>
                 </div>
                 <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />
-                <div className="text-center mt-2">
+                <div className="text-center mt-3">
                     <PrimaryButton type="submit">Enviar</PrimaryButton>
                 </div>
             </form>

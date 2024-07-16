@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 interface IAutobus {
     id: number,
     placa: string,
+    enabled: boolean,
     valorViajesEfectivo: number
     valorViajesWeb: number
     idEmpresa: string
@@ -77,7 +78,7 @@ const AutobusesIndexPage = () => {
                         <div key={autobus.id} className=" flex justify-between items-center">
                             <p>Placa: {autobus.placa}</p>
                             <p>Dinero disponible web: Bs {autobus.valorViajesWeb} </p>
-                            <PrimaryButton onClick={() => verTrayectos(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
+                            <PrimaryButton disabled={!autobus.enabled} onClick={() => verTrayectos(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
                         </div>
                     )}
                 </div>

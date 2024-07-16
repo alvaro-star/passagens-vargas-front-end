@@ -7,20 +7,24 @@ import Piso from "@/Pages/Publico/Components/Piso"
 import IAutobusForm from "./Types/IAutobusForm"
 import { useNavigate } from "react-router-dom"
 import TextInput234 from "@/Components/TextInput234"
+import IError from "@/Types/IErrors/IError"
+import InputError from "@/Components/InputError"
+
+const construtorPiso = {
+    id: null,
+    nLinhas: 10,
+    nColunas: 4,
+    distribuicaoFileira: 'DERECHA',
+    nPiso: 1,
+    inicioContagem: 'IZQUIERDA',
+    nSillas: null,
+    primeraSilla: 1,
+    idAutobus: null,
+    posicoesBloqueadas: []
+}
 
 const AutobusesFormPage = () => {
-    const construtorPiso = {
-        id: null,
-        nLinhas: 10,
-        nColunas: 4,
-        distribuicaoFileira: 'DERECHA',
-        nPiso: 1,
-        inicioContagem: 'IZQUIERDA',
-        nSillas: null,
-        primeraSilla: 1,
-        idAutobus: null,
-        posicoesBloqueadas: []
-    }
+
     const navigate = useNavigate()
 
     const [idEmpresa, setIdEmpresa] = useState<string>('')
@@ -29,6 +33,8 @@ const AutobusesFormPage = () => {
     const [piso2, setPiso2] = useState<IPiso>(construtorPiso)
 
     const [placa, setPlaca] = useState<string>('')
+    const [placaErro, setPlacaErro] = useState('')
+
     const [etapa, setEtapa] = useState(1)
     const [segundoPiso, setSegundoPiso] = useState<boolean | null>(null)
 
@@ -36,20 +42,21 @@ const AutobusesFormPage = () => {
         let cookie1 = sessionStorage.getItem('idEmpresa')
         if (cookie1) {
             setIdEmpresa(cookie1)
-        } else {
-            navigate('/')
-        }
+        } else navigate('/')
     }, [])
     useEffect(() => {
         if (piso1.nSillas) {
-            let piso2Aux = piso2
-            piso2Aux.primeraSilla = piso1.nSillas + 1
-            setPiso2(piso2Aux)
+            let nsillas = piso1.nSillas
+            setPiso2(prevPiso2 => ({
+                ...prevPiso2,
+                primeraSilla: nsillas + 1
+            }));
         }
-    }, [piso1.nSillas])
+    }, [piso1.nSillas]);
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setPlacaErro('')
         let autobusForm: IAutobusForm | null = {
             id: null,
             placa: placa,
@@ -82,6 +89,14 @@ const AutobusesFormPage = () => {
                 setEtapa(1)
                 setSegundoPiso(null)
                 navigate('/empresa/admin/autobuses')
+            }).catch(erro => {
+                if (erro.response.data.errors) {
+                    erro.response.data.errors.forEach((errorList: IError) => {
+                        if (errorList.name==="placa")
+                            setPlacaErro(errorList.message)
+                    });
+                }
+                
             })
     }
 
@@ -133,7 +148,7 @@ const AutobusesFormPage = () => {
                         {segundoPiso == false && <PrimaryButton className="mt-5" onClick={() => setEtapa(3)}>continuar</PrimaryButton>}
                     </div>
                 </div>
-                {segundoPiso == true &&
+                {segundoPiso &&
                     <section className="mt-5">
                         <div className="w-full p-5 border-x-2 border-t-2 bg-white rounded-t-lg flex">
                             <p className="w-full">
@@ -155,6 +170,7 @@ const AutobusesFormPage = () => {
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
                         <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa" />
+                        <InputError  className="ml-1" message={placaErro}/>
                     </div>
                 </section>
                 <div>

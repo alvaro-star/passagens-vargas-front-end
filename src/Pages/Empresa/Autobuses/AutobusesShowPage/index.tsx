@@ -7,6 +7,8 @@ import InputRelatorioComponent from "./Components/InputRelatorioComponent"
 import DataHora from "@/Classes/DataHora"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import AutobusModelShowPage from "./Components/AutobusModelShowPage"
+import http from "@/http"
+import AutobusEditComponent from "./Components/AutobusEditComponent"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -20,16 +22,47 @@ const AutobusesShowPage = () => {
     const showViaje = (id: string) => navigate(path + '/viajes/' + id)
 
     const [showModel, setShowModel] = useState(false)
+    const [showEditForm, setShowEditForm] = useState(false)
+    const eliminarAutobus = () => {
+        if (id) {
+            http.delete(`autobuses/${id}`)
+                .then(() => navigate(-1))
+                .catch((erro) => {
+                    if (erro.response.data.conteudo)
+                        alert(erro.response.data.conteudo);
+                    else
+                        console.log("Hubo un error en el processo");
+                })
+        }
+    }
+    const editarAutobus = (valor: string) => {
+        if (autobus) {
+            setAutobus({ ...autobus, placa: valor });
+        }
+    };
+
     return (
         <div className="mx-auto max-w-7xl py-10">
             {autobus && <>
                 <div className="w-full px-5 py-3 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
                     <p>Lista de viajes del autobus {autobus.placa}</p>
                     <div className="space-x-4 flex items-center">
+                        <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
+                        <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
                         <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
                         <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> registrar un viaje</PrimaryButton>
                     </div>
                 </div>
+                {showEditForm &&
+                    <div className="absolute inset-0 grid place-content-center">
+                        <AutobusEditComponent
+                            idAutobus={id!}
+                            setShowForm={setShowEditForm}
+                            placaProp={autobus.placa}
+                            setPlacaProp={editarAutobus}
+                        />
+                    </div>
+                }
             </>}
             <div hidden={!showModel} className="bg-white p-5">
                 <div className="ml-4">

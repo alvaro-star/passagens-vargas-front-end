@@ -65,8 +65,7 @@ const ViajesVentaPage = () => {
                             getPisoApi(viajeResponse.precios[indicePrimerPiso].id, setPrecio1)
                             getPisoApi(viajeResponse.precios[indiceSegundoPiso].id, setPrecio2)
                     }
-                }).catch(erro => {
-                    console.log(erro)
+                }).catch(() => {
                     alert("Ocurrio un error en la consulta del viaje")
                 });
         }

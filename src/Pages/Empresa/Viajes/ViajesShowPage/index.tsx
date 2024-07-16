@@ -1,15 +1,13 @@
-
-import DataHora from "@/Classes/DataHora"
-import PrimaryButton from "@/Components/PrimaryButton"
 import IParada2 from "@/Types/IViaje/IParada2"
 import http from "@/http"
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import ParadaFormPage from "../../Paradas/ParadaFormPage"
 import IParadaForm from "../Types/IParadaForm"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import PasajerosListaEmpresaPage from "./Components/PasajerosListaEmpresaPage"
-import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
+import ParadasTableComponent from "./Components/ParadasTableComponent"
+import PrimaryButton from "@/Components/PrimaryButton"
 
 
 interface IViajeExtends {
@@ -25,6 +23,7 @@ interface IViajeExtends {
 
 const ViajesShowPage = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [viaje, setViaje] = useState<IViajeExtends>()
     const [openFormCreate, setOpenFormCreate] = useState(false)
     const [mostrarOptions, setMostrarOptions] = useState(true)
@@ -33,16 +32,18 @@ const ViajesShowPage = () => {
         if (id) {
             http.get<IViajeExtends>(`viajes/${id}`)
                 .then(({ data }) => {
-                    const viaje = data;
-                    viaje.paradas = ordenarParadas(viaje.paradas);
+                    console.log(data);
+
+                    const viajeApi = data;
+                    viajeApi.paradas = ordenarParadas(viajeApi.paradas);
                     let dataAtual = new Date().getTime()
-                    let dataViaje = new Date(viaje.paradas[viaje.paradas.length - 1].dataHora).getTime()
+                    let dataViaje = new Date(viajeApi.paradas[viajeApi.paradas.length - 1].dataHora).getTime()
                     if (dataViaje <= dataAtual) {
                         setMostrarOptions(false)
                     } else {
                         setMostrarOptions(true)
                     }
-                    setViaje(viaje);
+                    setViaje(viajeApi);
                 });
         }
     }, [id]);
@@ -60,42 +61,64 @@ const ViajesShowPage = () => {
 
     const ordenarParadas = (paradas: IParada2[]) => {
         if (paradas.length > 0) {
-            return [...paradas].sort((a: IParada2, b: IParada2) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
-        } else {
-            return [];
-        }
+            return [...paradas].sort((a: IParada2, b: IParada2) =>
+                new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
+            );
+        } else return [];
+
     };
 
     const eliminarParada = (idParada: number) => {
-        http.delete("paradas/" + idParada)
-            .then(() => {
-                if (viaje) {
-                    let viajeParadas = viaje.paradas.filter(elemento => elemento.id != idParada)
-                    viaje.paradas = viajeParadas
-                    setViaje({
-                        ...viaje, paradas: viajeParadas
-                    });
-                }
-            })
+        if (viaje) {
+            http.delete(`paradas/${idParada}`)
+                .then(() => {
+                    const viajeParadas = viaje.paradas.filter((elemento) => elemento.id !== idParada);
+                    setViaje({ ...viaje, paradas: viajeParadas });
+                })
+                .catch((erro) => {
+                    if (erro.response?.data?.conteudo) {
+                        alert(erro.response.data.conteudo);
+                    } else {
+                        alert("No se puede eliminar esta parada");
+                    }
+                });
+        }
+    };
+    const addParada = (newParada: IParada2) => {
+        if (viaje) {
+            const updatedParadas = [...viaje.paradas, newParada];
+            setViaje({ ...viaje, paradas: ordenarParadas(updatedParadas) });
+        }
+    };
+
+    const eliminarViaje = () => {
+        http.delete(`empresa/viajes/${id}`).then(() => navigate(-1))
             .catch(erro => {
                 console.log(erro);
-                alert(erro.response.data.conteudo)
+                if (erro.response.data.conteudo)
+                    alert(erro.response.data.conteudo)
+                else
+                    alert("Hubo un error en el processo, notifique ala empresa...")
+
             })
     }
 
-    const addParada = (newParada: IParada2) => {
-        if (viaje) {
-            viaje.paradas.push(newParada);
-            viaje.paradas = ordenarParadas(viaje.paradas);
-            setViaje({ ...viaje });
-        }
-    };
     const [mostrarParadas, setMostrarParadas] = useState(false)
     return (
         <div className="p-10">
-            <h2 className="text-2xl font-semibold">
-                Datos del Viaje
-            </h2>
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">
+                    Datos del Viaje
+                </h2>
+                <div>
+                    <PrimaryButton
+                        onClick={() => eliminarViaje()}
+                        className="bg-red-500 rounded-none"
+                    >
+                        ELIMINAR
+                    </PrimaryButton>
+                </div>
+            </div>
             {viaje && <>
                 <div className="mt-5 flex items-center justify-between px-5 py-3 bg-slate-700 text-white">
                     <h2>Paradas</h2>
@@ -105,47 +128,15 @@ const ViajesShowPage = () => {
                     </div>
                 </div>
 
-                <div hidden={!mostrarParadas} className="py-5 bg-white">
-                    <table className="w-full text-center">
-                        <thead>
-                            <tr>
-                                <th className="text-start pl-5">Ciudad</th>
-                                <th>Plataforma</th>
-                                <th>Fecha y Hora</th>
-                                {mostrarOptions && <th>Acciones</th>}
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {viaje.paradas.map(parada =>
-                                <tr className=" hover:bg-slate-300" key={parada.id}>
-                                    <td className="pl-5 py-2 text-start"> {capitalizeFirstLetter(parada.ciudad)}, {parada.abreviacion} - {capitalizeFirstLetter(parada.lugar)}</td>
-                                    <td className="">{parada.plataforma}</td>
-                                    <td className="">{new DataHora(parada.dataHora).imprimir()}</td>
-                                    {mostrarOptions &&
-                                        <td className="">
-                                            <div className="text-white flex items-center justify-center">
-                                                <Link to={"/empresa/paradas/" + parada.id + "/edit"} className="bg-yellow-400 p-1.5 px-3 uppercase">
-                                                    Editar
-                                                </Link>
-                                                <button onClick={() => eliminarParada(parada.id)} className="bg-red-500 p-1.5 px-3 uppercase">
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                    <div className="pt-2 text-center">
-                        {mostrarOptions &&
-                            <PrimaryButton className="rounded-none" onClick={() => setOpenFormCreate(true)}>registrar una parada</PrimaryButton>
-                        }
-                    </div>
-                    <div className={"absolute inset-0 mt-36 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
-                        <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
-                    </div>
+                <ParadasTableComponent
+                    mostrarParadas={mostrarParadas}
+                    mostrarOptions={mostrarOptions}
+                    paradas={viaje.paradas}
+                    eliminarParada={eliminarParada}
+                    setOpenFormCreate={setOpenFormCreate}
+                />
+                <div className={"absolute inset-0 mt-36 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
+                    <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
                 </div>
                 <div className="">
                     {viaje.precios.length == 0

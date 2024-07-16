@@ -7,6 +7,7 @@ import { IoInformation } from "react-icons/io5";
 import ISillaType from "../Types/ISillaType";
 import IPasajeComplete from "../Types/IPasajeComplete";
 import PasajeroCard from "./PasajeroCard";
+import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
 interface Props {
     idPrecio: number | string
     setMostrarOptions: (value: boolean) => void
@@ -14,6 +15,7 @@ interface Props {
 const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
     const [sillas, setSillas] = useState<ISillaType[]>([])
     const [pisoModel, setPisoModel] = useState<IPiso | null>(null)
+    const [precioModel, setPrecioModel] = useState<IPrecio | null>(null)
     const [pasajeros, setPasajeros] = useState<IPasajeComplete[]>([])
 
     const downloadPasaje = (id: string | number) => {
@@ -39,8 +41,11 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
             if (posicionesString != '') {
                 posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
             }
+            console.log(data);
+
             data.piso.posicoesBloqueadas = posicionesBloqueadas
             setPisoModel(data.piso)
+            setPrecioModel(data)
         })
         http.get(`pasajes/from/${idPrecio}`).then(({ data }) => {
             setPasajeros(data)
@@ -102,7 +107,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
     return (
         <div className="mt-3">
             <div className="bg-gray-700 text-white px-5 p-3 flex items-center justify-between">
-                <p>Piso {pisoModel?.nPiso}</p>
+                <p>Piso {pisoModel?.nPiso} Precio: {precioModel?.precio} Bs</p>
                 <div className="flex items-center space-x-2">
                     <p>Mostrar Contenido</p>
                     <input type="checkbox" onChange={() => setMostrarLista(!mostrarLista)} checked={mostrarLista} />
@@ -170,31 +175,34 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sillas.filter(sillaElemento => sillaElemento.ocupado).map((sillaElemento, index) => (
-                                <tr className="hover:bg-slate-100" key={index}>
+                            {pasajeros.map(pasajero => (
+                                <tr className="hover:bg-slate-100" key={pasajero.id}>
                                     <td className="pl-1.5 py-1.5">
-                                        {sillaElemento.numero}
+                                        {pasajero.nSilla}
+                                    </td>
+                                    <td>{pasajero.carnet}</td>
+                                    <td>{pasajero.nombre}</td>
+                                    <td>
+                                        {(new DataHora(pasajero.nascimento)).data.imprimir()}
                                     </td>
                                     <td>
-                                        {sillaElemento.pasajero!.carnet}
+                                        {pasajero.salida.ciudad} - {pasajero.salida.abreviacion}
                                     </td>
                                     <td>
-                                        {sillaElemento.pasajero!.nombre}
-                                    </td>
-                                    <td>
-                                        {(new DataHora(sillaElemento.pasajero!.nascimento)).data.imprimir()}
-                                    </td>
-                                    <td>
-                                        {sillaElemento.pasajero!.salida.ciudad} - {sillaElemento.pasajero!.salida.abreviacion}
-                                    </td>
-                                    <td>
-                                        {sillaElemento.pasajero!.destino.ciudad} - {sillaElemento.pasajero!.destino.abreviacion}
+                                        {pasajero.destino.ciudad} - {pasajero.destino.abreviacion}
                                     </td>
                                     <td className="text-center">
-                                        <PrimaryButton className="rounded-none" onClick={() => downloadPasaje(sillaElemento.pasajero!.id)}>descargar pasaje</PrimaryButton>
+                                        <PrimaryButton className="rounded-none" onClick={() => downloadPasaje(pasajero.id)}>descargar pasaje</PrimaryButton>
                                     </td>
                                 </tr>
                             ))}
+                            {pasajeros.length == 0 &&
+                                <tr>
+                                    <td colSpan={7} className="py-1 text-center">
+                                        No hay Pasajeros Registrados
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </section>
