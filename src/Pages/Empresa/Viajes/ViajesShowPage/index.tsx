@@ -32,8 +32,6 @@ const ViajesShowPage = () => {
         if (id) {
             http.get<IViajeExtends>(`viajes/${id}`)
                 .then(({ data }) => {
-                    console.log(data);
-
                     const viajeApi = data;
                     viajeApi.paradas = ordenarParadas(viajeApi.paradas);
                     let dataAtual = new Date().getTime()

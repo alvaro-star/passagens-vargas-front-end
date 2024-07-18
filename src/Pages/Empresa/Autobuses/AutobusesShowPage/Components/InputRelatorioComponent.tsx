@@ -33,8 +33,8 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
                 .then(resposta => {
                     let autobus: IAutobusExtends = { ...resposta.data, pisos: [] }
                     let pisoResposta: IPiso;
-                    
-                    
+
+
 
                     for (let i = 0; i < resposta.data.pisos.length; i++) {
                         let pisoApi = resposta.data.pisos[i];
@@ -68,14 +68,19 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
         } else navigate("/")
     }, [idAutobus])
     const verMais = () => {
-        if (nextPage) {
-            http.get<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus?page=${nextPage}`)
-                .then(resposta => {
-                    setViajes(viajes.concat(resposta.data.content))
-                    if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
-                        setNextPage(null)
-                    } else setNextPage(resposta.data.pageable.pageNumber + 1)
-                })
+        if (nextPage && idAutobus) {
+            const mesInt = parseInt(mes) - 1;
+            const anoInt = parseInt(ano);
+            const dataAnalise = new Date(anoInt, mesInt, 2);
+            http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus?page=${nextPage}`, {
+                dataAnalise: dataAnalise,
+                idAutobus: idAutobus
+            }).then(resposta => {
+                setViajes(viajes.concat(resposta.data.content))
+                if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
+                    setNextPage(null)
+                } else setNextPage(resposta.data.pageable.pageNumber + 1)
+            })
         }
     }
 

@@ -8,6 +8,7 @@ import ISillaType from "../Types/ISillaType";
 import IPasajeComplete from "../Types/IPasajeComplete";
 import PasajeroCard from "./PasajeroCard";
 import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
+import PrecioEditComponent from "./PrecioEditComponent";
 interface Props {
     idPrecio: number | string
     setMostrarOptions: (value: boolean) => void
@@ -17,21 +18,14 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
     const [pisoModel, setPisoModel] = useState<IPiso | null>(null)
     const [precioModel, setPrecioModel] = useState<IPrecio | null>(null)
     const [pasajeros, setPasajeros] = useState<IPasajeComplete[]>([])
-
     const downloadPasaje = (id: string | number) => {
         http.get(`pasajes/${id}/download`, { responseType: 'blob' })
             .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'pasajero.pdf');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
             })
-            .catch(error => {
-                console.error('Erro ao baixar o PDF:', error);
-            });
+            .catch(() => console.error('Erro ao abrir o PDF...'));
     }
 
     useEffect(() => {
@@ -65,7 +59,6 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
         })
 
         let HashMapNSillaIndex: number[] = []
-
         let contador = pisoModel.primeraSilla - 1
 
         if (pisoModel.inicioContagem == 'IZQUIERDA') {
@@ -101,6 +94,12 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
 
         setSillas(SillasDisponibles)
     }, [pisoModel, pasajeros])
+    const editPrecio = (valor: number) => {
+        if (precioModel) {
+            setPrecioModel({ ...precioModel, precio: valor })
+        }
+    }
+    const [showEditComponent, setShowEditComponent] = useState(false)
     const [mostrarLista, setMostrarLista] = useState(true)
     const [aba, setAba] = useState(2)
     const [sillaElegido, setSillaElegido] = useState<ISillaType | null>(null)
@@ -109,10 +108,19 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
             <div className="bg-gray-700 text-white px-5 p-3 flex items-center justify-between">
                 <p>Piso {pisoModel?.nPiso} Precio: {precioModel?.precio} Bs</p>
                 <div className="flex items-center space-x-2">
+                    {mostrarLista &&
+                        <PrimaryButton
+                            className="bg-yellow-400 rounded-none"
+                            onClick={() => setShowEditComponent(true)}
+                        >
+                            editar
+                        </PrimaryButton>
+                    }
                     <p>Mostrar Contenido</p>
                     <input type="checkbox" onChange={() => setMostrarLista(!mostrarLista)} checked={mostrarLista} />
                 </div>
             </div>
+
             <section hidden={!mostrarLista}>
                 <section className="w-full flex items-center">
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : '')}
@@ -130,6 +138,16 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                     {sillaElegido != null &&
                         <PasajeroCard downloadPasaje={downloadPasaje} className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
                     }
+                    {precioModel && showEditComponent &&
+                        <div className="absolute inset-0 grid z-10 place-content-center">
+                            <PrecioEditComponent
+                                setShowForm={setShowEditComponent}
+                                nPiso={precioModel.nPiso}
+                                idPrecio={precioModel.id}
+                                setPrecioProp={editPrecio}
+                                precioProp={precioModel.precio}
+                            />
+                        </div>}
                     <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
                         <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
                         </div>

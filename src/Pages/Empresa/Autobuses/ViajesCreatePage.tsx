@@ -7,13 +7,24 @@ import ParadaForm from "../Viajes/Components/ParadaForm"
 import IParadaForm from "../Viajes/Types/IParadaForm"
 import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import IAutobusExtends from "./AutobusesShowPage/Types/IAutobusExtends"
+import IError from "@/Types/IErrors/IError"
 
 interface IErros {
+    [key: string]: string | IParadaFormErro; // Firma de índice
     idAutobus: string,
     precioPiso1: string,
     precioPiso2: string,
-    salida: IParadaFormErro
-    destino: IParadaFormErro
+    salida: IParadaFormErro,
+    destino: IParadaFormErro,
+}
+const construirParadaErro = () => {
+    return { plataforma: '', dataHora: '', idLugar: '' }
+}
+
+const construirViajeErro = () => {
+    let salida = construirParadaErro()
+    let destino = construirParadaErro()
+    return { idAutobus: '', precioPiso1: '', precioPiso2: '', salida: salida, destino: destino }
 }
 
 const ViajesCreatePage = () => {
@@ -25,16 +36,7 @@ const ViajesCreatePage = () => {
     const [autobus, setAutobus] = useState<IAutobusExtends>()
     const [precio1, setPrecio1] = useState('')
     const [precio2, setPrecio2] = useState('')
-
-    const construirParadaErro = () => {
-        return { plataforma: '', dataHora: '', idLugar: '' }
-    }
-
-    const construirViajeErro = () => {
-        let salida = construirParadaErro()
-        let destino = construirParadaErro()
-        return { idAutobus: '', precioPiso1: '', precioPiso2: '', salida: salida, destino: destino }
-    }
+    const [erros, setErros] = useState<IErros>(construirViajeErro())
 
     const validarParada = (parada: IParadaForm, errosParada: IParadaFormErro) => {
         let valido = true
@@ -63,11 +65,12 @@ const ViajesCreatePage = () => {
         }
     }, [id])
 
-    const [erros, setErros] = useState<IErros>(construirViajeErro())
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        let errosInFuncton = construirViajeErro()
+        console.log("Click");
+
+        let errosInFuncton: IErros = construirViajeErro()
         let podeEnviar = true;
         podeEnviar = validarParada(salida, errosInFuncton.salida)
         podeEnviar = validarParada(destino, errosInFuncton.destino)
@@ -96,25 +99,51 @@ const ViajesCreatePage = () => {
             }
         }
 
-        setErros(errosInFuncton)
-
         if (podeEnviar) {
             let formData = {
-                idAutobus: id,
-                salida: salida,
-                destino: destino,
-                precioPiso1: parseFloat(precio1),
-                precioPiso2: 0
+                idAutobus: id, salida: salida, destino: destino, precioPiso1: parseFloat(precio1), precioPiso2: 0
             }
 
-            if (autobus?.pisos.length == 2) {
+            if (autobus?.pisos.length == 2)
                 formData["precioPiso2"] = parseFloat(precio2)
-            }
 
             http.post('empresa/viajes/create', formData)
-                .then(() => navigate(-1))
-                .catch(erro => console.log(erro))
-        }
+                .then(() => {
+                    setErros(errosInFuncton)
+                    navigate(-1)
+                })
+                .catch(erro => {
+                    let salidaError: IParadaFormErro = construirParadaErro();
+                    let destinoError: IParadaFormErro = construirParadaErro();
+                    let errosInFuncton = construirViajeErro();
+
+                    if (erro.response && erro.response.data && erro.response.data.errors) {
+                        erro.response.data.errors.forEach((erroItem: IError) => {
+                            let erroNome = erroItem.name.split('.');
+                            if (erroNome.length === 2) {
+                                if (erroNome[0] === 'salida') {
+                                    salidaError[erroNome[1]] = erroItem.message;
+                                } else if (erroNome[0] === 'destino') {
+                                    destinoError[erroNome[1]] = erroItem.message;
+                                }
+                            } else {
+                                errosInFuncton = { ...errosInFuncton, [erroItem.name]: erroItem.message }
+                            }
+                        });
+                    }
+
+                    // Actualizar los errores en el estado
+                    setErros({
+                        ...errosInFuncton,
+                        salida: salidaError,
+                        destino: destinoError
+                    });
+                    console.log(erro);
+
+                });
+
+        } else
+            setErros(errosInFuncton)
     }
 
     return <div className="max-w-2xl mx-auto mt-10">

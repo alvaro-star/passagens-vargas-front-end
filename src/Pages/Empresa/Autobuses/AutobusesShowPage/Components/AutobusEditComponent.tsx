@@ -1,3 +1,4 @@
+import CloseButton from "@/Components/CloseButton"
 import InputError from "@/Components/InputError"
 import PrimaryButton from "@/Components/PrimaryButton"
 import TextInput234 from "@/Components/TextInput234"
@@ -5,7 +6,6 @@ import TituloForm from "@/Components/TituloForm"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
 import { useEffect, useState } from "react"
-import { IoClose } from "react-icons/io5"
 
 interface Props {
     placaProp: string
@@ -18,6 +18,7 @@ const AutobusEditComponent = ({ placaProp, idAutobus, setPlacaProp, setShowForm 
     const [placaError, setPlacaError] = useState('')
     useEffect(() => {
         setPlaca(placaProp)
+        setPlacaError('')
     }, [placaProp])
     const closeForm = () => {
         setShowForm(false);
@@ -44,11 +45,7 @@ const AutobusEditComponent = ({ placaProp, idAutobus, setPlacaProp, setShowForm 
     return <div className="w-72 bg-white p-5 border text-center">
         <div className=" flex items-center justify-between">
             <TituloForm text="Editar Autobus" />
-            <button
-                onClick={closeForm}
-                className="grid place-content-center p-1.5 bg-red-500 text-white rounded">
-                <IoClose />
-            </button>
+            <CloseButton onClick={closeForm} />
         </div>
         <TextInput234 className="mt-2" labelValue="Placa" value={placa} setValue={setPlaca} />
         <InputError message={placaError} />

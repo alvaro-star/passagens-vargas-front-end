@@ -137,30 +137,12 @@ const PassagensList = () => {
                 pasajes: pasajes.map(p => p.values),
                 metodo: "EFECTIVO"//Cambiara de forma dinamica
             }
-            http.post('pasajes/vender', pedido, { responseType: 'blob' }).then(response => {
-
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-
-                // Sugerir um nome para o arquivo a ser salvo
-                link.setAttribute('download', 'pasajes.pdf');  // Ou outro formato conforme a resposta
-
-                // Append link ao body
-                document.body.appendChild(link);
-
-                // Forçar o download
-                link.click();
-
-                // Limpar e remover o link
-                if (link.parentNode) {
-                    link.parentNode.removeChild(link);
-                }
-
-
-                // Liberar o objeto URL criado
-                window.URL.revokeObjectURL(url);
-
+            http.post('pasajes/vender', pedido).then(response => {
+                http.get(`pagos/${response.data.idFactura}/download`, { responseType: 'blob' }).then(({ data }) => {
+                    const blob = new Blob([data], { type: 'application/pdf' });
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                })
                 sessionStorage.removeItem('sillasFromViaje')
                 sessionStorage.removeItem('viajeData')
                 navigate("/empresa/viajes")
