@@ -71,10 +71,7 @@ const AppRouter = () => {
                     <Route index element={<HomeEmpresaPage />} />
                     <Route path="admin">
                         <Route path="autobuses">
-                            <Route index element={<AutobusesIndexPage />} />
                             <Route path="create" element={<AutobusesFormPage />} />
-                            <Route path=":id" element={<AutobusesShowPage />} />
-                            <Route path=":id/viaje/create" element={<ViajesCreatePage />} />
                         </Route>
                         <Route path="funcionarios">
                             <Route index element={<FuncionariosListPage />} />
@@ -83,6 +80,11 @@ const AppRouter = () => {
                         <Route path="viajes">
                             <Route index element={<ViajesIndexPage />} />
                         </Route>
+                    </Route>
+                    <Route path="autobuses">
+                        <Route index element={<AutobusesIndexPage />} />
+                        <Route path=":id" element={<AutobusesShowPage />} />
+                        <Route path=":id/viaje/create" element={<ViajesCreatePage />} />
                     </Route>
                     <Route path="paradas">
                         <Route path=":id/edit" element={<ParadaEditPage />} />

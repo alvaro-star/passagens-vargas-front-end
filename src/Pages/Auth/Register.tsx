@@ -23,6 +23,7 @@ const Register = () => {
     const [telefono, setTelefono] = useState<string>("")
     const [contrasena, setContrasena] = useState<string>("")
     const [contrasena2, setContrasena2] = useState<string>("")
+    const [enviado, setEnviado] = useState(false)
 
     const newErros = () => {
         return {
@@ -37,14 +38,17 @@ const Register = () => {
     const [erros, setErros] = useState<IErros>(newErros())
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
+        setEnviado(true)
         let errosValidation: IErros = newErros()
         if (contrasena === contrasena2 && contrasena != "") {
             const usuario = { login, nombre, telefono, contrasena }
             http.post('auth/register', usuario)
                 .then(() => {
+                    setEnviado(false)
                     navigate("/validar")
                 })
                 .catch(erro => {
+                    setEnviado(false)
                     if (erro?.response?.data?.errors) {
                         let erros: IError[] = erro?.response?.data?.errors
                         erros.forEach(erro => errosValidation[erro.name] = erro.message)
@@ -61,7 +65,7 @@ const Register = () => {
 
     return (
         <div className="mt-20 flex justify-center items-center ">
-            <FormTemplate onSubmit={enviar}>
+            <FormTemplate onSubmit={enviar} disabled={enviado}>
                 <h2 className="text-xl font-bold w-full">Registrate</h2>
                 <p className="w-full text-sm">Ingresa tus datos y create una cuenta...</p>
                 <div className="mt-2 w-full">

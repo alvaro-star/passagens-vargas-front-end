@@ -9,7 +9,7 @@ const EmpresaAdminLayout = () => {
     const tipoUsuario = sessionStorage.getItem("role")
     const rotas = [{
         label: 'Autobuses',
-        url: '/empresa/admin/autobuses'
+        url: '/empresa/autobuses'
     }, {
         label: 'Viajes Administrador',
         url: '/empresa/admin/viajes'
@@ -23,7 +23,7 @@ const EmpresaAdminLayout = () => {
 
     const rotasFuncionario = [{
         label: 'Autobuses',
-        url: '/empresa/admin/autobuses'
+        url: '/empresa/autobuses'
     }, {
         label: 'Viajes',
         url: '/empresa/viajes'

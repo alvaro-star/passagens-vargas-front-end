@@ -17,7 +17,7 @@ const ParadasTableComponent = ({ mostrarParadas, mostrarOptions, paradas, elimin
             <thead>
                 <tr>
                     <th className="text-start pl-5">Ciudad</th>
-                    <th>Plataforma</th>
+                    <th>Carril</th>
                     <th>Fecha y Hora</th>
                     {mostrarOptions && <th>Acciones</th>}
                 </tr>
@@ -34,7 +34,7 @@ const ParadasTableComponent = ({ mostrarParadas, mostrarOptions, paradas, elimin
                                     <Link to={"/empresa/paradas/" + parada.id + "/edit"} className="bg-yellow-400 p-1.5 px-3 uppercase">
                                         Editar
                                     </Link>
-                                    <button onClick={() => eliminarParada(parada.id)} className="bg-red-500 p-1.5 px-3 uppercase">
+                                    <button disabled={parada.tipo !== 'CAMINO'} onClick={() => eliminarParada(parada.id)} className="bg-red-500 p-1.5 px-3 uppercase disabled:opacity-25">
                                         Eliminar
                                     </button>
                                 </div>

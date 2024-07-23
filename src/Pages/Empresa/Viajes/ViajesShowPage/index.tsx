@@ -8,6 +8,8 @@ import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import PasajerosListaEmpresaPage from "./Components/PasajerosListaEmpresaPage"
 import ParadasTableComponent from "./Components/ParadasTableComponent"
 import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import AutobusCreateCopyComponent from "../../Autobuses/AutobusesShowPage/Components/AutobusCreateCopyComponent"
 
 
 interface IViajeExtends {
@@ -20,13 +22,13 @@ interface IViajeExtends {
     paradas: IParada2[]
 }
 
-
 const ViajesShowPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const [viaje, setViaje] = useState<IViajeExtends>()
     const [openFormCreate, setOpenFormCreate] = useState(false)
     const [mostrarOptions, setMostrarOptions] = useState(true)
+    const [showCreateCopyViaje, setShowCreateCopyViaje] = useState(false)
 
     useEffect(() => {
         if (id) {
@@ -76,9 +78,7 @@ const ViajesShowPage = () => {
                 .catch((erro) => {
                     if (erro.response?.data?.conteudo) {
                         alert(erro.response.data.conteudo);
-                    } else {
-                        alert("No se puede eliminar esta parada");
-                    }
+                    } else alert("No se puede eliminar esta parada");
                 });
         }
     };
@@ -92,12 +92,10 @@ const ViajesShowPage = () => {
     const eliminarViaje = () => {
         http.delete(`empresa/viajes/${id}`).then(() => navigate(-1))
             .catch(erro => {
-                console.log(erro);
                 if (erro.response.data.conteudo)
                     alert(erro.response.data.conteudo)
                 else
                     alert("Hubo un error en el processo, notifique ala empresa...")
-
             })
     }
 
@@ -108,16 +106,24 @@ const ViajesShowPage = () => {
                 <h2 className="text-2xl font-semibold">
                     Datos del Viaje
                 </h2>
-                <div>
-                    <PrimaryButton
-                        onClick={() => eliminarViaje()}
-                        className="bg-red-500 rounded-none"
-                    >
-                        ELIMINAR
-                    </PrimaryButton>
+                <div className="space-x-3">
+                    <PrimaryButtonEmpresa onClick={() => setShowCreateCopyViaje(true)}>duplicar viaje</PrimaryButtonEmpresa>
+                    {mostrarOptions &&
+                        <PrimaryButton
+                            onClick={() => eliminarViaje()}
+                            className="bg-red-500 rounded-none"
+                        >
+                            ELIMINAR viaje
+                        </PrimaryButton>
+                    }
                 </div>
             </div>
             {viaje && <>
+                {showCreateCopyViaje &&
+                    <div className="absolute inset-0 z-20 grid place-content-center bg-white bg-opacity-60">
+                        <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
+                    </div>
+                }
                 <div className="mt-5 flex items-center justify-between px-5 py-3 bg-slate-700 text-white">
                     <h2>Paradas</h2>
                     <div className="flex items-center space-x-2">

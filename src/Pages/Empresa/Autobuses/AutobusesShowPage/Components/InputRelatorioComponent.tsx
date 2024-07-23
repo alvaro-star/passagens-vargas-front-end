@@ -34,8 +34,6 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
                     let autobus: IAutobusExtends = { ...resposta.data, pisos: [] }
                     let pisoResposta: IPiso;
 
-
-
                     for (let i = 0; i < resposta.data.pisos.length; i++) {
                         let pisoApi = resposta.data.pisos[i];
                         let posicionesString: string = pisoApi.posicoesBloqueadas;
@@ -47,9 +45,6 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
                         pisoResposta = { ...pisoApi, posicoesBloqueadas: posicionesBloqueadas }
                         autobus.pisos = [...autobus.pisos, pisoResposta]
                     }
-
-                    console.log(autobus);
-
                     setAutobus(autobus)
                 })
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
@@ -67,6 +62,23 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
             setAnos(anosTemp)
         } else navigate("/")
     }, [idAutobus])
+
+    const buscar = () => {
+        const mesInt = parseInt(mes) - 1;
+        const anoInt = parseInt(ano);
+        const dataAnalise = new Date(anoInt, mesInt, 2);
+        if (idAutobus != null) {
+            http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
+                dataAnalise: dataAnalise,
+                idAutobus: idAutobus
+            }).then(resposta => { 
+                setViajes(resposta.data.content) 
+                if (resposta.data.totalPages > 1) setNextPage(1)
+                else setNextPage(null)
+            });
+        }
+    }
+    
     const verMais = () => {
         if (nextPage && idAutobus) {
             const mesInt = parseInt(mes) - 1;
@@ -84,17 +96,7 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
         }
     }
 
-    const buscar = () => {
-        const mesInt = parseInt(mes) - 1;
-        const anoInt = parseInt(ano);
-        const dataAnalise = new Date(anoInt, mesInt, 2);
-        if (idAutobus != null) {
-            http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
-                dataAnalise: dataAnalise,
-                idAutobus: idAutobus
-            }).then(resposta => { setViajes(resposta.data.content) });
-        }
-    }
+    
     return <div className="w-full flex justify-between items-center py-2 px-2">
         <section className="flex items-center">
             <p className="mr-2">

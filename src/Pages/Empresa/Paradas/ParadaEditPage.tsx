@@ -89,21 +89,21 @@ const ParadaEditPage = () => {
 
     return (
         <div className="w-full grid place-content-center pt-10">
-            <form onSubmit={enviar} className="w-full flex justify-center flex-col p-5 bg-gray-300 rounded-lg">
-                <div className="my-2 w-full flex justify-between items-center">
-                    <h2 className="pb-2 text-gray-800 text-lg font-semibold">Editar Parada</h2>
+            <form onSubmit={enviar} className="w-full flex justify-center flex-col p-5 bg-white border">
+                <div className="mb-2 w-full flex justify-between items-center">
+                    <h2 className="text-gray-800 text-lg font-semibold">Editar Parada</h2>
                 </div>
                 <div className="text-center mt-2">
-                    <div className="flex items-center space-x-4">
-                        <div className="w-24">
+                    <div className="space-y-4">
+                        <div className="4">
                             <TextInputObject className="text-center" type="text" min={1} value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Plataforma" />
-                            <InputError className="absolute text-wrap" message={paradaErros.plataforma} />
+                            <InputError className="text-wrap" message={paradaErros.plataforma} />
                         </div>
                         <div className="relative">
                             <TextInputObject type="datetime-local" value={parada.dataHora} onChange={(eve) => editar('dataHora', eve.target.value)} labelValue="Fecha de llegada" />
-                            <InputError className="absolute text-wrap" message={paradaErros.dataHora} />
+                            <InputError className="text-wrap" message={paradaErros.dataHora} />
                         </div>
-                        <div className="w-64 text-black">
+                        <div className="w-full text-black">
                             <SelectCostumized ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre Dela Ciudad" />
                         </div>
                         <div className="relative">
@@ -116,7 +116,7 @@ const ParadaEditPage = () => {
                             </select>
                             <label
                                 className="absolute text-sm text-gray-500 rounded-t bg-white duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Elije un lugar</label>
-                            <InputError className="absolute w-full text-wrap" message={paradaErros.idLugar} />
+                            <InputError className="w-full text-wrap" message={paradaErros.idLugar} />
                         </div>
                     </div>
                     <PrimaryButton type="submit" className="rounded-none mt-5 bg-yellow-500">Enviar</PrimaryButton>

@@ -3,16 +3,17 @@ import PrimaryButton from "./PrimaryButton"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
+    disabled?: boolean
     children?: React.ReactNode
 }
 
-const FormTemplate = ({ children, className, ...props }: Props) => {
+const FormTemplate = ({ children, disabled = false, className, ...props }: Props) => {
     return (
         <form
             {...props}
             className={`w-80 flex flex-col items-center justify-center bg-slate-200 p-5 rounded ${className}`}>
             {children}
-            <PrimaryButton className="mt-4">
+            <PrimaryButton type="submit" className="mt-4" disabled={disabled}>
                 Enviar
             </PrimaryButton>
         </form>

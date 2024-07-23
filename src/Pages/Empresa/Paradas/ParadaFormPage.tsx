@@ -30,7 +30,10 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
         if (!validarParada(parada)) {
             erros.dataHora = 'La fecha esta fuera del limite'
         }
-        let haErros = parada.dataHora === '' || parada.plataforma === '' || parada.idLugar === '' || !idViaje;
+        if (!parseInt(parada.plataforma)) {
+            erros.plataforma = "Necesita ser un numero"
+        }
+        let haErros = parada.dataHora === '' || parada.plataforma === '' || !parseInt(parada.plataforma) || parada.idLugar === '' || !idViaje;
         if (!haErros) {
             http.post<IParada2>('paradas', { ...parada, idViaje: idViaje })
                 .then(resposta => {
@@ -51,7 +54,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
 
     return (
         <div className={"w-full grid place-content-center " + className}>
-            <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 bg-gray-300 rounded-lg">
+            <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 border shadow bg-slate-100">
                 <div className="mb-2 w-full flex justify-between items-center">
                     <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
                     <button

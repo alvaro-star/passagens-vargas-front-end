@@ -88,7 +88,7 @@ const AutobusesFormPage = () => {
                 setPlaca('')
                 setEtapa(1)
                 setSegundoPiso(null)
-                navigate('/empresa/admin/autobuses')
+                navigate('/empresa/autobuses')
             }).catch(erro => {
                 if (erro.response.data.errors) {
                     erro.response.data.errors.forEach((errorList: IError) => {

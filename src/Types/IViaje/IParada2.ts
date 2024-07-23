@@ -3,6 +3,7 @@ export default interface IParada2 {
     dataHora: string,
     plataforma: number,
     idLugar: number
+    tipo: string
     lugar: string,
     ciudad: string,
     departamento: string,

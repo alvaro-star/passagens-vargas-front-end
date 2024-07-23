@@ -113,7 +113,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                             className="bg-yellow-400 rounded-none"
                             onClick={() => setShowEditComponent(true)}
                         >
-                            editar
+                            editar precio
                         </PrimaryButton>
                     }
                     <p>Mostrar Contenido</p>

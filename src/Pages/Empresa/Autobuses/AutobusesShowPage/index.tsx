@@ -9,6 +9,7 @@ import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import AutobusModelShowPage from "./Components/AutobusModelShowPage"
 import http from "@/http"
 import AutobusEditComponent from "./Components/AutobusEditComponent"
+import GetUserType from "@/Helpers/GetUserType"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -41,28 +42,31 @@ const AutobusesShowPage = () => {
         }
     };
 
+
     return (
         <div className="mx-auto max-w-7xl py-10">
             {autobus && <>
                 <div className="w-full px-5 py-3 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
                     <p>Lista de viajes del autobus {autobus.placa}</p>
                     <div className="space-x-4 flex items-center">
-                        <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
-                        <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
+                        {GetUserType() === "ROLE_EMPRESA_ADMIN" &&
+                            <>
+                                <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
+                                <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
+                            </>
+                        }
                         <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
                         <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> registrar un viaje</PrimaryButton>
                     </div>
                 </div>
-                {showEditForm &&
-                    <div className="absolute inset-0 grid place-content-center">
-                        <AutobusEditComponent
-                            idAutobus={id!}
-                            setShowForm={setShowEditForm}
-                            placaProp={autobus.placa}
-                            setPlacaProp={editarAutobus}
-                        />
-                    </div>
-                }
+                {showEditForm && <div className="absolute inset-0 grid place-content-center">
+                    <AutobusEditComponent
+                        idAutobus={id!}
+                        setShowForm={setShowEditForm}
+                        placaProp={autobus.placa}
+                        setPlacaProp={editarAutobus}
+                    />
+                </div>}
             </>}
             <div hidden={!showModel} className="bg-white p-5">
                 <div className="ml-4">

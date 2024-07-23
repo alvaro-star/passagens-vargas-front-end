@@ -33,7 +33,7 @@ const FuncionariosFormPage = () => {
             })
     }
     return <div className="flex justify-center py-10" onSubmit={enviar}>
-        <FormTemplate>
+        <FormTemplate className="border bg-white rounded-none">
             <h2 className="font-semibold text-lg">Registrar un nuevo Funcionario</h2>
             <div className="w-full mt-2">
                 <TextInput234 value={email} setValue={setEmail} labelValue="Email" required />
