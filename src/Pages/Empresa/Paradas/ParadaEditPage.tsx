@@ -59,7 +59,9 @@ const ParadaEditPage = () => {
                     }
                 })
                 .catch(erro => {
-                    if (erro.response.data.errors) {
+                    if (erro.response.data.conteudo) {
+                        alert(erro.response.data.conteudo)
+                    } else if (erro.response.data.errors) {
                         erro.response.data.errors.forEach((er: IError) => {
                             erros[er.name] = er.message;
                         });

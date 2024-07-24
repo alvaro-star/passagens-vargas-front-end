@@ -47,11 +47,13 @@ const CiudadesFormPage = () => {
         }
     }
     useEffect(() => {
-        http.get<ICiudad>(`ciudades/${parametros.id}`)
-            .then(resposta => {
-                setNombre(resposta.data.nombre)
-                setIdDepartamento(resposta.data.idDepartamento)
-            })
+        if (parametros.id) {
+            http.get<ICiudad>(`ciudades/${parametros.id}`)
+                .then(resposta => {
+                    setNombre(resposta.data.nombre)
+                    setIdDepartamento(resposta.data.idDepartamento)
+                })
+        }
     }, [parametros])
 
     useEffect(() => {

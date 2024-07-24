@@ -147,7 +147,9 @@ const PassagensList = () => {
                 sessionStorage.removeItem('viajeData')
                 navigate("/empresa/viajes")
             }).catch(error => {
-                if (error.response.data.errorsList.length != 0) {
+                if (error.response.data.conteudo) {
+                    alert(error.response.data.conteudo)
+                } else if (error.response.data.errorsList.length != 0) {
                     const errorsList: IErrorList = error.response.data.errorsList[0];
                     if (errorsList.name === 'pasajes') {
                         errorsList.itens.forEach(item => {

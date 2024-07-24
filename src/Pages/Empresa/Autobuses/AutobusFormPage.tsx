@@ -89,14 +89,16 @@ const AutobusesFormPage = () => {
                 setEtapa(1)
                 setSegundoPiso(null)
                 navigate('/empresa/autobuses')
-            }).catch(erro => {
-                if (erro.response.data.errors) {
-                    erro.response.data.errors.forEach((errorList: IError) => {
-                        if (errorList.name==="placa")
+            }).catch(({ response }) => {
+                if (response.data.conteudo) {
+                    alert(response.data.conteudo)
+                } else if (response.data.errors) {
+                    response.data.errors.forEach((errorList: IError) => {
+                        if (errorList.name === "placa")
                             setPlacaErro(errorList.message)
                     });
                 }
-                
+
             })
     }
 
@@ -170,7 +172,7 @@ const AutobusesFormPage = () => {
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
                         <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa" />
-                        <InputError  className="ml-1" message={placaErro}/>
+                        <InputError className="ml-1" message={placaErro} />
                     </div>
                 </section>
                 <div>

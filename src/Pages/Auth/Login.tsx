@@ -4,6 +4,7 @@ import http from "@/http"
 import FormTemplate from "@/Components/FormTemplate"
 import TextInput234 from "@/Components/TextInput234"
 import InputError from "@/Components/InputError"
+import IError from "@/Types/IErrors/IError"
 
 interface ILogin {
     token: string
@@ -28,13 +29,23 @@ const tipoUsuario = (roles: string[]): string => {
         return "ROLE_CLIENTE"
     return ""
 }
+interface ILoginError {
+    login: string,
+    contrasena: string
+    [key: string]: string
+}
+const newLoginError = () => {
+    return { login: '', contrasena: "" }
+}
 const Login = () => {
     const navigate = useNavigate()
     const [login, setLogin] = useState<string>('')
     const [contrasena, setContrasena] = useState<string>('')
     const [messageError, setMessageError] = useState("")
+    const [errorsForm, setErrorsForm] = useState<ILoginError>(newLoginError())
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
+        let errosForm: ILoginError = newLoginError()
         let message = ""
         const usuario = {
             login: login,
@@ -44,7 +55,7 @@ const Login = () => {
             .then(response => {
                 response.data.token
                 sessionStorage.setItem("token", response.data.token)
-
+                setErrorsForm(errosForm)
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
                     setLogin('')
                     setContrasena('')
@@ -76,11 +87,16 @@ const Login = () => {
                     }
                 })
             }).catch((erro) => {
-                if (erro.response.data.conteudo != null) {
+                if (erro.response.data.conteudo != null)
                     message = erro.response.data.conteudo
+                else if (erro.response.data.errors) {
+                    erro.response.data.errors.forEach((erroItem: IError) => {
+                        errosForm[erroItem.name] = erroItem.message
+                    });
                 } else {
                     message = "Hubo un error en la solicitud. Intente de nevo..."
                 }
+                setErrorsForm(errosForm)
                 setMessageError(message)
             })
         setMessageError(message)
@@ -92,9 +108,11 @@ const Login = () => {
                 <InputError message={messageError} />
                 <div className="mt-2 w-full">
                     <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
+                    <InputError className="ml-1" message={errorsForm.login} />
                 </div>
                 <div className="mt-2 w-full">
                     <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena" required />
+                    <InputError className="ml-1" message={errorsForm.contrasena} />
                 </div>
                 <Link to="/reset/password" className="w-full text-xs mt-1 text-end mr-3 text-blue-500 hover:text-blue-600 cursor-pointer">
                     Olvidaste tu contrasena?
