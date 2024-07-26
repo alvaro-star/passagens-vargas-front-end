@@ -1,7 +1,7 @@
 import CloseButton from "@/Components/CloseButton"
 import InputError from "@/Components/InputError"
 import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
-import TextInput234 from "@/Components/TextInput234"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import TituloForm from "@/Components/TituloForm"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
@@ -49,7 +49,7 @@ const AutobusCreateCopyComponent = ({ idViajeProp, setShowForm }: Props) => {
             <TituloForm text="Crear un nuevo viaje" />
             <CloseButton onClick={closeForm} />
         </div>
-        <TextInput234 value={dataNovo} type="date" setValue={setDataNovo} labelValue="Fecha nueva" />
+        <TextInputEmpresa value={dataNovo} type="date" setValue={setDataNovo} labelValue="Fecha nueva" />
         <InputError message={dataNovoError} className="ml-2" />
         <div className="text-center">
             <PrimaryButtonEmpresa className="mt-3">

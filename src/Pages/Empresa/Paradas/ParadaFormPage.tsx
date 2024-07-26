@@ -2,11 +2,11 @@ import { useState } from "react"
 import IParadaForm from "../Viajes/Types/IParadaForm"
 import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import ParadaForm from "../Viajes/Components/ParadaForm"
-import PrimaryButton from "@/Components/PrimaryButton"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
-import { IoClose } from "react-icons/io5"
 import IParada2 from "@/Types/IViaje/IParada2"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import CloseButton from "@/Components/CloseButton"
 
 interface Props {
     className?: string
@@ -57,16 +57,11 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
             <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 border shadow bg-slate-100">
                 <div className="mb-2 w-full flex justify-between items-center">
                     <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
-                    <button
-                        className="flex items-center justify-center rounded h-8 w-8 bg-red-500"
-                        onClick={() => setOpenForm(false)}
-                    >
-                        <IoClose className="text-xl text-center text-white" />
-                    </button>
+                    <CloseButton onClick={() => setOpenForm(false)}/>
                 </div>
                 <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />
                 <div className="text-center mt-3">
-                    <PrimaryButton type="submit">Enviar</PrimaryButton>
+                    <PrimaryButtonEmpresa type="submit">Enviar</PrimaryButtonEmpresa>
                 </div>
             </form>
         </div>

@@ -1,4 +1,5 @@
 import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import http from "@/http"
 import IPage from "@/Types/IPage/index"
 import { useEffect, useState } from "react"
@@ -13,26 +14,21 @@ const FuncionariosListPage = () => {
     const [nextPage, setNextPage] = useState<number | null>(null)
     useEffect(() => {
         http.get<IPage<IFuncionario>>("funcionarios/" + idEmpresa)
-            .then(resposta => {
-                setFuncionarios(resposta.data.content)
-                if (resposta.data.totalPages > 1) {
-                    setNextPage(1)
-                } else {
-                    setNextPage(null)
-                }
+            .then(({ data }) => {
+                setFuncionarios(data.content)
+                if (data.totalPages > 1) setNextPage(1)
+                else setNextPage(null)
             })
     }, [])
 
     const verMais = () => {
         if (nextPage != null) {
             http.get<IPage<IFuncionario>>("funcionarios/" + idEmpresa + `?page=${nextPage}`)
-                .then(resposta => {
-                    setFuncionarios(funcionarios.concat(resposta.data.content))
-                    if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
+                .then(({ data }) => {
+                    setFuncionarios(funcionarios.concat(data.content))
+                    if (data.totalPages <= data.pageable.pageNumber + 1)
                         setNextPage(null)
-                    } else {
-                        setNextPage(resposta.data.pageable.pageNumber + 1)
-                    }
+                    else setNextPage(data.pageable.pageNumber + 1)
                 })
         }
     }
@@ -56,18 +52,18 @@ const FuncionariosListPage = () => {
     }
     return (
         <div className="py-10 max-w-7xl mx-auto">
-            <div className="p-5 bg-slate-700 text-white flex items-center justify-between">
+            <div className="px-5 py-2 bg-slate-700 text-white flex items-center justify-between">
                 <h1 className="font-bold text-xl">Lista de Funcionarios dela Empresa</h1>
-                <PrimaryButton onClick={() => navigate(path + "/create")}>+ Funcionario</PrimaryButton>
+                <PrimaryButtonEmpresa onClick={() => navigate(path + "/create")}>Agregar un Funcionario</PrimaryButtonEmpresa>
             </div>
-            <div className="p-5 bg-white">
+            <div className="px-5 py-2 bg-white">
                 <table className="w-full ">
                     <thead>
                         <tr className="">
                             <th className="font-semibold text-start">Nombre</th>
                             <th className="font-semibold text-start">E-mail</th>
                             <th className="font-semibold text-start">Telefono</th>
-                            <th className="font-semibold text-center w-32">Actions</th>
+                            <th className="font-semibold text-center w-32">Opciones</th>
                         </tr>
                     </thead>
                     <tbody className="">

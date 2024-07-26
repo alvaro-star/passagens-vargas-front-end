@@ -1,7 +1,7 @@
 import CloseButton from "@/Components/CloseButton"
 import InputError from "@/Components/InputError"
 import PrimaryButton from "@/Components/PrimaryButton"
-import TextInput234 from "@/Components/TextInput234"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import TituloForm from "@/Components/TituloForm"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
@@ -49,7 +49,7 @@ const PrecioEditComponent = ({ precioProp, nPiso, idPrecio, setPrecioProp, setSh
                 <TituloForm text={"Editar precio del piso " + nPiso} />
                 <CloseButton onClick={closeMenu} />
             </div>
-            <TextInput234 className="mt-2" labelValue="Precio" value={precio} setValue={setPrecio} />
+            <TextInputEmpresa className="mt-2" labelValue="Precio" value={precio} setValue={setPrecio} />
             <InputError message={precioError} />
             <PrimaryButton
                 onClick={editar}

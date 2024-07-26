@@ -81,8 +81,8 @@ const AutobusesShowPage = () => {
                 <table className="w-full">
                     <thead>
                         <tr>
-                            <th>Origen</th>
-                            <th>Destino</th>
+                            <th className="text-start">Origen</th>
+                            <th className="text-start">Destino</th>
                             <th>Dinero en Efectivo</th>
                             <th>Acciones</th>
                         </tr>

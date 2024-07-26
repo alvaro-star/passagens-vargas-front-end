@@ -35,7 +35,6 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
             if (posicionesString != '') {
                 posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
             }
-            console.log(data);
 
             data.piso.posicoesBloqueadas = posicionesBloqueadas
             setPisoModel(data.piso)

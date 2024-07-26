@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import PisoFormPage from "./Components/PisoFormPage"
 import IPiso from "@/Types/IPiso"
 import http from "@/http"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import Piso from "@/Pages/Publico/Components/Piso"
 import IAutobusForm from "./Types/IAutobusForm"
 import { useNavigate } from "react-router-dom"
-import TextInput234 from "@/Components/TextInput234"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import IError from "@/Types/IErrors/IError"
 import InputError from "@/Components/InputError"
 
@@ -110,68 +110,68 @@ const AutobusesFormPage = () => {
             </h2>
 
             {etapa == 1 && <section>
-                <div className="w-full p-5 border-x-2 border-t-2 bg-white rounded-t-lg flex">
+                <div className="w-full p-5 border-x-2 border-t-2 bg-white flex">
                     <p className="w-full">
                         Piso 1
                     </p>
                 </div>
-                <div className="  rounded-b-lg border-2 py-5">
+                <div className=" border-2 py-5">
                     <PisoFormPage piso={piso1} etapa={etapa} setEtapa={setEtapa} setPiso={setPiso1} />
                 </div>
             </section>}
 
             {etapa == 2 && <>
-                <div className="w-full rounded-lg p-5 bg-white">
+                <div className="w-full p-5 bg-white">
                     <div className="w-full">
-                        <PrimaryButton
+                        <PrimaryButtonEmpresa
                             onClick={() => setEtapa(1)}
                             className=''>
                             Volver
-                        </PrimaryButton>
+                        </PrimaryButtonEmpresa>
                     </div>
                     <div className="grid place-content-center">
                         <p>
                             Desea agregar un segundo Piso?
                         </p>
                         <div className="mt-2 flex gap-2 justify-center">
-                            <PrimaryButton
+                            <PrimaryButtonEmpresa
                                 onClick={() => setSegundoPiso(true)}
                                 className={`hover:bg-green-800 ${segundoPiso != null && segundoPiso == true ? 'bg-green-800' : 'bg-green-500'}`}>
                                 Si
-                            </PrimaryButton>
-                            <PrimaryButton
+                            </PrimaryButtonEmpresa>
+                            <PrimaryButtonEmpresa
                                 onClick={() => setSegundoPiso(false)}
                                 className={`hover:bg-red-800 ${segundoPiso != null && segundoPiso == false ? 'bg-red-800' : 'bg-red-500'}`}>
                                 No
-                            </PrimaryButton>
+                            </PrimaryButtonEmpresa>
                         </div>
                     </div>
                     <div className="grid place-content-center">
-                        {segundoPiso == false && <PrimaryButton className="mt-5" onClick={() => setEtapa(3)}>continuar</PrimaryButton>}
+                        {segundoPiso == false && <PrimaryButtonEmpresa className="mt-5" onClick={() => setEtapa(3)}>continuar</PrimaryButtonEmpresa>}
                     </div>
                 </div>
                 {segundoPiso &&
                     <section className="mt-5">
-                        <div className="w-full p-5 border-x-2 border-t-2 bg-white rounded-t-lg flex">
+                        <div className="w-full p-5 border-x-2 border-t-2 bg-white flex">
                             <p className="w-full">
                                 Piso 2
                             </p>
                         </div>
-                        <div className={"  rounded-b-lg border-2 py-5"}>
+                        <div className={"border-2 py-5"}>
                             <PisoFormPage piso={piso2} etapa={etapa} setEtapa={setEtapa} setPiso={setPiso2} />
                         </div>
                     </section>
                 }
             </>}
             {etapa == 3 && <form className="relative border-2 py-8 sm:p-8 w-full " onSubmit={enviar}>
-                <PrimaryButton
+                <PrimaryButtonEmpresa
                     onClick={() => setEtapa(2)}
                     className='absolute ml-5'>
                     Volver
-                </PrimaryButton>
+                </PrimaryButtonEmpresa>
                 <section className="w-full grid place-content-center my-5">
                     <div className="w-72">
-                        <TextInput234 value={placa} setValue={setPlaca} required labelValue="N° Placa" />
+                        <TextInputEmpresa value={placa} setValue={setPlaca} required labelValue="N° Placa" />
                         <InputError className="ml-1" message={placaErro} />
                     </div>
                 </section>
@@ -186,7 +186,7 @@ const AutobusesFormPage = () => {
                     </div>
                 }
                 <div className="w-full mt-5 flex justify-center">
-                    <PrimaryButton>Salvar Registro</PrimaryButton>
+                    <PrimaryButtonEmpresa>Salvar Registro</PrimaryButtonEmpresa>
                 </div>
             </form>}
         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import InputError from "@/Components/InputError"
-import TextInput234 from "@/Components/TextInput234"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useNavigate, useParams } from "react-router-dom"
 import ParadaForm from "../Viajes/Components/ParadaForm"
@@ -167,11 +167,11 @@ const ViajesCreatePage = () => {
                 <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>
                 <div className="flex gap-2">
                     <div className="w-full">
-                        <TextInput234 value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)" />
+                        <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)" />
                         <InputError message={erros.precioPiso1} />
                     </div>
                     {autobus?.pisos.length == 2 && <div className="w-full">
-                        <TextInput234 value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
+                        <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
                         <InputError message={erros.precioPiso2} />
                     </div>}
                 </div>

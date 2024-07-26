@@ -1,7 +1,7 @@
 import CloseButton from "@/Components/CloseButton"
 import InputError from "@/Components/InputError"
 import PrimaryButton from "@/Components/PrimaryButton"
-import TextInput234 from "@/Components/TextInput234"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import TituloForm from "@/Components/TituloForm"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
@@ -47,7 +47,7 @@ const AutobusEditComponent = ({ placaProp, idAutobus, setPlacaProp, setShowForm 
             <TituloForm text="Editar Autobus" />
             <CloseButton onClick={closeForm} />
         </div>
-        <TextInput234 className="mt-2" labelValue="Placa" value={placa} setValue={setPlaca} />
+        <TextInputEmpresa className="mt-2" labelValue="Placa" value={placa} setValue={setPlaca} />
         <InputError message={placaError} />
         <PrimaryButton
             onClick={enviar}

@@ -3,6 +3,7 @@
 import { FaArrowRightLong } from "react-icons/fa6";
 import IVIajeResponse from "../Types/IViajeResponse"
 import { MdTimer } from "react-icons/md";
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 interface Props {
     viaje: IVIajeResponse
     indexViaje?: number
@@ -26,26 +27,36 @@ const CardViaje = ({ viaje, indexViaje, escojerViaje, className = '' }: Props) =
                     </div>
                     <section className="text-lg w-80">
                         <p className="font-bold text-2xl">
-                            Destino {viaje.destino.ciudad}
+                            Destino {capitalizeFirstLetter(viaje.destino.ciudad)}
                         </p>
-                        <p>{viaje.destino.lugar}</p>
-                        <p>Departamento {viaje.destino.departamento}</p>
+                        <p>{capitalizeFirstLetter(viaje.destino.lugar)}</p>
+                        <p>Departamento {capitalizeFirstLetter(viaje.destino.departamento)}</p>
                     </section>
                 </div>
                 <div className="text-xl flex items-center">
                     <MdTimer className="my-3 mr-3 text-3xl" />
-                    <p className="font-semibold">Salida  </p> {getDataHora(viaje.salida.dataHora)}
+                    <div className="flex items-center space-x-4">
+                        <p className="font-semibold">Salida  </p>
+                        <p>
+                            {getDataHora(viaje.salida.dataHora)}
+                        </p>
+                    </div>
                     <FaArrowRightLong className="mx-3 text-3xl" />
-                    <p className="font-semibold">Destino  </p> {getDataHora(viaje.destino.dataHora)}
+                    <div className="flex items-center space-x-4">
+                        <p className="font-semibold">Destino  </p>
+                        <p>
+                            {getDataHora(viaje.destino.dataHora)}
+                        </p>
+                    </div>
                 </div>
             </section>
             <section className="w-full flex flex-col justify-between">
                 <div className="text-lg w-80">
                     <p className="font-semibold text-2xl">
-                        Salida {viaje.salida.ciudad}
+                        Salida {capitalizeFirstLetter(viaje.salida.ciudad)}
                     </p>
-                    <p>{viaje.salida.lugar}</p>
-                    <p>Departamento {viaje.salida.departamento}</p>
+                    <p>{capitalizeFirstLetter(viaje.salida.lugar)}</p>
+                    <p>Departamento {capitalizeFirstLetter(viaje.salida.departamento)}</p>
                 </div>
                 {(viaje.precios?.length != 0 && escojerViaje) &&
                     <section className="flex flex-col items-end w-full">

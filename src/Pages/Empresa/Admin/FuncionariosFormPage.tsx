@@ -1,6 +1,7 @@
-import FormTemplate from "@/Components/FormTemplate"
+
 import InputError from "@/Components/InputError"
-import TextInput234 from "@/Components/TextInput234"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -33,13 +34,14 @@ const FuncionariosFormPage = () => {
             })
     }
     return <div className="flex justify-center py-10" onSubmit={enviar}>
-        <FormTemplate className="border bg-white rounded-none">
+        <form className="w-80 flex flex-col items-center justify-center p-5 border bg-white rounded-none">
             <h2 className="font-semibold text-lg">Registrar un nuevo Funcionario</h2>
             <div className="w-full mt-2">
-                <TextInput234 value={email} setValue={setEmail} labelValue="Email" required />
+                <TextInputEmpresa value={email} setValue={setEmail} labelValue="Email" required />
                 <InputError message={emailErro} />
             </div>
-        </FormTemplate>
+            <PrimaryButtonEmpresa className="mt-3">Enviar</PrimaryButtonEmpresa>
+        </form>
     </div>
 }
 

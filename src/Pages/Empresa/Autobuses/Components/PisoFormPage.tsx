@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import InputNumber from "./InputNumber"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import IPiso from "@/Types/IPiso"
 import ISilla from "@/Types/ISilla"
 import Piso from "@/Pages/Publico/Components/Piso"
@@ -95,9 +95,9 @@ const PisoFormPage = ({ piso, setPiso, etapa, setEtapa }: Props) => {
                 sillasOcupadas={[]}
                 clickSilla={clickSilla} />
             <section className="grid place-content-center">
-                <PrimaryButton onClick={confirmarModelo}>
+                <PrimaryButtonEmpresa onClick={confirmarModelo}>
                     CONFIRMAR MODELO
-                </PrimaryButton>
+                </PrimaryButtonEmpresa>
             </section>
         </div>
     )

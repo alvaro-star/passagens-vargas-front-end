@@ -1,6 +1,5 @@
-import { Outlet, useNavigate } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 import SecondaryButton from "../../Components/SecondaryButton"
-import ApplicationLogo from "../../Components/ApplicationLogo"
 import NavLink from "../../Components/NavLink"
 
 
@@ -36,10 +35,12 @@ const EmpresaAdminLayout = () => {
     }
 
     return (
-        <section className="min-h-screen relative bg-gray-100">
-            <header className="w-full bg-blue-500 text-white p-5 flex justify-between">
+        <section className="min-h-screen bg-gray-100">
+            <header className="w-full bg-blue-900 text-white p-5 flex justify-between">
                 <div className="flex items-center gap-5">
-                    <ApplicationLogo className="h-10 invert" />
+                    <Link to="/empresa" className="text-2xl font-bold">
+                        VP
+                    </Link>
                     {tipoUsuario === "ROLE_EMPRESA_ADMIN" && rotas.map((link, index) =>
                         <NavLink active={true} to={link.url} key={index} className="text-white">
                             {link.label}
@@ -52,7 +53,7 @@ const EmpresaAdminLayout = () => {
                     )}
                 </div>
                 <div className="mr-5">
-                    <SecondaryButton onClick={deslogar}>
+                    <SecondaryButton className="bg-white rounded-none" onClick={deslogar}>
                         log out
                     </SecondaryButton>
                 </div>
