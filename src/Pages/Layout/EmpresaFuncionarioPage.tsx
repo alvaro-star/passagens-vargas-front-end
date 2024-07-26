@@ -17,7 +17,7 @@ const EmpresaFuncionarioLayout = () => {
     const deslogar = () => {
         sessionStorage.removeItem('token')
         sessionStorage.removeItem('idEmpresa')
-        navigate('/login')
+        navigate('/')
     }
 
     return (

@@ -18,7 +18,7 @@ const PublicLayout = () => {
     let token = sessionStorage.getItem("token")
     const sair = () => {
         sessionStorage.removeItem("token")
-        navihate("/login")
+        navihate("/")
     }
 
     return (

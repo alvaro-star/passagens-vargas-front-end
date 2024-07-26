@@ -15,7 +15,7 @@ const AdminLayout = () => {
 
     const deslogar = () => {
         sessionStorage.removeItem('token')
-        navigate('/login')
+        navigate('/')
     }
 
     return (
