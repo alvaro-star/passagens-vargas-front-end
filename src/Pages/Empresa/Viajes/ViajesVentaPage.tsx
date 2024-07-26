@@ -47,7 +47,6 @@ const ViajesVentaPage = () => {
                     const viajeResponse = data;
                     viajeResponse.paradas = ordenarParadas(viajeResponse.paradas);
                     data.paradas.forEach(paf => {
-                        console.log();
                         if (viajeCookie.salida.idLugar === paf.idLugar)
                             setParadaSalida(paf)
                         if (viajeCookie.destino.idLugar === paf.idLugar)

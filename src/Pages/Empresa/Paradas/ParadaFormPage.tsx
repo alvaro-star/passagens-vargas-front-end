@@ -21,6 +21,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
     const novoParadaForm = () => {
         return { plataforma: '', dataHora: '', idLugar: '', id: "" }
     }
+    
     const [parada, setParada] = useState<IParadaForm>(novoParadaForm())
     const [paradaErros, setParadaErros] = useState<IParadaFormErro>(novoParadaForm())
 

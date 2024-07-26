@@ -26,7 +26,6 @@ const AutobusCreateCopyComponent = ({ idViajeProp, setShowForm }: Props) => {
                 setShowForm(false)
             })
             .catch((erro) => {
-                console.log(erro);
                 if (erro.response.data.conteudo)
                     alert(erro.response.data.conteudo)
                 else if (erro.response.data.errors) {

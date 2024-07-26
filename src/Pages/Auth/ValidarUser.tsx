@@ -16,9 +16,7 @@ const ValidarUser = () => {
                 alert("Su cuenta se creo exitosamente, ahora inicie sesion")
                 navigate("/login")
             })
-            .catch((erro) => {
-                console.log(erro);
-
+            .catch(() => {
                 alert("Verifica los datos o intenta registrarte otra vez")
             })
     }

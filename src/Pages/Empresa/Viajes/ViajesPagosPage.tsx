@@ -54,9 +54,7 @@ const PassagensList = () => {
         let cookie2 = sessionStorage.getItem("sillaFromViajeFuncionario")
         let cookie1 = sessionStorage.getItem("viajeSelectFuncionario")
         if (!cookie1 || !cookie2) {
-
-            console.log("Nao ha nada");
-            //return;
+            navigate(-1)
         }
 
         const viajeSelectFuncionario: IViaje = JSON.parse(cookie1!)
@@ -161,9 +159,7 @@ const PassagensList = () => {
                     setPasajes(updatedPasajes);
                 }
             })
-        } else {
-            console.log("Nao foi possivel configurar o metodo");
-        }
+        } else alert("Hubo un error en el processo")
 
     }
     return (

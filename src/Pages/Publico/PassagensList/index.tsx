@@ -104,9 +104,6 @@ const PassagensList = () => {
             idLugarDestino: viaje.destino.idLugar,
             pasajes: pasajes.map(p => p.values)
         };
-        console.log("Cheguei");
-
-        console.log(pasajeData);
 
         http.post('pasajes', pasajeData).then(() => {
             setContactoError(newContactoError);

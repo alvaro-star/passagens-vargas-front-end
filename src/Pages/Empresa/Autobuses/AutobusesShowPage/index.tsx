@@ -32,7 +32,7 @@ const AutobusesShowPage = () => {
                     if (erro.response.data.conteudo)
                         alert(erro.response.data.conteudo);
                     else
-                        console.log("Hubo un error en el processo");
+                        alert("Hubo un error en el processo")
                 })
         }
     }

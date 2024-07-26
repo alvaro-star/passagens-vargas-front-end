@@ -68,8 +68,6 @@ const ViajesCreatePage = () => {
 
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log("Click");
-
         let errosInFuncton: IErros = construirViajeErro()
         let podeEnviar = true;
         podeEnviar = validarParada(salida, errosInFuncton.salida)
@@ -138,8 +136,6 @@ const ViajesCreatePage = () => {
                         salida: salidaError,
                         destino: destinoError
                     });
-                    console.log(erro);
-
                 });
 
         } else

@@ -55,12 +55,9 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
 
             http.post<IViaje[]>("empresa/viajes/" + idEmpresa, formViajes)
                 .then(resposta => {
-                    console.log(resposta);
-
                     setViajes(resposta.data)
                 })
-                .catch(erro => {
-                    console.log(erro);
+                .catch(() => {
                     setViajes([])
                     alert("Ocurrio un error")
                 })
@@ -92,8 +89,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
                 .then(resposta => {
                     setViajes(resposta.data)
                 })
-                .catch(erro => {
-                    console.log(erro);
+                .catch(() => {
                     setViajes([])
                     alert("Ocurrio un error")
                 })

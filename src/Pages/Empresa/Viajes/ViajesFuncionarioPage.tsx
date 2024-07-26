@@ -1,5 +1,5 @@
 import DataHora from "@/Classes/DataHora"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import { useState } from "react"
@@ -12,18 +12,18 @@ const ViajesFuncionarioPage = () => {
     const navigate = useNavigate()
     const ordenarPisos = (pisos: IPrecio2[]) => {
         switch (pisos.length) {
-            case 1:
-                return pisos
+            case 1: return pisos
             case 2:
                 let indicePrimerPiso = pisos[0].nPiso == 1 ? 0 : 1
                 let indiceSegundoPiso = pisos[1].nPiso == 2 ? 1 : 0
                 return [pisos[indicePrimerPiso], pisos[indiceSegundoPiso]]
-            default:
-                return []
+            default: return []
         }
     }
 
     const selectViaje = (viaje: IViaje) => {
+        if (new Date(viaje.salida.dataHora) < new Date())
+            alert("El viaje ya partio")
         sessionStorage.setItem("viajeSelectFuncionario", JSON.stringify(viaje))
         navigate(viaje.id + "/vender")
     }
@@ -58,7 +58,9 @@ const ViajesFuncionarioPage = () => {
                                     )}
                                 </td>
                                 <td className="text-center">
-                                    <PrimaryButton onClick={() => selectViaje(viaje)} className="uppercase py-1.5 px-2 text-white font-semibold bg-blue-600 rounded-none">Escojer</PrimaryButton>
+                                    <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < new Date()} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
+                                        Escojer
+                                    </PrimaryButtonEmpresa>
                                 </td>
                             </tr>
                         )}

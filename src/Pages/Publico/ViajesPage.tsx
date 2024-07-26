@@ -47,11 +47,6 @@ const ViajesPage = () => {
                 sessionStorage.setItem('idPrecio', idPrecio)
                 navigate(`/viaje`)
             }
-            else {
-                console.log("O id do viaje e o id Passado sao diferentes");
-            }
-        } else {
-            console.log("O indice nao existe");
         }
     }
 
