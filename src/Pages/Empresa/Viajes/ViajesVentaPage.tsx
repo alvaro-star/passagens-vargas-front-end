@@ -1,5 +1,6 @@
 import DataHora from "@/Classes/DataHora";
 import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa";
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 import http from "@/http";
 import Piso from "@/Pages/Publico/Components/Piso";
@@ -124,10 +125,17 @@ const ViajesVentaPage = () => {
     }
     return <div className="max-w-7xl mx-auto py-5 space-y-5">
         <section className="bg-white p-5 border border-gray-700">
-            <h2 className="text-xl font-semibold">
-                Ruta del viaje
-            </h2>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between">
+                <p className="text-xl font-semibold">
+                    Ruta del viaje
+                </p>
+                {viaje &&
+                    <PrimaryButtonEmpresa onClick={() => navigate(`/empresa/viajes/${id}`)}>
+                        Ver mas Detalhes
+                    </PrimaryButtonEmpresa>
+                }
+            </div>
+            <div className="flex items-center space-x-2 mt-1">
                 {viaje && paradaSalida && paradaDestino && viaje.paradas.map((parada, index) =>
                     <div key={parada.id} className="flex items-center space-x-2">
                         <div hidden={index === 0}>

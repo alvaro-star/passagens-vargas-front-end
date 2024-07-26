@@ -108,6 +108,7 @@ const ViajesShowPage = () => {
                 </h2>
                 <div className="space-x-3">
                     <PrimaryButtonEmpresa onClick={() => setShowCreateCopyViaje(true)}>duplicar viaje</PrimaryButtonEmpresa>
+                    <PrimaryButtonEmpresa onClick={() => navigate("vender")}>Vender un pasaje</PrimaryButtonEmpresa>
                     {mostrarOptions &&
                         <PrimaryButton
                             onClick={() => eliminarViaje()}
