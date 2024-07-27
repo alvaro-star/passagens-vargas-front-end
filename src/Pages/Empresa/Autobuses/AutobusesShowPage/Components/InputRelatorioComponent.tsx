@@ -71,14 +71,14 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
                 dataAnalise: dataAnalise,
                 idAutobus: idAutobus
-            }).then(resposta => { 
-                setViajes(resposta.data.content) 
-                if (resposta.data.totalPages > 1) setNextPage(1)
+            }).then(({ data }) => {
+                setViajes(data.content)
+                if (data.totalPages > 1) setNextPage(1)
                 else setNextPage(null)
             });
         }
     }
-    
+
     const verMais = () => {
         if (nextPage && idAutobus) {
             const mesInt = parseInt(mes) - 1;
@@ -87,16 +87,16 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus?page=${nextPage}`, {
                 dataAnalise: dataAnalise,
                 idAutobus: idAutobus
-            }).then(resposta => {
-                setViajes(viajes.concat(resposta.data.content))
-                if (resposta.data.totalPages <= resposta.data.pageable.pageNumber + 1) {
+            }).then(({ data }) => {
+                setViajes(viajes.concat(data.content))
+                if (data.totalPages <= data.pageable.pageNumber + 1) {
                     setNextPage(null)
-                } else setNextPage(resposta.data.pageable.pageNumber + 1)
+                } else setNextPage(data.pageable.pageNumber + 1)
             })
         }
     }
 
-    
+
     return <div className="w-full flex justify-between items-center py-2 px-2">
         <section className="flex items-center">
             <p className="mr-2">
