@@ -9,6 +9,10 @@ import IPasajeComplete from "../Types/IPasajeComplete";
 import PasajeroCard from "./PasajeroCard";
 import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
 import PrecioEditComponent from "./PrecioEditComponent";
+import { FaAngleDown } from "react-icons/fa";
+import { LuMaximize2 } from "react-icons/lu";
+import ReactDOMServer from 'react-dom/server';
+import PisoPasajerosComponent from "./PisoPasajerosComponent";
 interface Props {
     idPrecio: number | string
     setMostrarOptions: (value: boolean) => void
@@ -98,6 +102,30 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
             setPrecioModel({ ...precioModel, precio: valor })
         }
     }
+    const openListaNewAba = () => {
+        if (!pisoModel) {
+            return
+        }
+
+        const content = ReactDOMServer.renderToStaticMarkup(<PisoPasajerosComponent pasajeros={pasajeros} />);
+        const newWindow = window.open('', '_blank');
+
+        if (pisoModel && newWindow) {
+            newWindow.document.open();
+            newWindow.document.write(`
+            <html>
+              <head>
+                <title>Lista de Pasajeros</title>
+              </head>
+              <body>
+                ${content}
+              </body>
+            </html>
+          `);
+            newWindow.document.close();
+        }
+
+    }
     const [showEditComponent, setShowEditComponent] = useState(false)
     const [mostrarLista, setMostrarLista] = useState(true)
     const [aba, setAba] = useState(2)
@@ -115,8 +143,11 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                             editar precio
                         </PrimaryButton>
                     }
-                    <p>Mostrar Contenido</p>
-                    <input type="checkbox" onChange={() => setMostrarLista(!mostrarLista)} checked={mostrarLista} />
+                    <FaAngleDown
+                        onClick={() => setMostrarLista(!mostrarLista)}
+                        fontSize={28}
+                        className={(!mostrarLista ? "rotate-90" : "") + " cursor-pointer"}
+                    />
                 </div>
             </div>
 
@@ -133,56 +164,65 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                         Ver Modelo del Autobus
                     </div>
                 </section>
-                <section className={(aba != 2 ? 'hidden' : 'flex') + " relative flex flex-col justify-center items-center bg-white"} >
-                    {sillaElegido != null &&
-                        <PasajeroCard downloadPasaje={downloadPasaje} className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
-                    }
-                    {precioModel && showEditComponent &&
-                        <div className="absolute inset-0 grid z-10 place-content-center">
-                            <PrecioEditComponent
-                                setShowForm={setShowEditComponent}
-                                nPiso={precioModel.nPiso}
-                                idPrecio={precioModel.id}
-                                setPrecioProp={editPrecio}
-                                precioProp={precioModel.precio}
-                            />
-                        </div>}
-                    <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
-                        <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
-                        </div>
-                        <div className="p-5 bg-gray-200 grid grid-cols-4 gap-3 place-content-center">
-                            {pisoModel && <>
-                                <div></div>
-                                {(pisoModel.nColunas == 3 && pisoModel.distribuicaoFileira == 'DERECHA')
-                                    ? <div style={{ gridRow: `span ${pisoModel.nLinhas + 1} / span ${pisoModel.nLinhas + 1}` }}></div>
-                                    : <div></div>
-                                }
-                                {(pisoModel.nColunas == 3 && pisoModel.distribuicaoFileira == 'IZQUIERDA')
-                                    ? <div style={{ gridRow: `span ${pisoModel.nLinhas + 1} / span ${pisoModel.nLinhas + 1}` }}></div>
-                                    : <div></div>
-                                }
-                                <div></div>
-                            </>}
-                            {sillas.map((silla, index) =>
-                                <div key={index} className={silla.numero != -1 ? "lg:rotate-90 bg-white relative w-12 h-12 grid place-content-center font-bold text-xl rounded border-2 border-gray-400" : ''}>
-                                    {silla.numero != -1 && silla.numero}
-                                    {silla.ocupado &&
-                                        <button disabled={!silla.ocupado} onClick={() => setSillaElegido(silla)} className="absolute text-center disabled:bg-yellow-300 top-0.5 right-0.5 bg-yellow-500 rounded">
-                                            <IoInformation className="text-sm font-bold" />
-                                        </button>
+                <div hidden={aba != 2} className="bg-white">
+                    <section className="relative flex flex-col justify-center items-center" >
+                        {sillaElegido != null &&
+                            <PasajeroCard downloadPasaje={downloadPasaje} className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
+                        }
+                        {precioModel && showEditComponent &&
+                            <div className="absolute inset-0 grid z-10 place-content-center">
+                                <PrecioEditComponent
+                                    setShowForm={setShowEditComponent}
+                                    nPiso={precioModel.nPiso}
+                                    idPrecio={precioModel.id}
+                                    setPrecioProp={editPrecio}
+                                    precioProp={precioModel.precio}
+                                />
+                            </div>}
+                        <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
+                            <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
+                            </div>
+                            <div className="p-5 bg-gray-200 grid grid-cols-4 gap-3 place-content-center">
+                                {pisoModel && <>
+                                    <div></div>
+                                    {(pisoModel.nColunas == 3 && pisoModel.distribuicaoFileira == 'DERECHA')
+                                        ? <div style={{ gridRow: `span ${pisoModel.nLinhas + 1} / span ${pisoModel.nLinhas + 1}` }}></div>
+                                        : <div></div>
                                     }
-                                </div>
-                            )}
+                                    {(pisoModel.nColunas == 3 && pisoModel.distribuicaoFileira == 'IZQUIERDA')
+                                        ? <div style={{ gridRow: `span ${pisoModel.nLinhas + 1} / span ${pisoModel.nLinhas + 1}` }}></div>
+                                        : <div></div>
+                                    }
+                                    <div></div>
+                                </>}
+                                {sillas.map((silla, index) =>
+                                    <div key={index} className={silla.numero != -1 ? "lg:rotate-90 bg-white relative w-12 h-12 grid place-content-center font-bold text-xl rounded border-2 border-gray-400" : ''}>
+                                        {silla.numero != -1 && silla.numero}
+                                        {silla.ocupado &&
+                                            <button disabled={!silla.ocupado} onClick={() => setSillaElegido(silla)} className="absolute text-center disabled:bg-yellow-300 top-0.5 right-0.5 bg-yellow-500 rounded">
+                                                <IoInformation className="text-sm font-bold" />
+                                            </button>
+                                        }
+                                    </div>
+                                )}
+                            </div>
+                            <div className="p-2 h-10 text-white bg-gray-500 text-center rounded-b">
+                            </div>
                         </div>
-                        <div className="p-2 h-10 text-white bg-gray-500 text-center rounded-b">
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
                 <section hidden={aba != 1} className="px-5 py-3 bg-white">
+                    <div className="w-full flex justify-end">
+                        <button
+                            onClick={openListaNewAba}
+                            className="w-8 h-8 bg-slate-400 grid place-content-center text-white">
+                            <LuMaximize2 />
+                        </button>
+                    </div>
                     <table className="w-full">
                         <thead>
                             <tr className="text-start">
-                                <th className="text-start">Numero de Silla</th>
+                                <th className="text-start">NSilla</th>
                                 <th className="text-start">Carnet</th>
                                 <th className="text-start">Nombre</th>
                                 <th className="text-start">Fecha de Nascimiento</th>

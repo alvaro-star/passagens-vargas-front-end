@@ -10,6 +10,7 @@ import ParadasTableComponent from "./Components/ParadasTableComponent"
 import PrimaryButton from "@/Components/PrimaryButton"
 import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import AutobusCreateCopyComponent from "../../Autobuses/AutobusesShowPage/Components/AutobusCreateCopyComponent"
+import { FaAngleDown } from "react-icons/fa"
 
 
 interface IViajeExtends {
@@ -108,7 +109,6 @@ const ViajesShowPage = () => {
                 </h2>
                 <div className="space-x-3">
                     <PrimaryButtonEmpresa onClick={() => setShowCreateCopyViaje(true)}>duplicar viaje</PrimaryButtonEmpresa>
-                    <PrimaryButtonEmpresa onClick={() => navigate("vender")}>Vender un pasaje</PrimaryButtonEmpresa>
                     {mostrarOptions &&
                         <PrimaryButton
                             onClick={() => eliminarViaje()}
@@ -128,8 +128,11 @@ const ViajesShowPage = () => {
                 <div className="mt-5 flex items-center justify-between px-5 py-3 bg-slate-700 text-white">
                     <h2>Paradas</h2>
                     <div className="flex items-center space-x-2">
-                        <p>Mostrar Lista</p>
-                        <input checked={mostrarParadas} onChange={() => setMostrarParadas(!mostrarParadas)} type="checkbox" className="rounded" />
+                        <FaAngleDown
+                            onClick={() => setMostrarParadas(!mostrarParadas)}
+                            fontSize={28}
+                            className={(!mostrarParadas ? "rotate-90" : "") + " cursor-pointer"}
+                        />
                     </div>
                 </div>
 

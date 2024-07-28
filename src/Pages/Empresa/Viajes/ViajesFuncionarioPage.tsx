@@ -8,6 +8,7 @@ import FormInlineTemplateFuncionario from "./Components/FormInlineTemplateFuncio
 import IViaje from "./Types/IViajeIndex"
 
 const ViajesFuncionarioPage = () => {
+    const timeBeforeMili = 2000
     const [viajes, setViajes] = useState<IViaje[]>([])
     const navigate = useNavigate()
     const ordenarPisos = (pisos: IPrecio2[]) => {
@@ -22,7 +23,7 @@ const ViajesFuncionarioPage = () => {
     }
 
     const selectViaje = (viaje: IViaje) => {
-        if (new Date(viaje.salida.dataHora) < new Date())
+        if (new Date(viaje.salida.dataHora).getTime() < new Date().getTime() - timeBeforeMili)
             alert("El viaje ya partio")
         sessionStorage.setItem("viajeSelectFuncionario", JSON.stringify(viaje))
         navigate(viaje.id + "/vender")
@@ -58,7 +59,7 @@ const ViajesFuncionarioPage = () => {
                                     )}
                                 </td>
                                 <td className="text-center">
-                                    <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < new Date()} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
+                                    <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < (new Date())} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
                                         Escojer
                                     </PrimaryButtonEmpresa>
                                 </td>
