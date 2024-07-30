@@ -8,9 +8,10 @@ interface Props {
     sillasOcupadas: number[],
     hidden?: boolean
     clickSilla?: (eve: React.MouseEvent<HTMLButtonElement, MouseEvent>, nSilla: ISilla) => void
+    hoverTransparent?: boolean
 }
 
-const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { } }: Props) => {
+const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { }, hoverTransparent = true }: Props) => {
     const [sillas, setSillas] = useState<ISilla[]>([])
     useEffect(() => {
         if (!piso.nLinhas || !piso.nColunas) return;
@@ -78,6 +79,7 @@ const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { 
                     <div></div>
                     {sillas.map((silla, index) =>
                         <SillaSquare key={index}
+                            hover={hoverTransparent}
                             disabled={silla.ocupado}
                             ocupado={silla.ocupado}
                             nSilla={silla.numero}

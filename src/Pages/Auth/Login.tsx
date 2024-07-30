@@ -111,7 +111,7 @@ const Login = () => {
                     <InputError className="ml-1" message={errorsForm.login} />
                 </div>
                 <div className="mt-2 w-full">
-                    <TextInput234 value={contrasena} setValue={setContrasena} labelValue="Contrasena" required />
+                    <TextInput234 type="password" value={contrasena} setValue={setContrasena} labelValue="Contrasena" required />
                     <InputError className="ml-1" message={errorsForm.contrasena} />
                 </div>
                 <Link to="/reset/password" className="w-full text-xs mt-1 text-end mr-3 text-blue-500 hover:text-blue-600 cursor-pointer">

@@ -177,12 +177,12 @@ const AutobusesFormPage = () => {
                 </section>
                 <div>
                     <h2 className="w-1/4 text-end my-2 text-xl font-semibold">Piso 1</h2>
-                    <Piso piso={piso1} sillasOcupadas={[]} />
+                    <Piso hoverTransparent={false} piso={piso1} sillasOcupadas={[]} />
                 </div>
                 {segundoPiso &&
                     <div className="mt-10">
                         <h2 className="w-1/4 text-end my-2 text-xl font-semibold">Piso 2</h2>
-                        <Piso piso={piso2} sillasOcupadas={[]}></Piso>
+                        <Piso hoverTransparent={false} piso={piso2} sillasOcupadas={[]}></Piso>
                     </div>
                 }
                 <div className="w-full mt-5 flex justify-center">

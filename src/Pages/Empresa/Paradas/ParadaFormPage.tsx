@@ -21,7 +21,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
     const novoParadaForm = () => {
         return { plataforma: '', dataHora: '', idLugar: '', id: "" }
     }
-    
+
     const [parada, setParada] = useState<IParadaForm>(novoParadaForm())
     const [paradaErros, setParadaErros] = useState<IParadaFormErro>(novoParadaForm())
 
@@ -34,18 +34,21 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
         if (!parseInt(parada.plataforma)) {
             erros.plataforma = "Necesita ser un numero"
         }
+
         let haErros = parada.dataHora === '' || parada.plataforma === '' || !parseInt(parada.plataforma) || parada.idLugar === '' || !idViaje;
         if (!haErros) {
             http.post<IParada2>('paradas', { ...parada, idViaje: idViaje })
-                .then(resposta => {
-                    addParada(resposta.data)
-                    setParada(novoParadaForm())
+                .then(({ data }) => {
+                    addParada(data)
+                    let paradaNovo = novoParadaForm()
+                    paradaNovo.idLugar = parada.idLugar
+                    setParada(paradaNovo)
                     setParadaErros(erros)
                     setOpenForm(false)
                 })
-                .catch(erro => {
-                    if (erro.response.data.errors)
-                        erro.response.data.errors.forEach((er: IError) => erros[er.name] = er.message)
+                .catch(({ response }) => {
+                    if (response.data.errors)
+                        response.data.errors.forEach((er: IError) => erros[er.name] = er.message)
                     setParadaErros(erros)
                 })
         } else {
@@ -58,7 +61,7 @@ const ParadaFormPage = ({ className = '', idViaje, setOpenForm, addParada, valid
             <form onSubmit={enviar} className="w-80 flex justify-center items-center flex-col p-5 border shadow bg-slate-100">
                 <div className="mb-2 w-full flex justify-between items-center">
                     <h2 className="pb-2 text-gray-800 text-lg font-semibold">Registra una Parada Nueva</h2>
-                    <CloseButton onClick={() => setOpenForm(false)}/>
+                    <CloseButton onClick={() => setOpenForm(false)} />
                 </div>
                 <ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros} />
                 <div className="text-center mt-3">

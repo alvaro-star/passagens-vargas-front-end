@@ -11,8 +11,7 @@ import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
 import PrecioEditComponent from "./PrecioEditComponent";
 import { FaAngleDown } from "react-icons/fa";
 import { LuMaximize2 } from "react-icons/lu";
-import ReactDOMServer from 'react-dom/server';
-import PisoPasajerosComponent from "./PisoPasajerosComponent";
+import getListaPasajero from "../getListaPasajero";
 interface Props {
     idPrecio: number | string
     setMostrarOptions: (value: boolean) => void
@@ -106,28 +105,17 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
         if (!pisoModel) {
             return
         }
-
-        const content = ReactDOMServer.renderToStaticMarkup(<PisoPasajerosComponent pasajeros={pasajeros} />);
         const newWindow = window.open('', '_blank');
 
         if (pisoModel && newWindow) {
             newWindow.document.open();
-            newWindow.document.write(`
-            <html>
-              <head>
-                <title>Lista de Pasajeros</title>
-              </head>
-              <body>
-                ${content}
-              </body>
-            </html>
-          `);
+            newWindow.document.write(getListaPasajero(pasajeros));
             newWindow.document.close();
         }
 
     }
     const [showEditComponent, setShowEditComponent] = useState(false)
-    const [mostrarLista, setMostrarLista] = useState(true)
+    const [mostrarLista, setMostrarLista] = useState(false)
     const [aba, setAba] = useState(2)
     const [sillaElegido, setSillaElegido] = useState<ISillaType | null>(null)
     return (
@@ -156,7 +144,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : '')}
                         onClick={() => setAba(1)}
                     >
-                        Lista de Pasajero
+                        Lista de Pasajeros
                     </div>
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 2 ? 'bg-slate-200' : '')}
                         onClick={() => setAba(2)}

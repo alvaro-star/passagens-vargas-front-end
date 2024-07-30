@@ -92,9 +92,9 @@ const ViajesShowPage = () => {
 
     const eliminarViaje = () => {
         http.delete(`empresa/viajes/${id}`).then(() => navigate(-1))
-            .catch(erro => {
-                if (erro.response.data.conteudo)
-                    alert(erro.response.data.conteudo)
+            .catch(({ response }) => {
+                if (response.data.conteudo)
+                    alert(response.data.conteudo)
                 else
                     alert("Hubo un error en el processo, notifique ala empresa...")
             })

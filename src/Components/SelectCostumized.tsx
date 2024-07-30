@@ -100,7 +100,10 @@ export default forwardRef(function SelectCostumized({ type = 'text', labelValue 
                 )}
                 {ciudades.length == 0 &&
                     <div className='px-2.5 p-2 cursor-pointer'>
-                        Escribe minimo 3 letras
+                        {valor.length > 3
+                            ? "No encontrado"
+                            : "Escribe minimo 3 letras"
+                        }
                     </div>
                 }
             </div>

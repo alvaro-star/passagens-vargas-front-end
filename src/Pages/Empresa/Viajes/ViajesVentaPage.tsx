@@ -168,10 +168,10 @@ const ViajesVentaPage = () => {
             </select>
             <div className="space-y-3">
                 {precio1 != null && <div hidden={nPiso == 2}>
-                    <Piso piso={precio1.piso} sillasOcupadas={precio1.sillasOcupadas} clickSilla={clickSilla} />
+                    <Piso hoverTransparent={false} piso={precio1.piso} sillasOcupadas={precio1.sillasOcupadas} clickSilla={clickSilla} />
                 </div>}
                 {precio2 != null && <div hidden={nPiso == 1}>
-                    <Piso piso={precio2.piso} sillasOcupadas={precio2.sillasOcupadas} clickSilla={clickSilla} />
+                    <Piso hoverTransparent={false} piso={precio2.piso} sillasOcupadas={precio2.sillasOcupadas} clickSilla={clickSilla} />
                 </div>}
             </div>
         </section>

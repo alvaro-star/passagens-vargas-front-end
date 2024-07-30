@@ -13,7 +13,7 @@ const SillaSquare = ({ nSilla, className = '', hover = true, ocupado = false, tr
     return (
         <button {...props}
             className={transparent
-                ? `h-12 w-12 rounded ${hover ? 'hover:bg-white' : ''}`
+                ? `h-12 w-12 rounded ${hover ? 'hover:bg-white' : 'cursor-auto'}`
                 : `font-bold text-2xl border-2 border-gray-500 h-12 w-12 bg-gray-300 flex justify-center items-center rounded ${className}`}>
             {!transparent && !ocupado && nSilla}
             {!transparent && ocupado &&

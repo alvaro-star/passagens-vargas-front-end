@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pasajeros</title>
+</head>
+<style>
+    body {
+        padding: 5px;
+    }
+
+    .tabela {
+        border: solid 1px;
+        width: 100%;
+        margin: 0;
+    }
+
+    .primeiraColuna {
+        padding-left: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem
+    }
+
+    .datosViaje {
+        padding: 5px;
+        border: solid 1px;
+        border-bottom: 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .datosViaje div h4 {
+        margin: 0;
+    }
+
+    .datosViaje div p {
+        margin: 0;
+    }
+</style>
+
+<body>
+    <div>
+        <h2>Datos del Viaje</h2>
+        <section class="datosViaje">
+            <div style="border: 10px;">
+                <h4>
+                    Salida: Santa Cruz - LP
+                </h4>
+                <p>
+                    12/03/2006 - 8:30
+                </p>
+            </div>
+            <div>
+                <h4>
+                    Destino: La Paz - LP
+                </h4>
+                <p>
+                    12/03/2006 - 8:30
+                </p>
+            </div>
+        </section>
+    </div>
+    <table class="tabela">
+        <thead>
+            <tr style="text-align:start">
+                <th style="text-align:start; width: 50px;">NSilla</th>
+                <th style="text-align:start; width: 70px;">Carnet</th>
+                <th style="text-align:start;">Nombre</th>
+                <th style="text-align:center; width: 120px;">Fecha de Nascimiento</th>
+                <th style="text-align:start">Salida</th>
+                <th style="text-align:start">Destino</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="hover:bg-slate-100">
+                <td>28</td>
+                <td>3308731</td>
+                <td>Alvaro Vargas Alvarez</td>
+                <td style="text-align: center;">15/3/2006 </td>
+                <td>SANTA CRUZ - SC</td>
+                <td>TARIJA - SC</td>
+            </tr>
+            <tr class="hover:bg-slate-100">
+                <td>10</td>
+                <td>3308731</td>
+                <td>Alvaro Alvarez Alvaro Vargas Alvarez Alvaro Vargas Alvarez</td>
+                <td>15/3/2006 </td>
+                <td>SANTA CRUZ - SC</td>
+                <td>TARIJA - SC</td>
+            </tr>
+            <tr class="hover:bg-slate-100">
+                <td>13</td>
+                <td>3308731</td>
+                <td>Alvaro Vargas Alvarez</td>
+                <td>15/3/2006 </td>
+                <td>SANTA CRUZ - SC</td>
+                <td>TARIJA - SC</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</body>
+
+</html>

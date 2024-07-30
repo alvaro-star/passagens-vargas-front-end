@@ -32,7 +32,7 @@ interface IPasajeList {
     errors: IPasajeError
 }
 
-const tasaServicio = 0.1
+const tasaServicio = 0
 
 const PassagensList = () => {
     const { id } = useParams()
@@ -93,74 +93,75 @@ const PassagensList = () => {
         factura.tasaServicio = factura.total * tasaServicio
         setFactura(factura)
         setPasajes(pasajesF)
-    }, [id, navigate])
+    }, [id])
     const primeiraLetraMayuscula = (palavra: string) => palavra.charAt(0).toUpperCase() + palavra.slice(1);
 
     const enviar = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        if (viaje) {
-            let hasErro = 0
-            let pasajeError: IPasajeError
-            let updatedPasajes: IPasajeList[] = pasajes.map(pasaje => {
-                pasajeError = { carnet: '', nombre: '', nascimento: '', nSilla: '' }
-                if (pasaje.values.carnet === '') {
-                    pasajeError.carnet = 'El carnet no puede ser nulo'
-                    hasErro = 1
-                }
-                if (pasaje.values.nombre === '') {
-                    pasajeError.nombre = 'El nombre no puede ser nulo'
-                    hasErro = 1
-                }
-                if (pasaje.values.nascimento === '') {
-                    pasajeError.nascimento = 'La fecha no puede ser nulo'
-                    hasErro = 1
-                }
-                if (!pasaje.values.nSilla) {
-                    pasajeError.carnet = 'Hubo un error con el numero dela Silla'
-                    hasErro = 1
-                }
-                return ({
-                    ...pasaje, errors: pasajeError
-                })
-            });
-            if (hasErro) {
-                setPasajes(updatedPasajes)
-                return;
+        if (!viaje) {
+            alert("Hubo un error en el processo")
+            return;
+        }
+        let hasErro = 0
+        let pasajeError: IPasajeError
+        let updatedPasajes: IPasajeList[] = pasajes.map(pasaje => {
+            pasajeError = { carnet: '', nombre: '', nascimento: '', nSilla: '' }
+            if (pasaje.values.carnet === '') {
+                pasajeError.carnet = 'El carnet no puede ser nulo'
+                hasErro = 1
             }
-            const pedido = {
-                idViaje: viaje?.id,
-                descuento: 0,
-                idLugarSalida: viaje?.salida.idLugar,
-                idLugarDestino: viaje?.destino.idLugar,
-                pasajes: pasajes.map(p => p.values),
-                metodo: "EFECTIVO"//Cambiara de forma dinamica
+            if (pasaje.values.nombre === '') {
+                pasajeError.nombre = 'El nombre no puede ser nulo'
+                hasErro = 1
             }
-            http.post('pasajes/vender', pedido).then(response => {
-                http.get(`pagos/${response.data.idFactura}/download`, { responseType: 'blob' }).then(({ data }) => {
-                    const blob = new Blob([data], { type: 'application/pdf' });
-                    const url = window.URL.createObjectURL(blob);
-                    window.open(url, '_blank');
-                })
-                sessionStorage.removeItem('sillasFromViaje')
-                sessionStorage.removeItem('viajeData')
-                navigate("/empresa/viajes")
-            }).catch(error => {
-                if (error.response.data.conteudo) {
-                    alert(error.response.data.conteudo)
-                } else if (error.response.data.errorsList.length != 0) {
-                    const errorsList: IErrorList = error.response.data.errorsList[0];
-                    if (errorsList.name === 'pasajes') {
-                        errorsList.itens.forEach(item => {
-                            item.errors.forEach(errInItem => {
-                                updatedPasajes[item.index].errors[errInItem.name] = primeiraLetraMayuscula(errInItem.message);
-                            });
-                        });
-                    }
-                    setPasajes(updatedPasajes);
-                }
+            if (pasaje.values.nascimento === '') {
+                pasajeError.nascimento = 'La fecha no puede ser nulo'
+                hasErro = 1
+            }
+            if (!pasaje.values.nSilla) {
+                pasajeError.carnet = 'Hubo un error con el numero dela Silla'
+                hasErro = 1
+            }
+            return ({
+                ...pasaje, errors: pasajeError
             })
-        } else alert("Hubo un error en el processo")
+        });
+        if (hasErro) {
+            setPasajes(updatedPasajes)
+            return;
+        }
+        const pedido = {
+            idViaje: viaje.id,
+            descuento: 0,
+            idLugarSalida: viaje.salida.idLugar,
+            idLugarDestino: viaje.destino.idLugar,
+            pasajes: pasajes.map(p => p.values),
+            metodo: "EFECTIVO"//Cambiara de forma dinamica
+        }
 
+        http.post('pasajes/vender', pedido).then(response => {
+            http.get(`pagos/${response.data.idFactura}/download`, { responseType: 'blob' }).then(({ data }) => {
+                const blob = new Blob([data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            })
+            sessionStorage.removeItem('sillaFromViajeFuncionario')
+            navigate(`/empresa/viajes/${id}/vender`)
+        }).catch(({ response }) => {
+            if (response.data.conteudo) {
+                alert(response.data.conteudo)
+            } else if (response.data.errorsList.length != 0) {
+                const errorsList: IErrorList = response.data.errorsList[0];
+                if (errorsList.name === 'pasajes') {
+                    errorsList.itens.forEach(item => {
+                        item.errors.forEach(errInItem => {
+                            updatedPasajes[item.index].errors[errInItem.name] = primeiraLetraMayuscula(errInItem.message);
+                        });
+                    });
+                }
+                setPasajes(updatedPasajes);
+            }
+        })
     }
     return (
         <div className="text-gray-900 flex flex-col max-w-7xl mx-auto lg:flex-row justify-center py-10 bg-gray-100 gap-4">

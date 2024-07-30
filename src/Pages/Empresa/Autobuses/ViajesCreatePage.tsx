@@ -144,7 +144,7 @@ const ViajesCreatePage = () => {
 
     return <div className="max-w-2xl mx-auto mt-10">
         <form className="bg-white border p-5 flex flex-col" onSubmit={enviar}>
-            <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje para {autobus?.placa}</h1>
+            <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje</h1>
             <div className="grid sm:grid-cols-2 gap-4">
                 <section>
                     <p className="text-lg font-semibold">
@@ -163,11 +163,11 @@ const ViajesCreatePage = () => {
                 <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>
                 <div className="flex gap-2">
                     <div className="w-full">
-                        <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del primer piso (Bs)" />
+                        <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
                         <InputError message={erros.precioPiso1} />
                     </div>
                     {autobus?.pisos.length == 2 && <div className="w-full">
-                        <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del segundo piso (Bs)" />
+                        <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
                         <InputError message={erros.precioPiso2} />
                     </div>}
                 </div>
