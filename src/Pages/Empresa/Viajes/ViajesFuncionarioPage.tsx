@@ -24,7 +24,7 @@ const ViajesFuncionarioPage = () => {
 
     const selectViaje = (viaje: IViaje) => {
         if (new Date(viaje.salida.dataHora).getTime() < new Date().getTime() - timeBeforeMili)
-            alert("El viaje ya partio")
+            alert("El autobus ya partio")
         sessionStorage.setItem("viajeSelectFuncionario", JSON.stringify(viaje))
         navigate(viaje.id + "/vender")
     }
@@ -59,9 +59,14 @@ const ViajesFuncionarioPage = () => {
                                     )}
                                 </td>
                                 <td className="text-center">
-                                    <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < (new Date())} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
-                                        Escojer
-                                    </PrimaryButtonEmpresa>
+                                    {new Date(viaje.salida.dataHora) < (new Date())
+                                        ? <PrimaryButtonEmpresa onClick={() => navigate("/empresa/viajes/" + viaje.id)} className="py-1.5 px-2 text-white bg-blue-600">
+                                            ver viaje
+                                        </PrimaryButtonEmpresa>
+                                        : <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < (new Date())} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
+                                            vender
+                                        </PrimaryButtonEmpresa>
+                                    }
                                 </td>
                             </tr>
                         )}

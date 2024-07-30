@@ -144,12 +144,12 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : '')}
                         onClick={() => setAba(1)}
                     >
-                        Lista de Pasajeros
+                        Lista de Pasageros
                     </div>
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 2 ? 'bg-slate-200' : '')}
                         onClick={() => setAba(2)}
                     >
-                        Ver Modelo del Autobus
+                        Modelo del Autobus
                     </div>
                 </section>
                 <div hidden={aba != 2} className="bg-white">
@@ -210,10 +210,10 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                     <table className="w-full">
                         <thead>
                             <tr className="text-start">
-                                <th className="text-start">NSilla</th>
+                                <th className="text-start">Asiento</th>
                                 <th className="text-start">Carnet</th>
                                 <th className="text-start">Nombre</th>
-                                <th className="text-start">Fecha de Nascimiento</th>
+                                <th className="text-start">Fecha de Nacimiento</th>
                                 <th className="text-start">Salida</th>
                                 <th className="text-start">Destino</th>
                                 <th>Actions</th>
@@ -244,7 +244,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                             {pasajeros.length == 0 &&
                                 <tr>
                                     <td colSpan={7} className="py-1 text-center">
-                                        No hay Pasajeros Registrados
+                                        No hay Pasageros Registrados
                                     </td>
                                 </tr>
                             }

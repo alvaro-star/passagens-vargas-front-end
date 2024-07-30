@@ -119,7 +119,7 @@ const PassagensList = () => {
                 hasErro = 1
             }
             if (!pasaje.values.nSilla) {
-                pasajeError.carnet = 'Hubo un error con el numero dela Silla'
+                pasajeError.carnet = 'Hubo un error con el numero del asiento'
                 hasErro = 1
             }
             return ({
@@ -186,7 +186,7 @@ const PassagensList = () => {
                                 <InputError className="absolute" message={pasaje.errors.carnet} />
                             </div>
                             <div className="relative">
-                                <TextInputObject className="rounded" type="date" value={pasaje.values.nascimento} onChange={e => editar(index, 'nascimento', e.target.value)} labelValue="Nascimiento" required />
+                                <TextInputObject className="rounded" type="date" value={pasaje.values.nascimento} onChange={e => editar(index, 'nascimento', e.target.value)} labelValue="Fecha de Nacimiento" required />
                                 <InputError className="absolute" message={pasaje.errors.nascimento} />
                             </div>
                         </div>
@@ -201,7 +201,7 @@ const PassagensList = () => {
             {viaje && factura && <FacturaComponent viaje={viaje} metodos={metodos} metodo={metodo} setMetodo={setMetodo} factura={factura} className="w-full lg:w-96" />}
             <section className="lg:hidden mt-5 text-center">
                 <PrimaryButton onClick={enviar} className="rounded-none">
-                    Comprar Viajes
+                    VENDER viaje
                 </PrimaryButton>
             </section>
         </div>

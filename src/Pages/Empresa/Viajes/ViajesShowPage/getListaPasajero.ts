@@ -53,10 +53,10 @@ export default function getListaPasajero(pasajeros: IPasajeComplete[]) {
     <table class="tabela">
         <thead>
             <tr style="text-align:start">
-                <th style="text-align:start; width: 50px;">NSilla</th>
+                <th style="text-align:start; width: 50px;">Asiento</th>
                 <th style="text-align:start; width: 70px;">Carnet</th>
                 <th style="text-align:start;">Nombre</th>
-                <th style="text-align:center; width: 120px;">Fecha de Nascimiento</th>
+                <th style="text-align:center; width: 120px;">Fecha de Nacimiento</th>
                 <th style="text-align:start">Salida</th>
                 <th style="text-align:start">Destino</th>
             </tr>

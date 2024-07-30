@@ -178,14 +178,14 @@ const ViajesVentaPage = () => {
         <section className="flex items-center justify-between space-x-3 p-5 border border-gray-700 bg-white">
             <div className="space-x-3 flex items-center">
                 <h3 className="font-semibold">
-                    Sillas Escogidas:
+                    Asientos Escogidos:
                 </h3>
                 <div className="flex space-x-4">
                     {sillasEscogidas.map((silla, indexSilla) => <SillaSquare key={indexSilla} onClick={eve => remover(eve, silla)} nSilla={silla} />)}
                 </div>
             </div>
             <div className="">
-                <PrimaryButton onClick={mandarLista} disabled={sillasEscogidas.length == 0} className="rounded-none">escojer lista</PrimaryButton>
+                <PrimaryButton onClick={mandarLista} disabled={sillasEscogidas.length == 0} className="rounded-none">escoger lista</PrimaryButton>
             </div>
         </section>
     </div>

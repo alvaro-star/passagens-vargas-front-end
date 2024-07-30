@@ -85,7 +85,7 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
             </div>
             <div className="border-b-2 border-gray-700 text-lg py-2">
                 {factura.pasajes.map((pasajero, index) => <div key={index} className="font-semibold flex justify-between">
-                    <p>Pasajero {index + 1} - Silla {pasajero.nSilla}</p>
+                    <p>Pasagero {index + 1} - Asiento {pasajero.nSilla}</p>
                     <p>Bs {pasajero.precio}</p>
                 </div>)}
             </div>

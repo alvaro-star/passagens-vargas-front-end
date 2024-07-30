@@ -8,7 +8,7 @@ class DataHora {
     }
 
     imprimir() {
-        return `${this.data.imprimir()} alas ${this.hora.imprimir()}`
+        return `${this.data.imprimir()} - ${this.hora.imprimir()}`
     }
 }
 

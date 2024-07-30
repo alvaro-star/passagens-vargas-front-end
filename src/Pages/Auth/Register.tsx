@@ -57,8 +57,8 @@ const Register = () => {
                     setErros(errosValidation)
                 })
         } else {
-            errosValidation.contrasena = "La contrasenha es distinta"
-            errosValidation.contrasena2 = "La contrasenha es distinta"
+            errosValidation.contrasena = "La contraseña es distinta"
+            errosValidation.contrasena2 = "La contraseña es distinta"
             setErros(errosValidation)
         }
     }
@@ -81,11 +81,11 @@ const Register = () => {
                     <InputError message={erros.telefono} />
                 </div>
                 <div className="mt-2 w-full">
-                    <TextInput234 type="password" value={contrasena} setValue={setContrasena} labelValue="Contrasenha" required />
+                    <TextInput234 type="password" value={contrasena} setValue={setContrasena} labelValue="Contraseña" required />
                     <InputError message={erros.contrasena} />
                 </div>
                 <div className="mt-2 w-full">
-                    <TextInput234 type="password" value={contrasena2} setValue={setContrasena2} labelValue="Repita la Contrasenha" required />
+                    <TextInput234 type="password" value={contrasena2} setValue={setContrasena2} labelValue="Repita la Contraseña" required />
                     <InputError message={erros.contrasena2} />
                 </div>
             </FormTemplate>
