@@ -177,7 +177,7 @@ const PassagensList = () => {
                             </div>
                         </div>
                         <div className="mt-2 relative">
-                            <TextInputObject className="rounded" value={pasaje.values.nombre} onChange={e => editar(index, 'nombre', e.target.value)} labelValue="Nombre" required />
+                            <TextInputObject className="rounded" value={pasaje.values.nombre} onChange={e => editar(index, 'nombre', e.target.value.toUpperCase())} labelValue="Nombre" required />
                             <InputError className="absolute" message={pasaje.errors.nombre} />
                         </div>
                         <div className="w-full mt-5 grid grid-cols-2 gap-5">

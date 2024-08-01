@@ -24,6 +24,7 @@ const AutobusesShowPage = () => {
 
     const [showModel, setShowModel] = useState(false)
     const [showEditForm, setShowEditForm] = useState(false)
+    const [showOptionsExtras, setShowOptionsExtras] = useState(false)
     const eliminarAutobus = () => {
         if (id) {
             http.delete(`autobuses/${id}`)
@@ -46,17 +47,24 @@ const AutobusesShowPage = () => {
     return (
         <div className="mx-auto max-w-7xl py-10">
             {autobus && <>
-                <div className="w-full px-5 py-3 bg-slate-700 text-white font-semibold text-xl flex justify-between items-center">
-                    <p>Lista de viajes del autobus {autobus.placa}</p>
-                    <div className="space-x-4 flex items-center">
-                        {GetUserType() === "ROLE_EMPRESA_ADMIN" &&
-                            <>
-                                <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
-                                <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
-                            </>
-                        }
-                        <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
-                        <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> registrar un viaje</PrimaryButton>
+                <div className="w-full px-5 py-3 bg-slate-700 text-white font-semibold flex justify-between items-center">
+                    <p className="text-xl">Lista de viajes del autobus {autobus.placa}</p>
+                    <div className="space-x-4">
+                        <button className="p-1.5" onClick={()=> setShowOptionsExtras(!showOptionsExtras)}>
+                            OPCIONES
+                        </button>
+                        <div hidden={!showOptionsExtras} className="relative">
+                            <div className="absolute w-40 right-0 top-0 flex flex-col">
+                                {GetUserType() === "ROLE_EMPRESA_ADMIN" &&
+                                    <>
+                                        <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
+                                        <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
+                                    </>
+                                }
+                                <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
+                                <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> nuevo viaje</PrimaryButton>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {showEditForm && <div className="absolute inset-0 grid place-content-center">

@@ -22,8 +22,8 @@ const CardViaje = ({ viaje, indexViaje, escojerViaje, className = '' }: Props) =
         <div className={`p-5 bg-gray-300 rounded flex ${className}`}>
             <section className="flex flex-col justify-between">
                 <div className="flex space-x-3">
-                    <div className="mr-3 h-32 w-64 rounded-lg bg-white grid place-content-center">
-                        <img src={viaje.logo} className="h-32 rounded-lg" />
+                    <div className="mr-3 h-40 w-64 rounded-lg bg-white grid place-content-center">
+                        <img src={viaje.logo} className="h-40 rounded-lg" />
                     </div>
                     <section className="text-lg w-80">
                         <p className="font-bold text-2xl">

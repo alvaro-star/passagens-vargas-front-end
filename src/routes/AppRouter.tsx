@@ -37,6 +37,11 @@ const ResetPassword = React.lazy(() => import('@/Pages/Auth/ResetPassword'));
 const Welcome = React.lazy(() => import("@/Pages/Publico/Welcome"));
 
 import Loading from "@/Pages/Publico/Loading";
+import ViajesPage from "@/Pages/Publico/ViajesPage";
+import SwitchSillasPage from "@/Pages/Publico/SwitchSillasPage";
+import PassagensList from "@/Pages/Publico/PassagensList";
+import SobrePage from "@/Pages/Publico/SobrePage";
+import Home from "@/Pages/Publico/Home";
 const AppRouter = () => {
     return (
         <Router>
@@ -48,6 +53,12 @@ const AppRouter = () => {
                         <Route path="login" element={<Login />} />
                         <Route path="registrar" element={<Register />} />
                         <Route path="validar" element={<ValidarUser />} />
+
+                        <Route path="home" element={<Home />} />
+                        <Route path="viajes" element={<ViajesPage />} />
+                        <Route path="viaje" element={<SwitchSillasPage />} />
+                        <Route path="viaje/step3/:id" element={<PassagensList />} />
+                        <Route path="sobre" element={<SobrePage />} />
                         {/**
                          * <Route path="viajes" element={<ViajesPage />} />
                         <Route path="viaje" element={<SwitchSillasPage />} />

@@ -18,5 +18,17 @@ http.interceptors.request.use(function (config) {
 }, function (error) {
     return Promise.reject(error)
 })
+/*
+http.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    const navigate = useNavigate()
+    if (error.response && error.response.status === 403) {
+        sessionStorage.removeItem('token')
+        navigate('/login')
+        return Promise.resolve();
+    }
+    return Promise.reject(error);
+});*/
 
 export default http

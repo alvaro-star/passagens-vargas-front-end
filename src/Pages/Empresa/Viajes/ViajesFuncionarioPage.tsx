@@ -60,10 +60,10 @@ const ViajesFuncionarioPage = () => {
                                 </td>
                                 <td className="text-center">
                                     {new Date(viaje.salida.dataHora) < (new Date())
-                                        ? <PrimaryButtonEmpresa onClick={() => navigate("/empresa/viajes/" + viaje.id)} className="py-1.5 px-2 text-white bg-blue-600">
+                                        ? <PrimaryButtonEmpresa onClick={() => navigate("/empresa/viajes/" + viaje.id)} className="py-1.5 px-2 text-white bg-yellow-500">
                                             ver viaje
                                         </PrimaryButtonEmpresa>
-                                        : <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < (new Date())} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-blue-600">
+                                        : <PrimaryButtonEmpresa disabled={new Date(viaje.salida.dataHora) < (new Date())} onClick={() => selectViaje(viaje)} className="py-1.5 px-2 text-white bg-green-700">
                                             vender
                                         </PrimaryButtonEmpresa>
                                     }
