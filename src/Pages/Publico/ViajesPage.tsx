@@ -37,17 +37,12 @@ const ViajesPage = () => {
             fetchViajes(ciudadSalida.id, ciudadDestino.id, dataConvert(fechaNueva))
         }
     }
-    const escojerViaje = (indexViaje: number | undefined, idViaje: string, idPrecio: string) => {
-        if (indexViaje != null) {
-            if (viajes[indexViaje].id === idViaje) {
-                //sessionStorage.removeItem("formViaje")
-                let viaje = viajes[indexViaje]
-                viaje.precios = []
-                sessionStorage.setItem('viajeData', JSON.stringify(viaje))
-                sessionStorage.setItem('idPrecio', idPrecio)
-                navigate(`/viaje`)
-            }
-        }
+    const escojerViaje = (viaje: IVIajeResponse, idPrecio: string) => {
+        //sessionStorage.removeItem("formViaje")
+        let viaje2 = { ...viaje, precios: [] }
+        sessionStorage.setItem('viajeData', JSON.stringify(viaje2))
+        sessionStorage.setItem('idPrecio', idPrecio)
+        navigate(`/viaje`)
     }
 
     return (
@@ -73,9 +68,13 @@ const ViajesPage = () => {
                     {fechaSalida && <TimeLine clickOtherDay={clickOtherDay} fechaSalida={fechaSalida} />}
                 </div>
                 <div className="grid grid-cols-1 gap-5 my-5 mx-auto max-w-7xl">
-                    {viajes.map((viaje, index) =>
-                        <CardViaje key={viaje.id} indexViaje={index} viaje={viaje} escojerViaje={escojerViaje} />
-                    )}
+                    {viajes.map((viaje) =>
+                        viaje.precios
+                            .filter(precio => !precio.lleno)
+                            .map(precio =>
+                                <CardViaje key={precio.id} viaje={viaje} precio={precio} escojerViaje={escojerViaje} />
+                            ))
+                    }
 
                     {viajes.length == 0 && <div> No hay viajes disponibles</div>}
                 </div>
