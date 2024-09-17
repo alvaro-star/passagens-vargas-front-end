@@ -36,7 +36,6 @@ const tasaServicio = 0
 
 const PassagensList = () => {
     const { id } = useParams()
-    const metodos = ['EFEC']
     const [viaje, setViaje] = useState<IViaje>()
     const [pasajes, setPasajes] = useState<IPasajeList[]>([])
 
@@ -198,7 +197,7 @@ const PassagensList = () => {
                     </PrimaryButton>
                 </section>
             </section>
-            {viaje && factura && <FacturaComponent viaje={viaje} metodos={metodos} metodo={metodo} setMetodo={setMetodo} factura={factura} className="w-full lg:w-96" />}
+            {viaje && factura && <FacturaComponent viaje={viaje} metodo={metodo} setMetodo={setMetodo} factura={factura} className="w-full lg:w-96" />}
             <section className="lg:hidden mt-5 text-center">
                 <PrimaryButton onClick={enviar} className="rounded-none">
                     VENDER viaje

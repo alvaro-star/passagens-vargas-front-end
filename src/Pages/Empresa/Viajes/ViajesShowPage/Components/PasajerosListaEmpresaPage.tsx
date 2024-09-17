@@ -31,6 +31,21 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
             .catch(() => console.error('Erro ao abrir o PDF...'));
     }
 
+    const rembolsarPasaje = (id: string | number) => {
+        http.delete(`pasajes/${id}`)
+            .then(() => {
+                setPasajeros((prevPasajes) =>
+                    prevPasajes.map((pasaje) => pasaje.id === id ? { ...pasaje, rembolsado: true } : pasaje)
+                );
+            })
+            .catch(({ error }) => {
+                if (error.response.data.conteudo)
+                    alert(error.response.data.conteudo)
+                console.error('Erro ao reembolsar o pasaje:', error);
+            });
+    };
+
+
     useEffect(() => {
         http.get(`precios/${idPrecio}/vender`).then(({ data }) => {
             let posicionesString: string = data.piso.posicoesBloqueadas
@@ -90,8 +105,10 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
         }
 
         pasajeros.forEach(pasajeroFor => {
-            SillasDisponibles[HashMapNSillaIndex[pasajeroFor.nSilla - pisoModel.primeraSilla]].ocupado = true
-            SillasDisponibles[HashMapNSillaIndex[pasajeroFor.nSilla - pisoModel.primeraSilla]].pasajero = pasajeroFor
+            if (!pasajeroFor.rembolsado) {
+                SillasDisponibles[HashMapNSillaIndex[pasajeroFor.nSilla - pisoModel.primeraSilla]].ocupado = true
+                SillasDisponibles[HashMapNSillaIndex[pasajeroFor.nSilla - pisoModel.primeraSilla]].pasajero = pasajeroFor
+            }
         })
 
         setSillas(SillasDisponibles)
@@ -236,8 +253,21 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                                     <td>
                                         {pasajero.destino.ciudad} - {pasajero.destino.abreviacion}
                                     </td>
-                                    <td className="text-center">
-                                        <PrimaryButton className="rounded-none" onClick={() => downloadPasaje(pasajero.id)}>descargar pasaje</PrimaryButton>
+                                    <td className="text-center flex justify-center">
+                                        <div className="flex items-center gap-2">
+                                            {!pasajero.rembolsado ?
+                                                <>
+                                                    <PrimaryButton className="rounded-none bg-red-500" onClick={() => rembolsarPasaje(pasajero.id)}>
+                                                        rembolsar
+                                                    </PrimaryButton>
+                                                    <PrimaryButton className="rounded-none" onClick={() => downloadPasaje(pasajero.id)}>descargar pasaje</PrimaryButton>
+                                                </>
+                                                :
+                                                <PrimaryButton disabled className="rounded-none">
+                                                    REMBOLSADO
+                                                </PrimaryButton>
+                                            }
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -4,6 +4,7 @@ import http from "@/http"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import RelatorioFormComponent from "./components/RelatorioFormComponent"
 
 
 const EmpresaIndexPage = () => {
@@ -17,6 +18,7 @@ const EmpresaIndexPage = () => {
                 else setNextPage(null)
             })
     }, [])
+    const [idEmpresa, setIdEmpresa] = useState('')
 
     const bloquearEmpresa = (idEmpresa: string) => {
         http.get(`empresas/${idEmpresa}/bloquedCount`)
@@ -46,6 +48,7 @@ const EmpresaIndexPage = () => {
                 })
         }
     }
+    const [openModal, setOpenModal] = useState(false)
     return (
         <div className="max-w-7xl mx-auto">
             <div className="">
@@ -57,6 +60,11 @@ const EmpresaIndexPage = () => {
                         className="bg-gray-500 text-white p-2  hover:bg-slate-500">
                         Criar Empresa
                     </Link>
+                </div>
+                <div hidden={!openModal} className="">
+                    <div className="absolute inset-0 grid place-content-center bg-white bg-opacity-75">
+                        <RelatorioFormComponent closeModal={() => setOpenModal(false)} idEmpresa={idEmpresa} />
+                    </div>
                 </div>
                 <div className="w-full">
                     <table className="w-full text-center">
@@ -92,6 +100,14 @@ const EmpresaIndexPage = () => {
                                                 className="bg-gray-300 text-sm font-semibold uppercase text-white p-2 "
                                             >
                                                 Assumir papel
+                                            </button>
+                                            <button
+                                                className="bg-gray-500 text-sm font-semibold uppercase text-white p-2 "
+                                                onClick={() => {
+                                                    setIdEmpresa(empresa.id)
+                                                    setOpenModal(true)
+                                                }}>
+                                                IMPRIMIR RELATORIO
                                             </button>
                                             <button
                                                 className="bg-gray-500 text-sm font-semibold uppercase text-white p-2 "

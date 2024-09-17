@@ -1,16 +1,18 @@
 import { useState } from "react"
-import { FaAngleDown, FaArrowRight } from "react-icons/fa"
+import { FaAngleDown, FaArrowRight, FaCreditCard } from "react-icons/fa"
+import { PiMoney } from "react-icons/pi";
 import IFactura from "../Types/IFactura"
 import IViaje from "../Types/IViajeIndex"
+import MetodoPagoBox from "./MetodoPagoBox"
+import { IoQrCode } from "react-icons/io5";
 interface Props {
     viaje: IViaje
     factura: IFactura
     metodo: string
     setMetodo: (metodo: string) => void
-    metodos: string[]
     className?: string
 }
-const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, className = "" }: Props) => {
+const FacturaComponent = ({ viaje, metodo, setMetodo, factura, className = "" }: Props) => {
     const getDataHora = (dataHora: string) => {
         let hora = dataHora.split('T')[1];
         let partes = hora.split(':')
@@ -103,18 +105,26 @@ const FacturaComponent = ({ viaje, metodos, metodo, setMetodo, factura, classNam
             </p>
         </div>
         <div className="px-5 py-3 bg-white border border-t-0 border-gray-700 text-center">
-            <p className="text-lg font-semibold mb-2">
-                Método de Pago
+            <p className="text-start text-xl font-semibold mb-2">
+                Elije el metodo de pago
             </p>
-            <div className="flex justify-center gap-2">
-                {metodos.map((metodoFo, index) =>
-                    <div key={index}
-                        className={"w-10 h-10 cursor-pointer rounded  font-bold flex items-center justify-center hover:bg-black hover:text-white " + (metodoFo.toUpperCase() === metodo ? 'bg-slate-500 text-white border-2 border-gray-700' : 'bg-slate-300')}
-                        onClick={() => setMetodo(metodoFo)}
-                    >
-                        {metodoFo}
-                    </div>
-                )}
+            <div className="grid grid-cols-1 gap-2">
+                <MetodoPagoBox checked={"EFECTIVO" === metodo} clickFunction={() => setMetodo("EFECTIVO")}>
+                    <PiMoney className="mx-2" />
+                    <span>Efectivo</span>
+                </MetodoPagoBox>
+                <MetodoPagoBox checked={"DEBITO" === metodo} clickFunction={() => setMetodo("DEBITO")}>
+                    <FaCreditCard className="mx-2" />
+                    <span>Debito</span>
+                </MetodoPagoBox>
+                <MetodoPagoBox checked={"CREDITO" === metodo} clickFunction={() => setMetodo("CREDITO")}>
+                    <FaCreditCard className="mx-2" />
+                    <span>Credito</span>
+                </MetodoPagoBox>
+                <MetodoPagoBox checked={"QR" === metodo} clickFunction={() => setMetodo("QR")}>
+                    <IoQrCode className="mx-2" />
+                    <span>QR</span>
+                </MetodoPagoBox>
             </div>
         </div>
     </section>

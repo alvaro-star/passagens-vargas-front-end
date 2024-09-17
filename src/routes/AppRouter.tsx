@@ -37,6 +37,8 @@ const ResetPassword = React.lazy(() => import('@/Pages/Auth/ResetPassword'));
 const Welcome = React.lazy(() => import("@/Pages/Publico/Welcome"));
 
 import Loading from "@/Pages/Publico/Loading";
+import Profile from "@/Pages/Auth/Profile";
+import ValidarUpdate from "@/Pages/Auth/ValidarUpdate";
 const AppRouter = () => {
     return (
         <Router>
@@ -46,6 +48,8 @@ const AppRouter = () => {
                         <Route index element={<Welcome />} />
                         <Route path="reset/password" element={<ResetPassword />} />
                         <Route path="login" element={<Login />} />
+                        <Route path="update" element={<Profile />} />
+                        <Route path="update/validar" element={<ValidarUpdate />} />
                         <Route path="registrar" element={<Register />} />
                         <Route path="validar" element={<ValidarUser />} />
 
