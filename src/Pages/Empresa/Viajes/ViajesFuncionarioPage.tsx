@@ -6,6 +6,9 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import FormInlineTemplateFuncionario from "./Components/FormInlineTemplateFuncionario"
 import IViaje from "./Types/IViajeIndex"
+import TdComponent from "@/Components/Table/TdComponent"
+import ThComponent from "@/Components/Table/ThComponent"
+import TableComponent from "@/Components/Table/TableComponent"
 
 const ViajesFuncionarioPage = () => {
     const timeBeforeMili = 2000
@@ -31,34 +34,36 @@ const ViajesFuncionarioPage = () => {
 
     return <div className="p-5 w-full">
         <div className="max-w-7xl mx-auto">
+            <div className="md:text-white py-5 font-semibold text-2xl">
+                Busque los viajes que necesite
+            </div>
             <section>
                 <FormInlineTemplateFuncionario setViajes={setViajes} />
             </section>
-            <section className="bg-white mt-6 py-5">
-                <table className="w-full">
-                    <thead>
-                        <tr>
-                            <th className="pl-5 text-start">Salida</th>
-                            <th className="text-start">Destino</th>
-                            <th className="text-center">Pisos</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <section className="bg-white mt-6 pt-5 rounded">
+                <TableComponent
+                    header={<div className="pb-2 -mt-2">Resultado dela busqueda</div>}
+                    thead={<>
+                        <ThComponent text="Salida" />
+                        <ThComponent text="Destino" />
+                        <ThComponent text="Pisos" />
+                        <ThComponent text="" />
+                    </>}
+                    tbody={<>
                         {viajes.map(viaje =>
-                            <tr key={viaje.id} className="hover:bg-slate-100">
-                                <td className="py-2 pl-5">
-                                    {capitalizeFirstLetter(viaje.salida.ciudad)}, {viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}
-                                </td>
-                                <td>
-                                    {capitalizeFirstLetter(viaje.destino.ciudad)}, {viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}
-                                </td>
-                                <td className="text-center">
+                            <tr key={viaje.id}>
+                                <TdComponent>
+                                    {capitalizeFirstLetter(viaje.salida.ciudad) + ", " + viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}
+                                </TdComponent>
+                                <TdComponent>
+                                    {capitalizeFirstLetter(viaje.destino.ciudad) + ", " + viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}
+                                </TdComponent>
+                                <TdComponent>
                                     {ordenarPisos(viaje.precios).map(piso =>
                                         <p key={piso.id} className={piso.lleno ? "text-red-500" : "text-green-500"}>Piso {piso.nPiso} : Bs {piso.precio}</p>
                                     )}
-                                </td>
-                                <td className="text-center">
+                                </TdComponent>
+                                <TdComponent className="text-right">
                                     {new Date(viaje.salida.dataHora) < (new Date())
                                         ? <PrimaryButtonEmpresa onClick={() => navigate("/empresa/viajes/" + viaje.id)} className="py-1.5 px-2 text-white bg-yellow-500">
                                             ver viaje
@@ -67,11 +72,18 @@ const ViajesFuncionarioPage = () => {
                                             vender
                                         </PrimaryButtonEmpresa>
                                     }
-                                </td>
+                                </TdComponent>
                             </tr>
                         )}
-                    </tbody>
-                </table>
+                        {viajes.length == 0 &&
+                            <tr>
+                                <td colSpan={5} className="py-2 text-center font-semibold">
+                                    No hay Viajes Registrados
+                                </td>
+                            </tr>
+                        }
+                    </>}
+                />
             </section>
         </div>
     </div>

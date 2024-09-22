@@ -5,17 +5,11 @@ import FormTemplate from "@/Components/FormTemplate"
 import TextInput234 from "@/Components/TextInput234"
 import InputError from "@/Components/InputError"
 import IError from "@/Types/IErrors/IError"
+import IUsuario from "./Types/IUsuario"
 
 interface ILogin {
     token: string
-}
-
-interface IUsuario {
-    login: string
-    nombre: string
-    roles: string[]
-    telefono: string
-    idEmpresa: string | null
+    refreshToken: string
 }
 
 const tipoUsuario = (roles: string[]): string => {
@@ -55,6 +49,8 @@ const Login = () => {
             .then(response => {
                 response.data.token
                 sessionStorage.setItem("token", response.data.token)
+                sessionStorage.setItem("refreshToken", response.data.refreshToken)
+
                 setErrorsForm(errosForm)
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
                     setLogin('')

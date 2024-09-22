@@ -5,6 +5,9 @@ import IPage from "@/Types/IPage/index"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import IFuncionario from "../Types/IFuncionario"
+import TdComponent from "@/Components/Table/TdComponent"
+import ThComponent from "@/Components/Table/ThComponent"
+import TableComponent from "@/Components/Table/TableComponent"
 
 const FuncionariosListPage = () => {
     const path = "/empresa/admin/funcionarios"
@@ -52,42 +55,46 @@ const FuncionariosListPage = () => {
     }
     return (
         <div className="py-10 max-w-7xl mx-auto">
-            <div className="px-5 py-2 bg-slate-700 text-white flex items-center justify-between">
-                <h1 className="font-bold text-xl">Lista de Funcionarios dela Empresa</h1>
+            <div className="md:text-white mx-5 pb-5 font-semibold text-2xl flex items-center justify-between">
+                <p>Lista de los funcionarios dela empresa</p>
                 <PrimaryButtonEmpresa onClick={() => navigate(path + "/create")}>Agregar un Funcionario</PrimaryButtonEmpresa>
             </div>
-            <div className="px-5 py-2 bg-white">
-                <table className="w-full ">
-                    <thead>
-                        <tr className="">
-                            <th className="font-semibold text-start">Nombre</th>
-                            <th className="font-semibold text-start">E-mail</th>
-                            <th className="font-semibold text-start">Telefono</th>
-                            <th className="font-semibold text-center w-32">Opciones</th>
+            <TableComponent
+                header={
+                    <div className="py-2 flex items-center justify-between">
+                        <p>Resultado dela busqueda</p>
+                        {nextPage != null && <PrimaryButton onClick={verMais} className="bg-blue-500 rounded-none hover:bg-blue-600">Ver Mas</PrimaryButton>}
+                    </div>}
+                thead={<>
+                    <ThComponent text="Salida" />
+                    <ThComponent text="Destino" />
+                    <ThComponent text="Pisos" />
+                    <ThComponent text="" />
+                </>}
+                tbody={<>
+                    {funcionarios.map(funcionario =>
+                        <tr key={funcionario.login}>
+                            <TdComponent>
+                                {funcionario.nombre}
+                            </TdComponent>
+                            <TdComponent>
+                                {funcionario.login}
+                            </TdComponent>
+                            <TdComponent>
+                                {funcionario.telefono}
+                            </TdComponent>
+                            <TdComponent className="text-right">
+                                <PrimaryButton
+                                    className="bg-red-500 rounded-none hover:bg-red-600"
+                                    onClick={() => eliminar(funcionario.login)}
+                                >
+                                    Despedir
+                                </PrimaryButton>
+                            </TdComponent>
                         </tr>
-                    </thead>
-                    <tbody className="">
-                        {funcionarios.map(funcionario =>
-                            <tr key={funcionario.login}>
-                                <td className="py-1.5">{funcionario.nombre}</td>
-                                <td>{funcionario.login}</td>
-                                <td>{funcionario.telefono}</td>
-                                <td className="text-center">
-                                    <PrimaryButton
-                                        className="bg-red-500 rounded-none hover:bg-red-600"
-                                        onClick={() => eliminar(funcionario.login)}
-                                    >
-                                        Despedir
-                                    </PrimaryButton>
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-                <div className="w-full text-center mt-2">
-                    {nextPage != null && <PrimaryButton onClick={verMais} className="bg-blue-500 rounded-none hover:bg-blue-600">Ver Mas</PrimaryButton>}
-                </div>
-            </div>
+                    )}
+                </>}
+            />
         </div>
     )
 }

@@ -10,7 +10,8 @@ import ParadasTableComponent from "./Components/ParadasTableComponent"
 import PrimaryButton from "@/Components/PrimaryButton"
 import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import AutobusCreateCopyComponent from "../../Autobuses/AutobusesShowPage/Components/AutobusCreateCopyComponent"
-import { FaAngleDown } from "react-icons/fa"
+import { FaBars, FaMapMarkerAlt } from "react-icons/fa"
+import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
 
 
 interface IViajeExtends {
@@ -104,19 +105,36 @@ const ViajesShowPage = () => {
     return (
         <div className="p-10">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">
+                <h2 className="md:text-white text-2xl font-semibold">
                     Datos del Viaje
                 </h2>
-                <div className="space-x-3">
-                    <PrimaryButtonEmpresa onClick={() => setShowCreateCopyViaje(true)}>duplicar viaje</PrimaryButtonEmpresa>
-                    {mostrarOptions &&
-                        <PrimaryButton
-                            onClick={() => eliminarViaje()}
-                            className="bg-red-500 rounded-none"
-                        >
-                            ELIMINAR viaje
-                        </PrimaryButton>
-                    }
+                <div className="space-x-3 relative flex items-center">
+                    <PrimaryButtonEmpresa onClick={() => setMostrarParadas(true)}>
+                        <FaMapMarkerAlt />
+                        <p>Paradas</p>
+                    </PrimaryButtonEmpresa>
+                    <div>
+                        <ButtonOptionsMenu
+                            children={
+                                <FaBars className="h-5"></FaBars>
+                            }
+                            optionsMenu={<>
+                                <PrimaryButtonEmpresa className="rounded-none w-full" onClick={() => setShowCreateCopyViaje(true)}>
+                                    duplicar viaje
+                                </PrimaryButtonEmpresa>
+                                {mostrarOptions &&
+                                    <PrimaryButton
+                                        onClick={() => eliminarViaje()}
+                                        className="bg-red-500 rounded-none"
+                                    >
+                                        ELIMINAR viaje
+                                    </PrimaryButton>
+                                }
+                            </>}
+                        />
+                    </div>
+                    <div className="hidden absolute right-0">
+                    </div>
                 </div>
             </div>
             {viaje && <>
@@ -125,25 +143,16 @@ const ViajesShowPage = () => {
                         <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
                     </div>
                 }
-                <div className="mt-5 flex items-center justify-between px-5 py-3 bg-slate-700 text-white">
-                    <h2>Paradas</h2>
-                    <div className="flex items-center space-x-2">
-                        <FaAngleDown
-                            onClick={() => setMostrarParadas(!mostrarParadas)}
-                            fontSize={28}
-                            className={(!mostrarParadas ? "rotate-90" : "") + " cursor-pointer"}
-                        />
-                    </div>
+                <div hidden={!mostrarParadas} className="absolute bg-slate-200 inset-0 pt-10 md:pt-20 z-10 bg-opacity-75">
+                    <ParadasTableComponent
+                        mostrarOptions={mostrarOptions}
+                        closeModal={() => setMostrarParadas(false)}
+                        paradas={viaje.paradas}
+                        eliminarParada={eliminarParada}
+                        setOpenFormCreate={setOpenFormCreate}
+                    />
                 </div>
-
-                <ParadasTableComponent
-                    mostrarParadas={mostrarParadas}
-                    mostrarOptions={mostrarOptions}
-                    paradas={viaje.paradas}
-                    eliminarParada={eliminarParada}
-                    setOpenFormCreate={setOpenFormCreate}
-                />
-                <div className={"absolute inset-0 mt-36 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
+                <div className={"absolute inset-0 mt-36 z-20 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
                     <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
                 </div>
                 <div className="">

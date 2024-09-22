@@ -15,7 +15,7 @@ const ViajesTableComponent = ({ viajes }: Props) => {
             <thead>
                 <tr>
                     <th className="text-start">Salida</th>
-                    <th>Destino</th>
+                    <th className="text-start">Destino</th>
                     <th>Saldo en Efectivo</th>
                     <th>Actions</th>
                 </tr>
@@ -25,7 +25,7 @@ const ViajesTableComponent = ({ viajes }: Props) => {
                     <tr key={viaje.id} className="">
                         <td className="py-2">{capitalizeFirstLetter(viaje.salida.ciudad) + ", " + viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}</td>
                         <td className="py-2 text-start">{capitalizeFirstLetter(viaje.destino.ciudad) + ", " + viaje.destino.abreviacion} - {new DataHora(viaje.destino.dataHora).imprimir()}</td>
-                        <td className="text-center">Bs {viaje.valorArrecadadoEfectivo}</td>
+                        <td className="text-center">Bs {viaje.valorArrecadadoEfectivo} - En desarrollo</td>
                         <td className="text-center">
                             <PrimaryButton className="rounded-none" onClick={() => showViaje(viaje.id)}>ver mais</PrimaryButton>
                         </td>

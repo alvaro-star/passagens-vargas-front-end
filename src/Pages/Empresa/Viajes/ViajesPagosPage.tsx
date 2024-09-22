@@ -39,7 +39,7 @@ const PassagensList = () => {
     const [viaje, setViaje] = useState<IViaje>()
     const [pasajes, setPasajes] = useState<IPasajeList[]>([])
 
-    const [metodo, setMetodo] = useState('EFEC')
+    const [metodo, setMetodo] = useState('EFECTIVO')
     const [factura, setFactura] = useState<IFactura>()
     const navigate = useNavigate()
 
@@ -135,7 +135,7 @@ const PassagensList = () => {
             idLugarSalida: viaje.salida.idLugar,
             idLugarDestino: viaje.destino.idLugar,
             pasajes: pasajes.map(p => p.values),
-            metodo: "EFECTIVO"//Cambiara de forma dinamica
+            metodo: metodo
         }
 
         http.post('pasajes/vender', pedido).then(response => {

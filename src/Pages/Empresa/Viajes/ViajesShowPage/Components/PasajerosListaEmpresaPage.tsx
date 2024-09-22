@@ -21,6 +21,11 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
     const [pisoModel, setPisoModel] = useState<IPiso | null>(null)
     const [precioModel, setPrecioModel] = useState<IPrecio | null>(null)
     const [pasajeros, setPasajeros] = useState<IPasajeComplete[]>([])
+
+    const [showEditComponent, setShowEditComponent] = useState(false)
+    const [mostrarLista, setMostrarLista] = useState(false)
+    const [aba, setAba] = useState(1)
+    const [sillaElegido, setSillaElegido] = useState<ISillaType | null>(null)
     const downloadPasaje = (id: string | number) => {
         http.get(`pasajes/${id}/download`, { responseType: 'blob' })
             .then(response => {
@@ -131,10 +136,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
         }
 
     }
-    const [showEditComponent, setShowEditComponent] = useState(false)
-    const [mostrarLista, setMostrarLista] = useState(false)
-    const [aba, setAba] = useState(2)
-    const [sillaElegido, setSillaElegido] = useState<ISillaType | null>(null)
+
     return (
         <div className="mt-3">
             <div className="bg-gray-700 text-white px-5 p-3 flex items-center justify-between">
@@ -156,34 +158,34 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                 </div>
             </div>
 
-            <section hidden={!mostrarLista}>
+            <section hidden={!mostrarLista} className="relative">
                 <section className="w-full flex items-center">
-                    <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : '')}
+                    <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : 'bg-slate-100')}
                         onClick={() => setAba(1)}
                     >
                         Lista de Pasageros
                     </div>
-                    <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 2 ? 'bg-slate-200' : '')}
+                    <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 2 ? 'bg-slate-200' : 'bg-slate-100')}
                         onClick={() => setAba(2)}
                     >
                         Modelo del Autobus
                     </div>
                 </section>
+                {precioModel && showEditComponent &&
+                    <div className="absolute inset-0 grid z-10 place-content-center">
+                        <PrecioEditComponent
+                            setShowForm={setShowEditComponent}
+                            nPiso={precioModel.nPiso}
+                            idPrecio={precioModel.id}
+                            setPrecioProp={editPrecio}
+                            precioProp={precioModel.precio}
+                        />
+                    </div>}
                 <div hidden={aba != 2} className="bg-white">
                     <section className="relative flex flex-col justify-center items-center" >
                         {sillaElegido != null &&
                             <PasajeroCard downloadPasaje={downloadPasaje} className="absolute z-30" silla={sillaElegido} setSillaElegido={setSillaElegido} />
                         }
-                        {precioModel && showEditComponent &&
-                            <div className="absolute inset-0 grid z-10 place-content-center">
-                                <PrecioEditComponent
-                                    setShowForm={setShowEditComponent}
-                                    nPiso={precioModel.nPiso}
-                                    idPrecio={precioModel.id}
-                                    setPrecioProp={editPrecio}
-                                    precioProp={precioModel.precio}
-                                />
-                            </div>}
                         <div className="lg:my-5 lg:h-72  lg:-rotate-90 p-5 rounded grid place-content-center">
                             <div className="p-2 h-14 bg-gray-500  text-white text-center rounded-t-3xl">
                             </div>

@@ -3,6 +3,10 @@ import IPage from "@/Types/IPage"
 import http from "@/http"
 import PrimaryButton from "@/Components/PrimaryButton"
 import { useNavigate } from "react-router-dom"
+import TdComponent from "@/Components/Table/TdComponent"
+import ThComponent from "@/Components/Table/ThComponent"
+import TableComponent from "@/Components/Table/TableComponent"
+import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 
 interface IAutobus {
     id: number,
@@ -56,35 +60,46 @@ const AutobusesIndexPage = () => {
                 })
         }
     }
-    return (
-        <>
-            <div className="my-10 pb-5 max-w-7xl mx-auto bg-white">
-                <div className="px-5 py-3 bg-slate-700 text-white flex items-center justify-between">
-                    <div className="flex items-center">
-                        <p className="text-xl ml-2 font-semibold w-full">
-                            Lista de autobuses
-                        </p>
-                    </div>
-                    {
-                        tipoUsuario === "ROLE_EMPRESA_ADMIN" &&
-                        <PrimaryButton onClick={create} className="rounded-none">registrar un Autobus</PrimaryButton>
-                    }
+    return (<>
+        <div className="pt-10 pb-5 max-w-7xl mx-auto">
+            <div className="px-5 text-white flex items-center justify-between">
+                <div className="flex items-center">
+                    <p className="text-2xl ml-2 font-semibold w-full">
+                        Lista de autobuses
+                    </p>
                 </div>
-                <div className="grid space-y-3 px-5 pt-3">
-                    {autobuses.map(autobus =>
-                        <div key={autobus.id} className=" flex justify-between items-center">
-                            <p>Placa: {autobus.placa}</p>
-                            <PrimaryButton disabled={!autobus.enabled} onClick={() => verViajes(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
-                        </div>
-                    )}
-                </div>
+                {tipoUsuario === "ROLE_EMPRESA_ADMIN" &&
+                    <PrimaryButtonEmpresa onClick={create} className="">registrar un Autobus</PrimaryButtonEmpresa>
+                }
+            </div>
+        </div>
+        <TableComponent
+            header={<div className="flex items-center justify-between py-2">
+                <p>Autobuses</p>
                 {nextPage != null &&
                     <div className="w-full text-center mt-2">
                         <PrimaryButton onClick={verMais} className="rounded-none bg-blue-500 hover:bg-blue-600">Ver Mas</PrimaryButton>
                     </div>
                 }
-            </div>
-        </>
+            </div>}
+            thead={<>
+                <ThComponent text="Placa" />
+                <ThComponent text="" />
+            </>}
+            tbody={<>
+                {autobuses.map(autobus =>
+                    <tr key={autobus.id}>
+                        <TdComponent>
+                            {autobus.placa}
+                        </TdComponent>
+                        <TdComponent className="text-right">
+                            <PrimaryButton disabled={!autobus.enabled} onClick={() => verViajes(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
+                        </TdComponent>
+                    </tr>
+                )}
+            </>}
+        />
+    </>
     )
 }
 

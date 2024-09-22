@@ -2,16 +2,19 @@ import { useEffect } from "react"
 
 const HomeEmpresaPage = () => {
     useEffect(() => {
-        
+
     }, [])
     return (
         <div className="w-full ">
-            <section className=" m-10">
-                <h2 className="text-2xl font-semibold">
+            <section className="m-10 md:text-white">
+                <h2 className="text-2xl font-semibold mb-5">
                     Bien venido ala empresa
                 </h2>
                 <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus quisquam dicta amet. Impedit illum accusamus ipsum. Incidunt omnis, vitae consectetur minus reprehenderit ducimus sit labore maiores ab iste harum. Facere!
+                    Este sitio fue pensado para ofrecer-le el mejor servicio para administrar su empresa, si tiene alguna sugerencia o problema respecto ala plataforma haganos-lo saber por email, esteremos atentos a sus comentarios.
+                </p>
+                <p>
+                    Esperemos que tenga una buena experiencia 
                 </p>
             </section>
         </div>

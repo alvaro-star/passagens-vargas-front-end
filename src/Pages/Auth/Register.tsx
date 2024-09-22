@@ -64,7 +64,7 @@ const Register = () => {
     }
 
     return (
-        <div className="mt-20 flex justify-center items-center ">
+        <div className="h-full grid place-content-center">
             <FormTemplate onSubmit={enviar} disabled={enviado}>
                 <h2 className="text-xl font-bold w-full">Registrate</h2>
                 <p className="w-full text-sm">Ingresa tus datos y create una cuenta...</p>

@@ -9,7 +9,8 @@ export default interface IViajeEmpresa {
     valorArrecadadoEfectivo: number
     valorArrecadadoNoWeb: number
     valorArrecadadoWeb: number
-    isCobrado:boolean
+    isCobrado: boolean
+    cancelado: boolean
     precios: IPiso[]
     salida: IParada2
     destino: IParada2

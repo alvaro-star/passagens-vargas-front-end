@@ -103,16 +103,16 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
                 Viajes del mes
             </p>
             <select value={mes} onChange={e => setMes(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l focus:ring-blue-500 focus:border-blue-500 block p-1">
                 {meses.map(mes => <option key={mes} value={mes}>{mes}</option>)}
             </select>
             <select value={ano} onChange={e => setAno(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-1">
                 {anos.map(ano => <option key={ano} value={ano}>{ano}</option>)}
             </select>
             <button
                 onClick={buscar}
-                className="bg-blue-500 hover:bg-blue-600 h-full rounded-r p-2.5 border border-blue-500 text-white grid place-content-center">
+                className="bg-blue-500 hover:bg-blue-600 h-full rounded-r p-1 border border-blue-500 text-white grid place-content-center">
                 <IoSearch style={{ fontWeight: "bold" }} className="text-xl" />
             </button>
         </section>

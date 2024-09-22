@@ -10,7 +10,7 @@ const ValidarUpdate = () => {
     const [codigo, setCodigo] = useState("")
     const enviar = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        http.post("/auth/validar_update", { codigo })
+        http.put("/auth/validar_update", { codigo })
             .then(() => {
                 alert("Sus datos fueron actualizados exitosamente")
                 navigate("/login")

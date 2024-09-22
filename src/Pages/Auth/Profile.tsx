@@ -4,12 +4,13 @@ import TextInput234 from "@/Components/TextInput234"
 
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import IUsuario from "./Types/IUsuario"
 
 interface IErros {
     nombre: string
-    login: string
+    email: string
     telefono: string
     contrasena: string,
     [key: string]: string
@@ -18,7 +19,7 @@ interface IErros {
 const Profile = () => {
     const navigate = useNavigate()
     const [nombre, setNombre] = useState<string>("")
-    const [login, setLogin] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
     const [telefono, setTelefono] = useState<string>("")
     const [contrasena, setContrasena] = useState<string>("")
     const [enviado, setEnviado] = useState(false)
@@ -26,12 +27,19 @@ const Profile = () => {
     const newErros = () => {
         return {
             nombre: "",
-            login: "",
+            email: "",
             telefono: "",
-            contrasena: "",
-            contrasena2: ""
+            contrasena: ""
         }
     }
+
+    useEffect(() => {
+        http.get<IUsuario>("/usuarios/mydata").then(({ data }) => {
+            setEmail(data.login)
+            setTelefono(data.telefono)
+            setNombre(data.nombre)
+        })
+    }, [])
 
     const [erros, setErros] = useState<IErros>(newErros())
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
@@ -39,7 +47,7 @@ const Profile = () => {
         setEnviado(true)
         let errosValidation: IErros = newErros()
         if (contrasena != "") {
-            const usuario = { login, nombre, telefono, contrasena }
+            const usuario = { email, nombre, telefono, contrasena }
             http.post('auth/update', usuario)
                 .then(() => {
                     setEnviado(false)
@@ -50,18 +58,17 @@ const Profile = () => {
                     if (erro?.response?.data?.errors) {
                         let erros: IError[] = erro?.response?.data?.errors
                         erros.forEach(erro => errosValidation[erro.name] = erro.message)
-                    } else
+                    } else if (erro?.response?.data?.conteudo)
+                        alert(erro?.response?.data?.conteudo);
+                    else
                         alert("Hubo un error en la solicitud");
                     setErros(errosValidation)
                 })
-        } else {
-            errosValidation.contrasena = "La contraseña es distinta"
-            setErros(errosValidation)
         }
     }
 
     return (
-        <div className="mt-20 flex justify-center items-center ">
+        <div className="h-full grid place-content-center">
             <FormTemplate onSubmit={enviar} disabled={enviado} buttonMessage="Actualizar">
                 <h2 className="text-xl font-bold w-full">Escribe tus nuevos datos</h2>
                 <div className="mt-2 w-full">
@@ -69,7 +76,7 @@ const Profile = () => {
                     <InputError message={erros.nombre} />
                 </div>
                 <div className="mt-2 w-full">
-                    <TextInput234 value={login} setValue={setLogin} labelValue="E-mail" required />
+                    <TextInput234 value={email} setValue={setEmail} labelValue="E-mail" required />
                     <InputError message={erros.login} />
                 </div>
                 <div className="mt-2 w-full">
