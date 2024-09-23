@@ -163,7 +163,7 @@ const PassagensList = () => {
         })
     }
     return (
-        <div className="text-gray-900 flex flex-col max-w-7xl mx-auto lg:flex-row justify-center py-10 bg-gray-100 gap-4">
+        <div className="text-gray-900 flex flex-col max-w-7xl mx-auto lg:flex-row justify-center py-10 gap-4">
             <section className="w-full lg:w-3/4 flex flex-col items-center space-y-5">
                 {pasajes.map((pasaje, index) =>
                     <section

@@ -1,5 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaMapMarked, FaNewspaper, FaPaintBrush, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
+import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaMapMarked, FaNewspaper, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
+import { TbLogout2 } from "react-icons/tb";
 import { useState } from "react"
 import CloseButton from "@/Components/CloseButton"
 import SubtittleComponent from "./Components/SubtittleComponent"
@@ -140,7 +141,7 @@ const EmpresaAdminLayout = () => {
                             />
                             <li className="inline-flex">
                                 <div className="cursor-pointer flex items-center text-gray-700 hover:text-blue-500 text-sm no-underline font-semibold" onClick={deslogar}>
-                                    <FaPaintBrush className="mr-2 text-gray-400 text-base" />
+                                    <TbLogout2 className="mr-2 text-gray-400 text-base" />
                                     <p>Cerrar Sesion</p>
                                 </div>
                             </li>

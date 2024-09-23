@@ -26,7 +26,7 @@ const ParadasTableComponent = ({ mostrarOptions, paradas, closeModal, eliminarPa
             </div>}
             thead={<>
                 <ThComponent text="Salida" />
-                <ThComponent text="Destino" />
+                <ThComponent text="N Carril" />
                 <ThComponent text="Fecha y Hora" />
                 {mostrarOptions &&
                     <ThComponent text="" />
