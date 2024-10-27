@@ -87,8 +87,8 @@ const AutobusesIndexPage = () => {
                 <ThComponent text="" />
             </>}
             tbody={<>
-                {autobuses.map(autobus =>
-                    <tr key={autobus.id}>
+                {autobuses.map((autobus, index) =>
+                    <tr key={autobus.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
                         <TdComponent>
                             {autobus.placa}
                         </TdComponent>

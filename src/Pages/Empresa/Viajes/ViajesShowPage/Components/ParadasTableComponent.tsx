@@ -26,29 +26,29 @@ const ParadasTableComponent = ({ mostrarOptions, paradas, closeModal, eliminarPa
             </div>}
             thead={<>
                 <ThComponent text="Salida" />
-                <ThComponent text="N Carril" />
-                <ThComponent text="Fecha y Hora" />
+                <ThComponent text="N Carril" className="text-center" />
+                <ThComponent text="Fecha y Hora" className="text-center" />
                 {mostrarOptions &&
                     <ThComponent text="" />
                 }
             </>}
             tbody={<>
-                {paradas.map(parada =>
-                    <tr className="hover:bg-slate-300" key={parada.id}>
-                        <TdComponent>
+                {paradas.map((parada, index) =>
+                    <tr key={parada.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
+                        <TdComponent >
                             {capitalizeFirstLetter(parada.ciudad)}, {parada.abreviacion} - {capitalizeFirstLetter(parada.lugar)}
                         </TdComponent>
-                        <TdComponent>
+                        <TdComponent className="text-center">
                             {parada.plataforma}
                         </TdComponent>
-                        <TdComponent>
+                        <TdComponent className="text-center">
                             {new DataHora(parada.dataHora).imprimir()}
                         </TdComponent>
                         {mostrarOptions &&
                             <TdComponent className="w-full flex justify-end">
-                                <ButtonOptionsMenu classNameButton="bg-white shadow-none outiline-none" children={<FaBars className="text-black" />}
+                                <ButtonOptionsMenu classNameButton="active:bg-slate-300 bg-white shadow-none outiline-none" children={<FaBars className="text-black" />}
                                     optionsMenu={<>
-                                        <Link to={"/empresa/paradas/" + parada.id + "/edit"} className="text-white font-semibold bg-yellow-400 p-1.5 px-3 uppercase">
+                                        <Link to={`/empresa/paradas/${parada.id}/edit`} className="text-white font-semibold bg-yellow-400 p-1.5 px-3 uppercase">
                                             Editar
                                         </Link>
                                         <button disabled={parada.tipo !== 'CAMINO'} onClick={() => eliminarParada(parada.id)} className="text-white text-start font-semibold bg-red-500 p-1.5 px-3 uppercase disabled:opacity-25">

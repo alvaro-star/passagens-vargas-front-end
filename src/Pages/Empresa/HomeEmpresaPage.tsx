@@ -1,9 +1,4 @@
-import { useEffect } from "react"
-
 const HomeEmpresaPage = () => {
-    useEffect(() => {
-
-    }, [])
     return (
         <div className="w-full ">
             <section className="m-10 md:text-white">
@@ -14,7 +9,7 @@ const HomeEmpresaPage = () => {
                     Este sitio fue pensado para ofrecer-le el mejor servicio para administrar su empresa, si tiene alguna sugerencia o problema respecto ala plataforma haganos-lo saber por email, esteremos atentos a sus comentarios.
                 </p>
                 <p>
-                    Esperemos que tenga una buena experiencia 
+                    Esperemos que tenga una buena experiencia
                 </p>
             </section>
         </div>

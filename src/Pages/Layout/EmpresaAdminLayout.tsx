@@ -1,16 +1,21 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaMapMarked, FaNewspaper, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
+import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaHome, FaMapMarked, FaNewspaper, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
 import { TbLogout2 } from "react-icons/tb";
 import { useState } from "react"
 import CloseButton from "@/Components/CloseButton"
 import SubtittleComponent from "./Components/SubtittleComponent"
-import LiButtonComponent from "./Components/LIButtonComponent"
+import LiButtonComponent from "./Components/LiButtonComponent"
 import LinkLayoutComponent from "./Components/LinkLayoutComponent"
 
 const EmpresaAdminLayout = () => {
     const navigate = useNavigate()
     const tipoUsuario = sessionStorage.getItem("role")
+    const [activeRoute, setActiveRoute] = useState("/empresa")
     const rotas = {
+        homePage: {
+            label: 'Inicio',
+            url: '/empresa'
+        },
         autobusesPage: {
             label: 'Autobuses',
             url: '/empresa/autobuses'
@@ -46,7 +51,7 @@ const EmpresaAdminLayout = () => {
                     >
                         <FaBars className="" />
                     </button>
-                    <div className="md:block text-left md:pb-2 md:pl-5 md:pt-6 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+                    <div onClick={() => navigate("/empresa")} className="cursor-pointer  md:block text-left md:pb-2 md:pl-5 md:pt-6 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
                         pasajes vargas
                     </div>
                     <ul className="md:hidden items-center flex flex-wrap list-none py-4 px-6">
@@ -98,34 +103,52 @@ const EmpresaAdminLayout = () => {
                         <ul className="md:flex-col md:min-w-full flex flex-col list-none">
                             {tipoUsuario === "ROLE_EMPRESA_ADMIN" && <>
                                 <LiButtonComponent
-                                    icon={<FaBus className="mr-2 text-gray-400 text-base" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaHome />}
+                                    to={rotas.homePage.url}
+                                    text={rotas.homePage.label}
+                                />
+                                <LiButtonComponent
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaBus />}
                                     to={rotas.autobusesPage.url}
                                     text={rotas.autobusesPage.label}
                                 />
                                 <LiButtonComponent
-                                    icon={<FaClipboardList className="text-gray-400 mr-2 text-sm" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaClipboardList />}
                                     to={rotas.viajesAdminPage.url}
                                     text={rotas.viajesAdminPage.label}
                                 />
                                 <LiButtonComponent
-                                    icon={<FaClipboardList className="text-gray-400 mr-2 text-sm" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaClipboardList />}
                                     to={rotas.viajesFuncionarioPage.url}
                                     text={rotas.viajesFuncionarioPage.label}
                                 />
                                 <LiButtonComponent
-                                    icon={<FaUserFriends className="mr-2 text-gray-400 text-base" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaUserFriends />}
                                     to={rotas.funcionariosPage.url}
                                     text={rotas.funcionariosPage.label}
                                 />
                             </>}
                             {tipoUsuario === "ROLE_EMPRESA_FUNCIONARIO" && <>
                                 <LiButtonComponent
-                                    icon={<FaBus className="mr-2 text-gray-400 text-base" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaHome />}
+                                    to={rotas.homePage.url}
+                                    text={rotas.homePage.label}
+                                />
+                                <LiButtonComponent
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaBus />}
                                     to={rotas.autobusesPage.url}
                                     text={rotas.autobusesPage.label}
                                 />
                                 <LiButtonComponent
-                                    icon={<FaClipboardList className="text-gray-400 mr-2 text-sm" />}
+                                    setActiveRoute={setActiveRoute}
+                                    icon={<FaClipboardList />}
                                     to={rotas.viajesFuncionarioPage.url}
                                     text={rotas.viajesFuncionarioPage.label}
                                 />
@@ -135,12 +158,13 @@ const EmpresaAdminLayout = () => {
                         <SubtittleComponent text="Autenticacion" />
                         <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
                             <LiButtonComponent
+                                setActiveRoute={setActiveRoute}
                                 to="/update"
-                                icon={<FaUserCircle className="text-gray-400 mr-2 text-sm" />}
+                                icon={<FaUserCircle />}
                                 text="Perfil"
                             />
                             <li className="inline-flex">
-                                <div className="cursor-pointer flex items-center text-gray-700 hover:text-blue-500 text-sm no-underline font-semibold" onClick={deslogar}>
+                                <div className="cursor-pointer flex items-center spa text-gray-700 hover:text-blue-500 text-sm no-underline font-semibold" onClick={deslogar}>
                                     <TbLogout2 className="mr-2 text-gray-400 text-base" />
                                     <p>Cerrar Sesion</p>
                                 </div>

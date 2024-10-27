@@ -72,8 +72,8 @@ const FuncionariosListPage = () => {
                     <ThComponent text="" />
                 </>}
                 tbody={<>
-                    {funcionarios.map(funcionario =>
-                        <tr key={funcionario.login}>
+                    {funcionarios.map((funcionario, index) =>
+                        <tr key={funcionario.login} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
                             <TdComponent>
                                 {funcionario.nombre}
                             </TdComponent>

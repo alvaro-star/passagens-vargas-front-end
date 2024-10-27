@@ -1,5 +1,6 @@
 import axios from 'axios'
-
+const COOKIE_TOKEN_NAME = "token"
+const COOKIE_REFRESH_TOKEN_NAME = "refreshToken"
 const http = axios.create({
     //baseURL: 'http://85.209.95.183:8080/',
     baseURL: 'http://127.0.0.1:8080/',
@@ -10,7 +11,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-    const token = sessionStorage.getItem('token')
+    const token = sessionStorage.getItem(COOKIE_TOKEN_NAME)
 
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`
@@ -27,22 +28,13 @@ http.interceptors.response.use(function (response) {
     const originalRequest = error.config;
 
     if ((error.response.status === 401 || error.response.status === 403) && !originalRequest._retry) {
-        originalRequest._retry = true;  // Marcar a requisição como sendo repetida
+        originalRequest._retry = true;
         try {
-            // Obter o refresh token (geralmente armazenado em localStorage ou cookies)
-            const refreshToken = sessionStorage.getItem('refreshToken');
-
-            // Fazer uma requisição para obter um novo access token
+            const refreshToken = sessionStorage.getItem(COOKIE_REFRESH_TOKEN_NAME);
             const response = await axios.post('auth/refresh', { refreshToken });
-
-            // Atualizar o access token
             const newAccessToken = response.data.accessToken;
-            sessionStorage.setItem('accessToken', newAccessToken);
-
-            // Adicionar o novo token no cabeçalho Authorization da requisição original
+            sessionStorage.setItem(COOKIE_TOKEN_NAME, newAccessToken);
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-
-            // Repetir a requisição original com o novo token
             return http(originalRequest);
         } catch (refreshError) {
             console.error('Inicia Session Nuevamente', refreshError);

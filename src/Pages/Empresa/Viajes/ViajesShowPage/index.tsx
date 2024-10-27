@@ -5,13 +5,13 @@ import { useNavigate, useParams } from "react-router-dom"
 import ParadaFormPage from "../../Paradas/ParadaFormPage"
 import IParadaForm from "../Types/IParadaForm"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
-import PasajerosListaEmpresaPage from "./Components/PasajerosListaEmpresaPage"
 import ParadasTableComponent from "./Components/ParadasTableComponent"
 import PrimaryButton from "@/Components/PrimaryButton"
 import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
 import AutobusCreateCopyComponent from "../../Autobuses/AutobusesShowPage/Components/AutobusCreateCopyComponent"
 import { FaBars, FaMapMarkerAlt } from "react-icons/fa"
 import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
+import PasajerosTable from "./Components/PasajerosTable"
 
 
 interface IViajeExtends {
@@ -94,13 +94,19 @@ const ViajesShowPage = () => {
     const eliminarViaje = () => {
         http.delete(`empresa/viajes/${id}`).then(() => navigate(-1))
             .catch(({ response }) => {
-                if (response.data.conteudo)
-                    alert(response.data.conteudo)
-                else
-                    alert("Hubo un error en el processo, notifique ala empresa...")
+                if (response.data.conteudo) alert(response.data.conteudo)
+                else alert("Hubo un error en el processo, notifique ala empresa...")
             })
     }
-
+    const downloadPasajesList = () => {
+        http.get(`empresa/viajes/${id}/pdf`, { responseType: 'blob' })
+            .then(response => {
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            })
+            .catch(() => console.error('Erro ao abrir o PDF...'));
+    }
     const [mostrarParadas, setMostrarParadas] = useState(false)
     return (
         <div className="p-10">
@@ -109,23 +115,23 @@ const ViajesShowPage = () => {
                     Datos del Viaje
                 </h2>
                 <div className="space-x-3 relative flex items-center">
-                    <PrimaryButtonEmpresa onClick={() => setMostrarParadas(true)}>
+                    <PrimaryButtonEmpresa onClick={() => setMostrarParadas(true)} className="space-x-2">
                         <FaMapMarkerAlt />
                         <p>Paradas</p>
                     </PrimaryButtonEmpresa>
                     <div>
                         <ButtonOptionsMenu
-                            children={
-                                <FaBars className="h-5"></FaBars>
-                            }
+                            children={<FaBars className="h-5" />}
                             optionsMenu={<>
                                 <PrimaryButtonEmpresa className="rounded-none w-full" onClick={() => setShowCreateCopyViaje(true)}>
                                     duplicar viaje
                                 </PrimaryButtonEmpresa>
+                                <PrimaryButtonEmpresa className="rounded-none w-full" onClick={downloadPasajesList}>
+                                    imprimir lista
+                                </PrimaryButtonEmpresa>
                                 {mostrarOptions &&
                                     <PrimaryButton
-                                        onClick={() => eliminarViaje()}
-                                        className="bg-red-500 rounded-none"
+                                        onClick={() => eliminarViaje()} className="bg-red-500 rounded-none"
                                     >
                                         ELIMINAR viaje
                                     </PrimaryButton>
@@ -156,11 +162,11 @@ const ViajesShowPage = () => {
                     <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
                 </div>
                 <div className="">
-                    {viaje.precios.length == 0
-                        ? <div>Carregando</div>
-                        : viaje.precios.map(precioItem =>
-                            <PasajerosListaEmpresaPage setMostrarOptions={setMostrarOptions} idPrecio={precioItem.id} key={precioItem.id} />
-                        )
+                    {viaje.precios.length != 0 &&
+                        <PasajerosTable
+                            setMostrarOptions={setMostrarOptions}
+                            idsPrecio={viaje.precios.map(item => item.id.toString())}
+                        />
                     }
                 </div>
             </>}

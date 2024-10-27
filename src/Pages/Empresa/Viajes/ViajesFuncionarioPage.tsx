@@ -50,8 +50,8 @@ const ViajesFuncionarioPage = () => {
                         <ThComponent text="" />
                     </>}
                     tbody={<>
-                        {viajes.map(viaje =>
-                            <tr key={viaje.id}>
+                        {viajes.map((viaje, index) =>
+                            <tr key={viaje.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
                                 <TdComponent>
                                     {capitalizeFirstLetter(viaje.salida.ciudad) + ", " + viaje.salida.abreviacion} - {new DataHora(viaje.salida.dataHora).imprimir()}
                                 </TdComponent>
