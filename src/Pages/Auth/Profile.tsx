@@ -1,6 +1,6 @@
-import FormTemplate from "@/Components/FormTemplate"
-import InputError from "@/Components/InputError"
-import TextInput234 from "@/Components/TextInput234"
+import FormTemplate from "@/Components/FormComponents/FormTemplate"
+import InputError from "@/Components/FormComponents/InputError"
+import TextInput234 from "@/Components/FormComponents/TextInput234"
 
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"

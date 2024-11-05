@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import DataHora from "@/Classes/DataHora"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import IViajeEmpresa from "@/Pages/Empresa/Types/IViajeEmpresa"

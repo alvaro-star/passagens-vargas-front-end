@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import InputError from "@/Components/InputError"
+import InputError from "@/Components/FormComponents/InputError"
 import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useNavigate, useParams } from "react-router-dom"
@@ -8,6 +8,8 @@ import IParadaForm from "../Viajes/Types/IParadaForm"
 import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import IAutobusExtends from "./AutobusesShowPage/Types/IAutobusExtends"
 import IError from "@/Types/IErrors/IError"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 
 interface IErros {
     [key: string]: string | IParadaFormErro; // Firma de índice
@@ -142,42 +144,48 @@ const ViajesCreatePage = () => {
             setErros(errosInFuncton)
     }
 
-    return <div className="max-w-2xl mx-auto mt-10">
-        <form className="bg-white border p-5 flex flex-col" onSubmit={enviar}>
-            <h1 className="text-2xl font-semibold text-center">Registre los datos del nuevo Viaje</h1>
-            <div className="grid sm:grid-cols-2 gap-4">
-                <section>
-                    <p className="text-lg font-semibold">
-                        Datos dela Salida
-                    </p>
-                    <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
-                </section>
-                <section className="">
-                    <p className="text-lg font-semibold">
-                        Datos del destino
-                    </p>
-                    <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
-                </section>
-            </div>
-            <section className="">
-                <p className="text-lg font-semibold my-2">Regitre los precios del viaje</p>
-                <div className="flex gap-2">
-                    <div className="w-full">
-                        <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
-                        <InputError message={erros.precioPiso1} />
-                    </div>
-                    {autobus?.pisos.length == 2 && <div className="w-full">
-                        <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
-                        <InputError message={erros.precioPiso2} />
-                    </div>}
+    return <ContainerShowTemplate
+        header={
+            <h1 className="text-2xl font-semibold text-center w-full">
+                Registre los datos del nuevo Viaje
+            </h1>
+        }>
+        <div className="max-w-2xl mx-auto">
+            <form className="bg-white border p-5 flex flex-col rounded" onSubmit={enviar}>
+                <div className="grid sm:grid-cols-2 gap-4">
+                    <section>
+                        <p className="text-lg font-semibold">
+                            Datos dela Salida
+                        </p>
+                        <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
+                    </section>
+                    <section className="">
+                        <p className="text-lg font-semibold">
+                            Datos del destino
+                        </p>
+                        <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
+                    </section>
                 </div>
-            </section>
-            <div className="text-center mt-5">
-                <button className="bg-black py-1.5 px-3 rounded font-semibold text-white" type="submit">
-                    ENVIAR
-                </button>
-            </div>
-        </form>
-    </div>
+                <section className=" flex justify-between items-center mt-5">
+                    <p className="text-lg font-semibold my-2">Precios</p>
+                    <div className="flex gap-2">
+                        <div className="w-full">
+                            <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
+                            <InputError message={erros.precioPiso1} />
+                        </div>
+                        {autobus?.pisos.length == 2 && <div className="w-full">
+                            <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
+                            <InputError message={erros.precioPiso2} />
+                        </div>}
+                    </div>
+                </section>
+                <div className="text-center mt-5">
+                    <PrimaryButton type="submit">
+                        ENVIAR
+                    </PrimaryButton>
+                </div>
+            </form>
+        </div>
+    </ContainerShowTemplate>
 }
 export default ViajesCreatePage

@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import http from "@/http"
-import FormTemplate from "@/Components/FormTemplate"
-import TextInput234 from "@/Components/TextInput234"
-import InputError from "@/Components/InputError"
+import FormTemplate from "@/Components/FormComponents/FormTemplate"
+import TextInput234 from "@/Components/FormComponents/TextInput234"
+import InputError from "@/Components/FormComponents/InputError"
 import IError from "@/Types/IErrors/IError"
 import IUsuario from "./Types/IUsuario"
 
@@ -37,6 +37,7 @@ const Login = () => {
     const [contrasena, setContrasena] = useState<string>('')
     const [messageError, setMessageError] = useState("")
     const [errorsForm, setErrorsForm] = useState<ILoginError>(newLoginError())
+    
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault()
         let errosForm: ILoginError = newLoginError()

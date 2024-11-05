@@ -1,6 +1,6 @@
 import ApplicationLogo from "@/Components/ApplicationLogo"
 import NavLink from "@/Components/NavLink"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { Link, Outlet, useNavigate } from "react-router-dom"
 
 const PublicLayout = () => {

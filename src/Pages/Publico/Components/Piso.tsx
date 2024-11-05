@@ -16,7 +16,6 @@ const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { 
     useEffect(() => {
         if (!piso.nLinhas || !piso.nColunas) return;
         let SillasDisponibles: ISilla[] = []
-
         piso.posicoesBloqueadas.forEach(nIndisponivel => {
             SillasDisponibles[nIndisponivel - 1] = {
                 numero: -1,
@@ -56,8 +55,21 @@ const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { 
         }
 
         sillasOcupadas.forEach(sillaOcupada => {
-            SillasDisponibles[HashMapNSillaIndex[sillaOcupada - piso.primeraSilla]].ocupado = true
+            try {
+                console.log("La sila ocupada es ");
+                console.log(sillaOcupada);
+                console.log(piso.primeraSilla);
+                console.log(piso.id);
+
+                console.log(sillaOcupada - piso.primeraSilla);
+
+                SillasDisponibles[HashMapNSillaIndex[sillaOcupada - piso.primeraSilla]].ocupado = true
+            } catch (error) {
+                console.log(error);
+            }
         })
+
+        console.log(SillasDisponibles);
 
         setSillas(SillasDisponibles)
     }, [piso])

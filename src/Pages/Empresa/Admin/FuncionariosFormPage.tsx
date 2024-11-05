@@ -1,6 +1,6 @@
 
-import InputError from "@/Components/InputError"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import InputError from "@/Components/FormComponents/InputError"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useState } from "react"

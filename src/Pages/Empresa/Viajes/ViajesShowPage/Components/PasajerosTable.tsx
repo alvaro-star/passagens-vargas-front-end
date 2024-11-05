@@ -1,5 +1,5 @@
 import DataHora from "@/Classes/DataHora";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton";
 import http from "@/http";
 import { useEffect, useState } from "react";
 import IPasajeComplete from "../Types/IPasajeComplete";

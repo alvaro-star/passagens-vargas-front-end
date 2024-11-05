@@ -2,13 +2,13 @@ import { useEffect, useState } from "react"
 import PisoFormPage from "./Components/PisoFormPage"
 import IPiso from "@/Types/IPiso"
 import http from "@/http"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import Piso from "@/Pages/Publico/Components/Piso"
 import IAutobusForm from "./Types/IAutobusForm"
 import { useNavigate } from "react-router-dom"
 import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import IError from "@/Types/IErrors/IError"
-import InputError from "@/Components/InputError"
+import InputError from "@/Components/FormComponents/InputError"
 
 const construtorPiso = {
     id: null,
@@ -105,17 +105,16 @@ const AutobusesFormPage = () => {
 
     return (
         <div className="px-5 sm:px-24 pb-32">
-            <h2 className="text-center text-2xl font-semibold my-5">
+            <h2 className="text-center text-2xl font-semibold my-5 text-white">
                 Ajusta las Dimensiones del nuveo Autobus a tu preferencia
             </h2>
-
             {etapa == 1 && <section>
                 <div className="w-full p-5 border-x-2 border-t-2 bg-white flex">
                     <p className="w-full">
                         Piso 1
                     </p>
                 </div>
-                <div className=" border-2 py-5">
+                <div className=" border-2 py-5 bg-slate-100">
                     <PisoFormPage piso={piso1} etapa={etapa} setEtapa={setEtapa} setPiso={setPiso1} />
                 </div>
             </section>}
@@ -157,7 +156,7 @@ const AutobusesFormPage = () => {
                                 Piso 2
                             </p>
                         </div>
-                        <div className={"border-2 py-5"}>
+                        <div className={"border-2 py-5 bg-slate-100"}>
                             <PisoFormPage piso={piso2} etapa={etapa} setEtapa={setEtapa} setPiso={setPiso2} />
                         </div>
                     </section>

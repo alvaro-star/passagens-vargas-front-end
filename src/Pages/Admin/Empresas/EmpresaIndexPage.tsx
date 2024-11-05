@@ -3,7 +3,7 @@ import IPage from "@/Types/IPage"
 import http from "@/http"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import RelatorioFormComponent from "./components/RelatorioFormComponent"
 
 

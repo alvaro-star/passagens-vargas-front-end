@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes } from 'react';
-import ICampo from '../Types/ICampo';
+import ICampo from '../../Types/ICampo';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     isFocused?: boolean

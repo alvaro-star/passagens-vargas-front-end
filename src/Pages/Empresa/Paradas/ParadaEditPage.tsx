@@ -6,11 +6,11 @@ import http from "@/http";
 import IParada2 from "@/Types/IViaje/IParada2";
 import { useNavigate, useParams } from "react-router-dom";
 import TextInputObject from "@/Pages/Publico/Components/TextInputObject";
-import InputError from "@/Components/InputError";
-import SelectCostumized from "@/Components/SelectCostumized";
+import InputError from "@/Components/FormComponents/InputError";
+import SelectCostumized from "@/Components/FormComponents/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
 import ILugar from "@/Types/ILugar";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton";
 import IError from "@/Types/IErrors/IError";
 
 const ParadaEditPage = () => {

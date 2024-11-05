@@ -1,9 +1,9 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa";
-import InputError from "@/Components/InputError"
+import InputError from "@/Components/FormComponents/InputError"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
-import SelectCostumized from "@/Components/SelectCostumized";
+import SelectCostumized from "@/Components/FormComponents/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
 import http from "@/http";
 import IFormViaje from "../Types/IFormViaje";

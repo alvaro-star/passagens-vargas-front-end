@@ -1,5 +1,5 @@
-import FormTemplate from "@/Components/FormTemplate"
-import TextInput234 from "@/Components/TextInput234"
+import FormTemplate from "@/Components/FormComponents/FormTemplate"
+import TextInput234 from "@/Components/FormComponents/TextInput234"
 import http from "@/http"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"

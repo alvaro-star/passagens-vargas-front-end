@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PrimaryButtonEmpresa from "./PrimaryButtonEmpresa";
+import PrimaryButtonEmpresa from "./Buttons/PrimaryButtonEmpresa";
 interface Props {
     children: React.ReactNode
     classNameButton?: string

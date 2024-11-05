@@ -1,5 +1,5 @@
-import PrimaryButton from "@/Components/PrimaryButton"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import http from "@/http"
 import IPage from "@/Types/IPage/index"
 import { useEffect, useState } from "react"
@@ -8,6 +8,7 @@ import IFuncionario from "../Types/IFuncionario"
 import TdComponent from "@/Components/Table/TdComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 const FuncionariosListPage = () => {
     const path = "/empresa/admin/funcionarios"
@@ -54,11 +55,12 @@ const FuncionariosListPage = () => {
             })
     }
     return (
-        <div className="py-10 max-w-7xl mx-auto">
-            <div className="md:text-white mx-5 pb-5 font-semibold text-2xl flex items-center justify-between">
+        <ContainerShowTemplate header={<>
+            <div className="md:text-white font-semibold text-2xl">
                 <p>Lista de los funcionarios dela empresa</p>
-                <PrimaryButtonEmpresa onClick={() => navigate(path + "/create")}>Agregar un Funcionario</PrimaryButtonEmpresa>
             </div>
+            <PrimaryButtonEmpresa onClick={() => navigate(path + "/create")}>Agregar un Funcionario</PrimaryButtonEmpresa>
+        </>}>
             <TableComponent
                 header={
                     <div className="py-2 flex items-center justify-between">
@@ -95,7 +97,7 @@ const FuncionariosListPage = () => {
                     )}
                 </>}
             />
-        </div>
+        </ContainerShowTemplate >
     )
 }
 

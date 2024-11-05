@@ -1,7 +1,6 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import http from "@/http"
 import IPage from "@/Types/IPage"
-import IPiso from "@/Types/IPiso"
 import { useEffect, useState } from "react"
 import { IoSearch } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
@@ -30,21 +29,8 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
             setMes((dateNow.getMonth() + 1).toString())
             setAno(dateNow.getFullYear().toString())
             http.get<IAutobusExtendsApi>(`autobuses/${idAutobus}`)
-                .then(resposta => {
-                    let autobus: IAutobusExtends = { ...resposta.data, pisos: [] }
-                    let pisoResposta: IPiso;
-
-                    for (let i = 0; i < resposta.data.pisos.length; i++) {
-                        let pisoApi = resposta.data.pisos[i];
-                        let posicionesString: string = pisoApi.posicoesBloqueadas;
-                        let posicionesBloqueadas: number[] = [];
-
-                        if (posicionesString !== '')
-                            posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString.trim(), 10));
-
-                        pisoResposta = { ...pisoApi, posicoesBloqueadas: posicionesBloqueadas }
-                        autobus.pisos = [...autobus.pisos, pisoResposta]
-                    }
+                .then(({ data }) => {
+                    let autobus: IAutobusExtends = { ...data, pisos: [] }
                     setAutobus(autobus)
                 })
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {

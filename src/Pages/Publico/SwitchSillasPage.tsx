@@ -6,7 +6,7 @@ import ProcessLine from "./Components/ProcessLine";
 import http from "@/http";
 import IPiso from "@/Types/IPiso";
 import ISilla from "@/Types/ISilla";
-import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton";
 import IVIajeResponse from "./Types/IViajeResponse";
 import FormInlineTemplateIndependent from "./Components/FormInlineTemplateIndependent";
 

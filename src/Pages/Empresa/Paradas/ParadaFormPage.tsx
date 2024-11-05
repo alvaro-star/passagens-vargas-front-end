@@ -5,8 +5,8 @@ import ParadaForm from "../Viajes/Components/ParadaForm"
 import http from "@/http"
 import IError from "@/Types/IErrors/IError"
 import IParada2 from "@/Types/IViaje/IParada2"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
-import CloseButton from "@/Components/CloseButton"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
+import CloseButton from "@/Components/Buttons/CloseButton"
 
 interface Props {
     className?: string

@@ -1,5 +1,5 @@
 import DataHora from "@/Classes/DataHora"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import { useState } from "react"
@@ -9,6 +9,7 @@ import IViaje from "./Types/IViajeIndex"
 import TdComponent from "@/Components/Table/TdComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 const ViajesFuncionarioPage = () => {
     const timeBeforeMili = 2000
@@ -32,11 +33,12 @@ const ViajesFuncionarioPage = () => {
         navigate(viaje.id + "/vender")
     }
 
-    return <div className="p-5 w-full">
+    return <ContainerShowTemplate header={
+        <div className="text-2xl md:text-white font-semibold ">
+            Busque los viajes que necesite
+        </div>
+    }>
         <div className="max-w-7xl mx-auto">
-            <div className="md:text-white py-5 font-semibold text-2xl">
-                Busque los viajes que necesite
-            </div>
             <section>
                 <FormInlineTemplateFuncionario setViajes={setViajes} />
             </section>
@@ -86,7 +88,7 @@ const ViajesFuncionarioPage = () => {
                 />
             </section>
         </div>
-    </div>
+    </ContainerShowTemplate>
 }
 
 export default ViajesFuncionarioPage

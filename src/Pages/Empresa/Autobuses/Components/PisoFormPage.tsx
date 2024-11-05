@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import InputNumber from "./InputNumber"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import IPiso from "@/Types/IPiso"
 import ISilla from "@/Types/ISilla"
 import Piso from "@/Pages/Publico/Components/Piso"
-import InputLabel from "@/Components/InputLabel"
+import InputLabel from "@/Components/FormComponents/InputLabel"
 
 interface Props {
     piso: IPiso,

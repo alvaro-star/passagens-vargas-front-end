@@ -1,5 +1,5 @@
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput234 from "@/Components/TextInput234";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton";
+import TextInput234 from "@/Components/FormComponents/TextInput234";
 import http from "@/http";
 import { useState } from "react";
 

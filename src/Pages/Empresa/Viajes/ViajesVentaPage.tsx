@@ -1,6 +1,6 @@
 import DataHora from "@/Classes/DataHora";
-import PrimaryButton from "@/Components/PrimaryButton";
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton";
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa";
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 import http from "@/http";
 import Piso from "@/Pages/Publico/Components/Piso";
@@ -74,11 +74,6 @@ const ViajesVentaPage = () => {
         if (idPrecio) {
             http.get(`precios/${idPrecio}/vender`)
                 .then(resposta => {
-                    let posicionesString: string = resposta.data.piso.posicoesBloqueadas
-                    let posicionesBloqueadas: number[] = []
-                    if (posicionesString != '')
-                        posicionesBloqueadas = posicionesString.split(',').map(numeroString => parseInt(numeroString))
-                    resposta.data.piso.posicoesBloqueadas = posicionesBloqueadas
                     setPrecioParam(resposta.data)
                 })
         }
@@ -121,7 +116,7 @@ const ViajesVentaPage = () => {
             nSillaMedio: precio2 ? precio2.piso.primeraSilla : -1
         }
         sessionStorage.setItem("sillaFromViajeFuncionario", JSON.stringify(form))
-        navigate("/empresa/viajes/" + id + "/pagar")
+        navigate(`/empresa/viajes/${id}/pagar`)
     }
     return <div className="max-w-7xl mx-auto py-5 space-y-5">
         <section className="bg-white p-5 border border-gray-700">

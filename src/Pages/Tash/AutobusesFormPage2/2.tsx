@@ -1,5 +1,5 @@
-import InputLabel from "@/Components/InputLabel"
-import TextInput2 from "@/Components/TextInput"
+import InputLabel from "@/Components/FormComponents/InputLabel"
+import TextInput2 from "@/Components/FormComponents/TextInput"
 import SillaSquare from "@/Pages/Publico/Components/SillaSquare"
 import ICampo from "@/Types/ICampo"
 import { useEffect, useState } from "react"

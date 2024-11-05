@@ -1,13 +1,14 @@
 import { useState } from "react"
 import IViajeEmpresa from "../../Types/IViajeEmpresa"
 import InputRelatorioComponent from "./Components/InputRelatorioComponent"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import DataHora from "@/Classes/DataHora"
 import { useNavigate } from "react-router-dom"
 import TableComponent from "@/Components/Table/TableComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TdComponent from "@/Components/Table/TdComponent"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 const ViajesIndexPage = () => {
     const idEmpresa = sessionStorage.getItem('idEmpresa')
@@ -16,10 +17,13 @@ const ViajesIndexPage = () => {
     const navigate = useNavigate()
     const showViaje = (codigo: string) => navigate('/empresa/viajes/' + codigo)
 
-    return <div className="max-w-7xl m-auto py-10">
-        <h2 className="ml-5 text-2xl md:text-white font-semibold pb-5">
-            Lista de Viajes dela Empresa
-        </h2>
+    return <ContainerShowTemplate
+        header={
+            <h2 className="text-2xl md:text-white font-semibold">
+                Lista de Viajes dela Empresa
+            </h2>
+        }>
+
         {idEmpresa && <TableComponent
             header={<InputRelatorioComponent idEmpresa={idEmpresa} viajes={viajes} setViajes={setViajes} />}
             thead={
@@ -56,7 +60,7 @@ const ViajesIndexPage = () => {
                 }
             </>}
         />}
-    </div>
+    </ContainerShowTemplate>
 }
 
 export default ViajesIndexPage

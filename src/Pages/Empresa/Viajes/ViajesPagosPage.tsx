@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import TextInputObject from "@/Pages/Publico/Components/TextInputObject"
@@ -8,7 +8,7 @@ import IFactura from "./Types/IFactura";
 import FacturaComponent from "./Components/FacturaComponent";
 import http from "@/http"
 import IErrorList from "@/Types/IErrors/IErrorList"
-import InputError from "@/Components/InputError"
+import InputError from "@/Components/FormComponents/InputError"
 
 
 interface IPasaje {

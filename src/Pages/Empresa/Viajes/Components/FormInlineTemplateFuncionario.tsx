@@ -1,14 +1,15 @@
 import React, { FormHTMLAttributes, useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa";
-import InputError from "@/Components/InputError"
+import InputError from "@/Components/FormComponents/InputError"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
-import SelectCostumized from "@/Components/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
 import IFormViaje from "@/Pages/Publico/Types/IFormViaje";
 import http from "@/http";
 import IViaje from "../Types/IViajeIndex";
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
+import SelectCiudad from "@/Components/FormComponents/SelectCiudad";
+import IType from "@/Types/IType";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
@@ -22,8 +23,8 @@ interface Erros {
 }
 
 const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: Props) => {
-    const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
-    const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
+    const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null);
+    const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null);
     const [fechaIda, setFechaIda] = useState<Date | null>(new Date());
     const [errors, setErrors] = useState<Erros>({
         ciudadSalida: '',
@@ -41,15 +42,15 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
             fechaIda: !fechaIda ? 'Valor inválido' : ''
         };
 
-        if (ciudadSalida && ciudadDestino && ciudadSalida.id === ciudadDestino.id) {
+        if (ciudadSalida && ciudadDestino && ciudadSalida.value === ciudadDestino.value) {
             erros.ciudadSalida = 'La salida es igual al destino';
             erros.ciudadDestino = 'El destino es igual a la salida';
         }
 
         if (!Object.values(erros).some(error => !!error) && idEmpresa != "") {
             const formViajes = {
-                idCiudadSalida: ciudadSalida!.id,
-                idCiudadDestino: ciudadDestino ? ciudadDestino.id : 0,
+                idCiudadSalida: ciudadSalida!.value,
+                idCiudadDestino: ciudadDestino ? ciudadDestino.value : 0,
                 fechaSalida: dataConvert(fechaIda!)
             };
 
@@ -67,11 +68,13 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
         setErrors(erros);
     };
 
-    const findCiudadById = (id: number, setCiudad: (c: ICiudad | null) => void) => {
+    const findCiudadById = (id: number, setCiudad: (c: IType | null) => void) => {
         http.get<ICiudad>("ciudades/" + id)
-            .then(({ data }) => { setCiudad(({ ...data, nombre: capitalizeFirstLetter(data.nombre) })) })
+            .then(({ data }) => { setCiudad(({ value: data.id, label: capitalizeFirstLetter(data.nombre) })) })
             .catch(() => setCiudad(null))
     }
+
+
 
     useEffect(() => {
         let cookie1 = localStorage.getItem("formViajeFuncionarios")
@@ -83,6 +86,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
             if (object.idCiudadDestino != 0) {
                 findCiudadById(object.idCiudadDestino, setCiudadDestino)
             }
+
             findCiudadById(object.idCiudadSalida, setCiudadSalida)
             setFechaIda(new Date(object.fechaSalida + "T00:00:00"));
             http.post<IViaje[]>("empresa/viajes/" + idEmpresa, object)
@@ -101,11 +105,11 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
             {...props}
             onSubmit={enviar}>
             <div className="w-full relative">
-                <SelectCostumized ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} labelValue="Ciudad de Origen" />
+                <SelectCiudad labelValue="Origen" ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} />
                 <InputError className="absolute pl-2" message={errors.ciudadSalida} />
             </div>
             <div className="w-full relative">
-                <SelectCostumized ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Ciudad de Destino" />
+                <SelectCiudad labelValue="Destino" ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} />
                 <InputError className="absolute pl-2" message={errors.ciudadDestino} />
             </div>
             <div className="relative">

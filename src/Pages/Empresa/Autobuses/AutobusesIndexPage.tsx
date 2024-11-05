@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import IPage from "@/Types/IPage"
 import http from "@/http"
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { useNavigate } from "react-router-dom"
 import TdComponent from "@/Components/Table/TdComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 interface IAutobus {
     id: number,
@@ -61,44 +62,42 @@ const AutobusesIndexPage = () => {
         }
     }
     return (<>
-        <div className="pt-10 pb-5 max-w-7xl mx-auto">
-            <div className="px-5 text-white flex items-center justify-between">
-                <div className="flex items-center">
-                    <p className="text-2xl ml-2 font-semibold w-full">
-                        Lista de autobuses
-                    </p>
-                </div>
+        <ContainerShowTemplate
+            header={<>
+                <p className="text-2xl ml-2 font-semibold w-full">
+                    Lista de autobuses
+                </p>
                 {tipoUsuario === "ROLE_EMPRESA_ADMIN" &&
-                    <PrimaryButtonEmpresa onClick={create} className="">registrar un Autobus</PrimaryButtonEmpresa>
+                    <PrimaryButtonEmpresa onClick={create} className="whitespace-nowrap">registrar un Autobus</PrimaryButtonEmpresa>
                 }
-            </div>
-        </div>
-        <TableComponent
-            header={<div className="flex items-center justify-between py-2">
-                <p>Autobuses</p>
-                {nextPage != null &&
-                    <div className="w-full text-center mt-2">
-                        <PrimaryButton onClick={verMais} className="rounded-none bg-blue-500 hover:bg-blue-600">Ver Mas</PrimaryButton>
-                    </div>
-                }
-            </div>}
-            thead={<>
-                <ThComponent text="Placa" />
-                <ThComponent text="" />
-            </>}
-            tbody={<>
-                {autobuses.map((autobus, index) =>
-                    <tr key={autobus.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
-                        <TdComponent>
-                            {autobus.placa}
-                        </TdComponent>
-                        <TdComponent className="text-right">
-                            <PrimaryButton disabled={!autobus.enabled} onClick={() => verViajes(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
-                        </TdComponent>
-                    </tr>
-                )}
-            </>}
-        />
+            </>}>
+            <TableComponent
+                header={<div className="flex items-center justify-between py-2">
+                    <p>Autobuses</p>
+                    {nextPage != null &&
+                        <div className="w-full text-center mt-2">
+                            <PrimaryButton onClick={verMais} className="rounded-none bg-blue-500 hover:bg-blue-600">Ver Mas</PrimaryButton>
+                        </div>
+                    }
+                </div>}
+                thead={<>
+                    <ThComponent text="Placa" />
+                    <ThComponent text="" />
+                </>}
+                tbody={<>
+                    {autobuses.map((autobus, index) =>
+                        <tr key={autobus.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
+                            <TdComponent>
+                                {autobus.placa}
+                            </TdComponent>
+                            <TdComponent className="text-right">
+                                <PrimaryButton disabled={!autobus.enabled} onClick={() => verViajes(autobus.id)} className="bg-blue-500 rounded-none">Ver viajes</PrimaryButton>
+                            </TdComponent>
+                        </tr>
+                    )}
+                </>}
+            />
+        </ContainerShowTemplate>
     </>
     )
 }

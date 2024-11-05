@@ -6,12 +6,13 @@ import ParadaFormPage from "../../Paradas/ParadaFormPage"
 import IParadaForm from "../Types/IParadaForm"
 import IPrecio2 from "@/Types/IViaje/IPrecio2"
 import ParadasTableComponent from "./Components/ParadasTableComponent"
-import PrimaryButton from "@/Components/PrimaryButton"
-import PrimaryButtonEmpresa from "@/Components/PrimaryButtonEmpresa"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
+import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import AutobusCreateCopyComponent from "../../Autobuses/AutobusesShowPage/Components/AutobusCreateCopyComponent"
 import { FaBars, FaMapMarkerAlt } from "react-icons/fa"
 import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
 import PasajerosTable from "./Components/PasajerosTable"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 
 interface IViajeExtends {
@@ -109,8 +110,8 @@ const ViajesShowPage = () => {
     }
     const [mostrarParadas, setMostrarParadas] = useState(false)
     return (
-        <div className="p-10">
-            <div className="flex justify-between items-center">
+        <ContainerShowTemplate
+            header={<>
                 <h2 className="md:text-white text-2xl font-semibold">
                     Datos del Viaje
                 </h2>
@@ -142,35 +143,37 @@ const ViajesShowPage = () => {
                     <div className="hidden absolute right-0">
                     </div>
                 </div>
-            </div>
-            {viaje && <>
-                {showCreateCopyViaje &&
-                    <div className="absolute inset-0 z-20 grid place-content-center bg-white bg-opacity-60">
-                        <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
-                    </div>
-                }
-                <div hidden={!mostrarParadas} className="absolute bg-slate-200 inset-0 pt-10 md:pt-20 z-10 bg-opacity-75">
-                    <ParadasTableComponent
-                        mostrarOptions={mostrarOptions}
-                        closeModal={() => setMostrarParadas(false)}
-                        paradas={viaje.paradas}
-                        eliminarParada={eliminarParada}
-                        setOpenFormCreate={setOpenFormCreate}
-                    />
-                </div>
-                <div className={"absolute inset-0 mt-36 z-20 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
-                    <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
-                </div>
-                <div className="">
-                    {viaje.precios.length != 0 &&
-                        <PasajerosTable
-                            setMostrarOptions={setMostrarOptions}
-                            idsPrecio={viaje.precios.map(item => item.id.toString())}
-                        />
+            </>}>
+            <>
+                {viaje && <>
+                    {showCreateCopyViaje &&
+                        <div className="absolute inset-0 z-20 grid place-content-center bg-white bg-opacity-60">
+                            <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
+                        </div>
                     }
-                </div>
-            </>}
-        </div>
+                    <div hidden={!mostrarParadas} className="absolute bg-slate-200 inset-0 pt-10 md:pt-20 z-50 bg-opacity-75">
+                        <ParadasTableComponent
+                            mostrarOptions={mostrarOptions}
+                            closeModal={() => setMostrarParadas(false)}
+                            paradas={viaje.paradas}
+                            eliminarParada={eliminarParada}
+                            setOpenFormCreate={setOpenFormCreate}
+                        />
+                    </div>
+                    <div className={"absolute inset-0 mt-36 z-30 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
+                        <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
+                    </div>
+                    <div className="">
+                        {viaje.precios.length != 0 &&
+                            <PasajerosTable
+                                setMostrarOptions={setMostrarOptions}
+                                idsPrecio={viaje.precios.map(item => item.id.toString())}
+                            />
+                        }
+                    </div>
+                </>}
+            </>
+        </ContainerShowTemplate>
     )
 }
 

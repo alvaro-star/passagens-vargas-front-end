@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import IFuncionario from "@/Pages/Empresa/Types/IFuncionario"
 import IPage from "@/Types/IPage"
 import http from "@/http"

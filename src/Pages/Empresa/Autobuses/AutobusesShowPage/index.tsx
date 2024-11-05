@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import IAutobusExtends from "./Types/IAutobusExtends"
@@ -15,6 +15,7 @@ import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
 import { FaBars } from "react-icons/fa"
 import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
+import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -49,52 +50,50 @@ const AutobusesShowPage = () => {
 
 
     return (
-        <div className="mx-auto max-w-7xl py-10">
-            {autobus && <>
-                <div className="w-full px-5 py-3 text-white font-semibold flex justify-between items-center">
-                    <p className="text-2xl pb-3">Lista de Viajes del autobus {autobus.placa}</p>
-                    <ButtonOptionsMenu
-                        children={<FaBars className="h-5" />}
-                        optionsMenu={<>
-                            {GetUserType() === "ROLE_EMPRESA_ADMIN" &&
-                                <>
-                                    <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
-                                    <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
-                                </>
-                            }
-                            <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
-                            <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> nuevo viaje</PrimaryButton>
-                        </>}
-                    />
-                </div>
-                {showEditForm && <div className="absolute inset-0 z-20 grid place-content-center">
-                    <AutobusEditComponent
-                        idAutobus={id!}
-                        setShowForm={setShowEditForm}
-                        placaProp={autobus.placa}
-                        setPlacaProp={editarAutobus}
-                    />
-                </div>}
-            </>}
+        <ContainerShowTemplate
+            header={autobus && <>
+                <p className="text-2xl font-semibold">
+                    Lista de Viajes del autobus {autobus.placa}
+                </p>
+                <ButtonOptionsMenu
+                    children={<FaBars className="h-5" />}
+                    optionsMenu={<>
+                        {GetUserType() === "ROLE_EMPRESA_ADMIN" &&
+                            <>
+                                <PrimaryButton className="bg-yellow-500 rounded-none" onClick={() => setShowEditForm(true)}>editar</PrimaryButton>
+                                <PrimaryButton className="bg-red-500 rounded-none" onClick={eliminarAutobus}>eliminar</PrimaryButton>
+                            </>
+                        }
+                        <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
+                        <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> nuevo viaje</PrimaryButton>
+                    </>}
+                />
+            </>}>
+
+            {autobus && showEditForm && <div className="absolute inset-0 z-20 grid place-content-center">
+                <AutobusEditComponent
+                    idAutobus={id!}
+                    setShowForm={setShowEditForm}
+                    placaProp={autobus.placa}
+                    setPlacaProp={editarAutobus}
+                />
+            </div>}
             <div hidden={!showModel} className="bg-white p-5">
                 <div className="ml-4">
                     Modelo
                 </div>
                 {autobus && <AutobusModelShowPage autobus={autobus} />}
             </div>
-
             <TableComponent
                 header={
                     <InputRelatorioComponent idAutobus={id} viajes={viajes} setViajes={setViajes} setAutobus={setAutobus} />
                 }
-                thead={
-                    <>
-                        <ThComponent text="Salida" />
-                        <ThComponent text="Destino" />
-                        <ThComponent text="Saldo en Efectivo" />
-                        <ThComponent text="" />
-                    </>
-                }
+                thead={<>
+                    <ThComponent text="Salida" />
+                    <ThComponent text="Destino" />
+                    <ThComponent text="Saldo en Efectivo" />
+                    <ThComponent text="" />
+                </>}
                 tbody={<>
                     {viajes.map((viaje, index) =>
                         <tr key={viaje.id} className={`${(index % 2 ? "" : "bg-gray-100")} hover:bg-slate-200`}>
@@ -121,7 +120,7 @@ const AutobusesShowPage = () => {
                     }
                 </>}
             />
-        </div >
+        </ContainerShowTemplate >
     )
 }
 

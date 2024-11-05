@@ -1,5 +1,5 @@
 import React, { FormHTMLAttributes } from "react"
-import PrimaryButton from "./PrimaryButton"
+import PrimaryButton from "../Buttons/PrimaryButton"
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,

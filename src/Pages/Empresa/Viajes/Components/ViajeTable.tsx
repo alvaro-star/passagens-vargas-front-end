@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import http from "@/http"
 import IPage from "@/Types/IPage"
 import { useEffect, useState } from "react"

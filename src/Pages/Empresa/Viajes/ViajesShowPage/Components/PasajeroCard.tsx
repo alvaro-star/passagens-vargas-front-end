@@ -1,4 +1,4 @@
-import PrimaryButton from "@/Components/PrimaryButton"
+import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
 import { IoClose } from "react-icons/io5"
 import ISillaType from "../Types/ISillaType"

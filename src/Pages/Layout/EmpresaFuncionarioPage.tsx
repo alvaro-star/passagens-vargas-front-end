@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import SecondaryButton from "../../Components/SecondaryButton"
+import SecondaryButton from "../../Components/Buttons/SecondaryButton"
 import ApplicationLogo from "../../Components/ApplicationLogo"
 import NavLink from "../../Components/NavLink"
 

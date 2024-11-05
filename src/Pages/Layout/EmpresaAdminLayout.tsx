@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaHome, FaMapMarked, FaNewspaper, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
 import { TbLogout2 } from "react-icons/tb";
 import { useState } from "react"
-import CloseButton from "@/Components/CloseButton"
+import CloseButton from "@/Components/Buttons/CloseButton"
 import SubtittleComponent from "./Components/SubtittleComponent"
 import LiButtonComponent from "./Components/LiButtonComponent"
 import LinkLayoutComponent from "./Components/LinkLayoutComponent"
@@ -42,7 +42,7 @@ const EmpresaAdminLayout = () => {
     const [moreOptions, setMoreOptions] = useState(false)
     return (
         <section className="min-h-screen bg-gray-100 w-full md:flex">
-            <div className=" md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10">
+            <div className=" md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-50">
                 <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
                     <button
                         className="cursor-pointer text-black opacity-50 md:hidden px-5 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
@@ -59,7 +59,7 @@ const EmpresaAdminLayout = () => {
                             <a className="text-blueGray-500 block py-1 px-3" href="#pablo">
                                 <FaBell />
                             </a>
-                            <div className="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48">
+                            <div className="hidden bg-white text-base z-30 float-left py-2 list-none text-left rounded shadow-lg min-w-48">
                                 <LinkLayoutComponent>Action</LinkLayoutComponent>
                                 <LinkLayoutComponent>Another action</LinkLayoutComponent>
                                 <LinkLayoutComponent>Something else here</LinkLayoutComponent>
@@ -179,18 +179,6 @@ const EmpresaAdminLayout = () => {
                 <div className="px-6 md:-mt-64">
                     <Outlet />
                 </div>
-            </div>
-            <div hidden>
-                <LiButtonComponent icon text="Login" />
-                <LiButtonComponent icon text="Register" />
-                <FaTv className="text-blueGray-400 mr-2 text-sm" />
-                <FaTools className="text-blueGray-400 mr-2 text-sm" />
-                <FaTable className="text-blueGray-400 mr-2 text-sm" />
-                <FaMapMarked className="text-blueGray-400 mr-2 text-sm" />
-                <FaNewspaper className="text-blueGray-400 mr-2 text-sm" />
-                <FaUserCircle className="text-blueGray-400 mr-2 text-sm" />
-                <FaFingerprint className="text-blueGray-400 mr-2 text-sm" />
-                <FaClipboardList className="text-blueGray-400 mr-2 text-sm" />
             </div>
         </section>
     )

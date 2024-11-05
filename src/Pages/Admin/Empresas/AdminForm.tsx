@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import http from "@/http"
-import FormTemplate from "@/Components/FormTemplate"
-import TextInput234 from "@/Components/TextInput234"
+import FormTemplate from "@/Components/FormComponents/FormTemplate"
+import TextInput234 from "@/Components/FormComponents/TextInput234"
 
 const AdminForm = () => {
     const navigate = useNavigate()
