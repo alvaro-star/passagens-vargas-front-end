@@ -1,4 +1,7 @@
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import { CookieRole } from "@/Helpers/CookieGenerate/CookiesAuth"
+import processBlob from "@/Helpers/processBlob"
 import http from "@/http"
 import IPage from "@/Types/IPage"
 import { useEffect, useState } from "react"
@@ -38,10 +41,14 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
         setAnos(anosTemp)
     }, [idEmpresa])
 
-    const buscar = () => {
+    const convertPropsToDate = () => {
         const mesInt = parseInt(mes) - 1;
         const anoInt = parseInt(ano);
-        const dataAnalise = new Date(anoInt, mesInt, 2);
+        return new Date(anoInt, mesInt, 2);
+    }
+
+    const buscar = () => {
+        const dataAnalise = convertPropsToDate();
 
         http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/empresa`, {
             dataAnalise: dataAnalise,
@@ -55,9 +62,7 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
 
     const verMais = () => {
         if (nextPage) {
-            const mesInt = parseInt(mes) - 1;
-            const anoInt = parseInt(ano);
-            const dataAnalise = new Date(anoInt, mesInt, 2);
+            const dataAnalise = convertPropsToDate();
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/empresa?page=${nextPage}`, {
                 dataAnalise: dataAnalise,
                 idEmpresa: idEmpresa
@@ -70,6 +75,17 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
         }
     }
 
+    const downloadRelatorio = async () => {
+        const empresaId = CookieEmpresaId.get()
+        const formData = { idEmpresa: empresaId, data: convertPropsToDate() }
+        try {
+            const response = await http.post('/facturas', formData, { responseType: 'blob' })
+            processBlob(response)
+        } catch (error) {
+            console.log("Hubo un error en la solicitud");
+        }
+    }
+
 
     return <div className="w-full flex justify-between items-center py-2 px-2">
         <section className="flex items-center">
@@ -77,11 +93,11 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
                 Viajes del mes
             </p>
             <select value={mes} onChange={e => setMes(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l focus:ring-blue-500 focus:border-blue-500 block p-1">
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l focus:ring-blue-500 focus:border-blue-500 block p-1 outline-none">
                 {meses.map(mes => <option key={mes} value={mes}>{mes}</option>)}
             </select>
             <select value={ano} onChange={e => setAno(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-1">
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-1 outline-none">
                 {anos.map(ano => <option key={ano} value={ano}>{ano}</option>)}
             </select>
             <button
@@ -90,7 +106,10 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
                 <IoSearch style={{ fontWeight: "bold" }} className="text-xl" />
             </button>
         </section>
-        <section>
+        <section className="flex items-center space-x-2">
+            {CookieRole.get() == "ROLE_EMPRESA_ADMIN" && <PrimaryButton onClick={downloadRelatorio}>
+                DESCARGAR RELATORIO
+            </PrimaryButton>}
             {nextPage && <PrimaryButton onClick={verMais}> ver mas viajes </PrimaryButton>}
         </section>
     </div>

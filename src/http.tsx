@@ -25,14 +25,9 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
     return response;
 }, async function (error) {
-    console.log("error");
-    console.log(error);
-    console.log("error");
     const originalRequest = error.config;
     
     if ((error.response?.status === 401 || error.response.status === 403) && !originalRequest._retry) {
-        console.log("Entrei no if");
-        
         originalRequest._retry = true;
         try {
             const refreshToken = CookieRefreshToken.get()
@@ -45,12 +40,7 @@ http.interceptors.response.use(function (response) {
 
             return http(originalRequest);
         } catch (refreshError) {
-            console.log("erroDaSolicitacao");
-            
-            console.log(error);
-
-            console.error('Inicia Session Nuevamente', refreshError);
-            //window.location.href = '/login';
+            window.location.href = '/login';
             return Promise.reject(refreshError);
         }
     }

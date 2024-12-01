@@ -19,11 +19,11 @@ const ViajesIndexPage = () => {
     const showViaje = (codigo: string) => navigate('/empresa/viajes/' + codigo)
 
     return <ContainerShowTemplate
-        header={
+        header={<>
             <h2 className="text-2xl md:text-white font-semibold">
                 Lista de Viajes dela Empresa
             </h2>
-        }>
+        </>}>
 
         {idEmpresa && <TableComponent
             header={<>

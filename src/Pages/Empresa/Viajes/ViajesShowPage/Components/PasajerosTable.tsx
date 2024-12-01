@@ -48,7 +48,7 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
                 return data; // Devuelve los datos para recogerlos más tarde
             });
 
-            promisesResponse = await Promise.all(promises); // Espera a que todas las promesas se resuelvan
+            promisesResponse = await Promise.all(promises);
         } catch (error) {
             console.log("Hubo un error en la búsqueda", error);
             return [];
@@ -56,7 +56,7 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
 
         let pasajeros: IPasajeComplete[] = [];
         promisesResponse.forEach(lista => pasajeros = pasajeros.concat(lista))
-        return pasajeros; // Devuelve los pasajeros obtenidos
+        return pasajeros;
     };
 
     useEffect(() => {
