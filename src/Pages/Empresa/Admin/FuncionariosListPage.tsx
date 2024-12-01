@@ -9,12 +9,13 @@ import TdComponent from "@/Components/Table/TdComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
 
 const FuncionariosListPage = () => {
     const path = "/empresa/admin/funcionarios"
     const navigate = useNavigate()
     const [funcionarios, setFuncionarios] = useState<IFuncionario[]>([])
-    const idEmpresa = sessionStorage.getItem("idEmpresa")
+    const idEmpresa = CookieEmpresaId.get()
     const [nextPage, setNextPage] = useState<number | null>(null)
     useEffect(() => {
         http.get<IPage<IFuncionario>>("funcionarios/" + idEmpresa)
@@ -38,7 +39,7 @@ const FuncionariosListPage = () => {
     }
 
     const eliminar = (email: string) => {
-        const idEmpresa = sessionStorage.getItem("idEmpresa")
+        const idEmpresa = CookieEmpresaId.get()
         http.delete("funcionarios/" + idEmpresa + "/" + email)
             .then(() => {
                 const updateFuncionarios = [...funcionarios]

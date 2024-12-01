@@ -1,6 +1,6 @@
 import axios from 'axios'
-const COOKIE_TOKEN_NAME = "token"
-const COOKIE_REFRESH_TOKEN_NAME = "refreshToken"
+import { CookieRefreshToken, CookieToken } from './Helpers/CookieGenerate/CookiesAuth'
+
 const http = axios.create({
     //baseURL: 'http://85.209.95.183:8080/',
     baseURL: 'http://127.0.0.1:8080/',
@@ -11,7 +11,7 @@ const http = axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-    const token = sessionStorage.getItem(COOKIE_TOKEN_NAME)
+    const token = CookieToken.get()
 
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`
@@ -30,10 +30,10 @@ http.interceptors.response.use(function (response) {
     if ((error.response.status === 401 || error.response.status === 403) && !originalRequest._retry) {
         originalRequest._retry = true;
         try {
-            const refreshToken = sessionStorage.getItem(COOKIE_REFRESH_TOKEN_NAME);
+            const refreshToken = CookieRefreshToken.get()
             const response = await axios.post('auth/refresh', { refreshToken });
             const newAccessToken = response.data.accessToken;
-            sessionStorage.setItem(COOKIE_TOKEN_NAME, newAccessToken);
+            CookieToken.set(newAccessToken)
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return http(originalRequest);
         } catch (refreshError) {

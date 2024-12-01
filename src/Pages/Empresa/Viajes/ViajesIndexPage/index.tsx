@@ -9,9 +9,10 @@ import TableComponent from "@/Components/Table/TableComponent"
 import ThComponent from "@/Components/Table/ThComponent"
 import TdComponent from "@/Components/Table/TdComponent"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
 
 const ViajesIndexPage = () => {
-    const idEmpresa = sessionStorage.getItem('idEmpresa')
+    const idEmpresa = CookieEmpresaId.get()
     const [viajes, setViajes] = useState<IViajeEmpresa[]>([])
 
     const navigate = useNavigate()

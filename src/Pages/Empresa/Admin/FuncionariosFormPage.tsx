@@ -5,6 +5,7 @@ import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
 
 const FuncionariosFormPage = () => {
     const [email, setEmail] = useState("")
@@ -13,7 +14,7 @@ const FuncionariosFormPage = () => {
     const navigate = useNavigate()
     const enviar = (e: React.FormEvent<HTMLDivElement>) => {
         e.preventDefault()
-        const idEmpresa = sessionStorage.getItem("idEmpresa")
+        const idEmpresa = CookieEmpresaId.get()
         let dados = { email }
         setEmail("")
         setEmailErro("")

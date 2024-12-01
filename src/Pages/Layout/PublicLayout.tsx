@@ -1,7 +1,7 @@
-import ApplicationLogo from "@/Components/ApplicationLogo"
 import NavLink from "@/Components/NavLink"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { Link, Outlet, useNavigate } from "react-router-dom"
+import { CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 
 const PublicLayout = () => {
     const navihate = useNavigate()
@@ -15,9 +15,9 @@ const PublicLayout = () => {
         label: 'Sobre',
         url: '/sobre'
     }]
-    let token = sessionStorage.getItem("token")
+    let token = CookieToken.get()
     const sair = () => {
-        sessionStorage.removeItem("token")
+        CookieToken.remove()
         navihate("/")
     }
 
@@ -25,7 +25,7 @@ const PublicLayout = () => {
         <>
             <header className="p-5 bg-slate-100 flex justify-between items-center">
                 <div className="flex items-center justify-center gap-2">
-                    <ApplicationLogo className="h-8" />
+                    V
                     {links.map((link, index) =>
                         <NavLink active={true} to={link.url} key={index}>
                             {link.label}

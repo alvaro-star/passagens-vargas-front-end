@@ -8,7 +8,8 @@ import ThComponent from "@/Components/Table/ThComponent"
 import TableComponent from "@/Components/Table/TableComponent"
 import PrimaryButtonEmpresa from "@/Components/Buttons/PrimaryButtonEmpresa"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
-
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import { CookieRole } from "@/Helpers/CookieGenerate/CookiesAuth"
 interface IAutobus {
     id: number,
     placa: string,
@@ -21,9 +22,9 @@ interface IAutobus {
 
 const AutobusesIndexPage = () => {
     const pathFuncionario = '/empresa/autobuses'
-    const tipoUsuario = sessionStorage.getItem("role")
+    const tipoUsuario = CookieRole.get()
     const navigate = useNavigate()
-    const idEmpresa = sessionStorage.getItem('idEmpresa')
+    const idEmpresa = CookieEmpresaId.get()
     const [autobuses, setAutobuses] = useState<IAutobus[]>([])
     const [nextPage, setNextPage] = useState<number | null>(null)
 

@@ -6,6 +6,8 @@ import TextInput234 from "@/Components/FormComponents/TextInput234"
 import InputError from "@/Components/FormComponents/InputError"
 import IError from "@/Types/IErrors/IError"
 import IUsuario from "./Types/IUsuario"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import { CookieRefreshToken, CookieRole, CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 
 interface ILogin {
     token: string
@@ -49,8 +51,8 @@ const Login = () => {
         http.post<ILogin>("auth/login", usuario)
             .then(response => {
                 response.data.token
-                sessionStorage.setItem("token", response.data.token)
-                sessionStorage.setItem("refreshToken", response.data.refreshToken)
+                CookieToken.set(response.data.token)
+                CookieRefreshToken.set(response.data.refreshToken)
 
                 setErrorsForm(errosForm)
                 http.get<IUsuario>("/usuarios/mydata").then(resposta => {
@@ -58,7 +60,7 @@ const Login = () => {
                     setContrasena('')
                     //Só será mandado um role, por enquanto
                     const rolePadrao = tipoUsuario(resposta.data.roles)
-                    sessionStorage.setItem("role", rolePadrao)
+                    CookieRole.set(rolePadrao)
 
                     switch (rolePadrao) {
                         case "ROLE_ADMIN":
@@ -66,13 +68,13 @@ const Login = () => {
                             break;
                         case "ROLE_EMPRESA_ADMIN":
                             if (resposta.data.idEmpresa) {
-                                sessionStorage.setItem("idEmpresa", resposta.data.idEmpresa)
+                                CookieEmpresaId.set(resposta.data.idEmpresa)
                                 navigate("/empresa")
                             }
                             break;
                         case "ROLE_EMPRESA_FUNCIONARIO":
                             if (resposta.data.idEmpresa) {
-                                sessionStorage.setItem("idEmpresa", resposta.data.idEmpresa)
+                                CookieEmpresaId.set(resposta.data.idEmpresa)
                                 navigate("/empresa/viajes")
                             }
                             break;

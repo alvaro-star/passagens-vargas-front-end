@@ -14,6 +14,7 @@ import InputError from "@/Components/FormComponents/InputError"
 import SelectCiudad from "@/Components/FormComponents/SelectCiudad"
 import SelectComponent from "@/Components/FormComponents/SelectComponent"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
 
 
 const ViajesCreatePage = () => {
@@ -53,6 +54,12 @@ const ViajesCreatePage = () => {
                 })
         }
     }
+
+    useEffect(() => {
+        
+        CookieEmpresaId.get()       
+    }, [])
+
     useEffect(() => {
         fetchLugares(ciudadSalida, setIdLugarSalida, setLugaresSalida)
     }, [ciudadSalida])
@@ -86,7 +93,6 @@ const ViajesCreatePage = () => {
     }
 
 
-
     const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const errorsForm = validarFormData()
@@ -112,11 +118,11 @@ const ViajesCreatePage = () => {
             return
         } catch (erro: CustomAxiosResponse | any) {
             console.log(erro);
-            
+
             if (erro.status == 422) {
                 const formError = processErro422(erro)
                 setErros(formError)
-            } else if (erro.status == 409) {    
+            } else if (erro.status == 409) {
                 alert(erro.response.data.conteudo)
             } else alert("Hubo un error en la solicitud...")
         }
@@ -142,7 +148,12 @@ const ViajesCreatePage = () => {
         }>
         <div className="max-w-2xl mx-auto">
             <form className="bg-white border p-5 flex flex-col rounded" onSubmit={enviar}>
-                <h2 className="">
+                <h2 className="text-xl font-semibold mb-3">
+                    <SelectComponent>
+
+                    </SelectComponent>
+                </h2>
+                <h2 className="text-xl font-semibold mb-3">
                     Datos del Viaje
                 </h2>
                 <div className="flex gap-3">
@@ -161,7 +172,7 @@ const ViajesCreatePage = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-3 mt-3">
                     <div className="space-y-3">
-                        <p>Origen</p>
+                        <p className="font-semibold">Origen</p>
                         <SelectCiudad labelValue="Ciudad" ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} />
                         <SelectComponent labelValue="Lugar" value={idLugarSalida} onChange={e => setIdLugarSalida(e.target.value)}>
                             {lugaresSalida.map(lugar => <option key={lugar.id} value={lugar.id}>
@@ -171,7 +182,7 @@ const ViajesCreatePage = () => {
                         <InputError className="w-full ml-2" message={erros.idLugarSalida} />
                     </div>
                     <div className="space-y-3">
-                        <p>Destino</p>
+                        <p className="font-semibold">Destino</p>
                         <SelectCiudad labelValue="Ciudad" ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} />
                         <SelectComponent labelValue="Lugar" value={idLugarDestino} onChange={e => setIdLugarDestino(e.target.value)}>
                             {lugaresDestino.map(lugar => <option key={lugar.id} value={lugar.id}>
@@ -182,7 +193,7 @@ const ViajesCreatePage = () => {
                     </div>
                 </div>
                 <section className=" flex justify-between items-center mt-5">
-                    <p className="text-lg font-semibold my-2">Precios</p>
+                    <p className="text-lg font-semibold my-2">Precio</p>
                     <div className="flex gap-2">
                         <div className="w-full">
                             <TextInputEmpresa className="w-44" value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />

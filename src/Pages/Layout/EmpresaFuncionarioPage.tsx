@@ -1,7 +1,9 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import SecondaryButton from "../../Components/Buttons/SecondaryButton"
-import ApplicationLogo from "../../Components/ApplicationLogo"
+
 import NavLink from "../../Components/NavLink"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import { CookieRefreshToken, CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 
 
 const EmpresaFuncionarioLayout = () => {
@@ -15,8 +17,9 @@ const EmpresaFuncionarioLayout = () => {
     }]
 
     const deslogar = () => {
-        sessionStorage.removeItem('token')
-        sessionStorage.removeItem('idEmpresa')
+        CookieEmpresaId.remove()
+        CookieToken.remove()
+        CookieRefreshToken.remove()
         navigate('/')
     }
 
@@ -24,7 +27,7 @@ const EmpresaFuncionarioLayout = () => {
         <section className="min-h-screen relative bg-gray-100">
             <header className="w-full bg-blue-500 text-white p-5 flex justify-between">
                 <div className="flex items-center gap-5">
-                    <ApplicationLogo className="h-10 invert" />
+                    V
                     {rotas.map((link, index) =>
                         <NavLink active={true} to={link.url} key={index} className="text-white">
                             {link.label}

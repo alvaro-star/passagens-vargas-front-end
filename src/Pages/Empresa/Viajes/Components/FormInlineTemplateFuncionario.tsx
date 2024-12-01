@@ -10,6 +10,7 @@ import IViaje from "../Types/IViajeIndex";
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
 import SelectCiudad from "@/Components/FormComponents/SelectCiudad";
 import IType from "@/Types/IType";
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
     className?: string,
@@ -34,7 +35,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
 
     const enviar = (eve: React.FormEvent<HTMLFormElement>) => {
         eve.preventDefault();
-        let cookie2 = sessionStorage.getItem("idEmpresa")
+        let cookie2 = CookieEmpresaId.get()
         let idEmpresa = cookie2 ? cookie2 : ""
         let erros: Erros = {
             ciudadSalida: !ciudadSalida ? 'Escoje una ciudad válida' : '',
@@ -78,7 +79,7 @@ const FormInlineTemplateFuncionario = ({ className = '', setViajes, ...props }: 
 
     useEffect(() => {
         let cookie1 = localStorage.getItem("formViajeFuncionarios")
-        let cookie2 = sessionStorage.getItem("idEmpresa")
+        let cookie2 = CookieEmpresaId.get()
         let formData = cookie1 ? cookie1 : ""
         let idEmpresa = cookie2 ? cookie2 : ""
         if (formData != "" && idEmpresa != "") {

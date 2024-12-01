@@ -6,10 +6,12 @@ import CloseButton from "@/Components/Buttons/CloseButton"
 import SubtittleComponent from "./Components/SubtittleComponent"
 import LiButtonComponent from "./Components/LiButtonComponent"
 import LinkLayoutComponent from "./Components/LinkLayoutComponent"
+import { CookieRefreshToken, CookieRole, CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth";
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId";
 
 const EmpresaAdminLayout = () => {
     const navigate = useNavigate()
-    const tipoUsuario = sessionStorage.getItem("role")
+    const tipoUsuario = CookieRole.get()
     const [activeRoute, setActiveRoute] = useState("/empresa")
     const rotas = {
         homePage: {
@@ -35,8 +37,9 @@ const EmpresaAdminLayout = () => {
     }
 
     const deslogar = () => {
-        sessionStorage.removeItem('token')
-        sessionStorage.removeItem('idEmpresa')
+        CookieEmpresaId.remove()
+        CookieToken.remove()
+        CookieRefreshToken.remove()
         navigate('/')
     }
     const [moreOptions, setMoreOptions] = useState(false)

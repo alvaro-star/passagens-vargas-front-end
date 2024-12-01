@@ -1,3 +1,4 @@
+import { CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 import { Link, useNavigate } from "react-router-dom"
 import FormInlineTemplateIndependent from "./Components/FormInlineTemplate/FormInlineTemplateIndependent"
 
@@ -5,9 +6,9 @@ import FormInlineTemplateIndependent from "./Components/FormInlineTemplate/FormI
 const Home = () => {
 
     const navigate = useNavigate()
-    const token = sessionStorage.getItem('token')
+    const token = CookieToken.get()
     const logout = () => {
-        sessionStorage.removeItem('token')
+        CookieToken.remove()
         navigate('/login')
     }
 

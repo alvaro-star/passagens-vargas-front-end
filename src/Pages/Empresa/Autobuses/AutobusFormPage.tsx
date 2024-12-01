@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import IError from "@/Types/IErrors/IError"
 import InputError from "@/Components/FormComponents/InputError"
+import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
 
 const construtorPiso = {
     id: null,
@@ -39,7 +40,7 @@ const AutobusesFormPage = () => {
     const [segundoPiso, setSegundoPiso] = useState<boolean | null>(null)
 
     useEffect(() => {
-        let cookie1 = sessionStorage.getItem('idEmpresa')
+        let cookie1 = CookieEmpresaId.get()
         if (cookie1) {
             setIdEmpresa(cookie1)
         } else navigate('/')

@@ -1,6 +1,7 @@
 import NavLink from "@/Components/NavLink"
 import SecondaryButton from "@/Components/Buttons/SecondaryButton"
 import { Outlet, useNavigate } from "react-router-dom"
+import { CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 
 const AdminLayout = () => {
     const navigate = useNavigate()
@@ -13,7 +14,7 @@ const AdminLayout = () => {
     }]
 
     const deslogar = () => {
-        sessionStorage.removeItem('token')
+        CookieToken.remove()
         navigate('/')
     }
 

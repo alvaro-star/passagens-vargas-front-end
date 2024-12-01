@@ -1,3 +1,4 @@
+import { CookieRole } from '@/Helpers/CookieGenerate/CookiesAuth';
 import React, { ButtonHTMLAttributes } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,7 +8,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const EmpresaAdminButton = ({ className = '', disabled, children, ...props }: Props) => {
-    const role = sessionStorage.getItem("role")
+    const role = CookieRole.get()
     return (
         <>
             {role === "ROLE_EMPRESA_ADMIN" &&

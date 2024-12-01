@@ -1,3 +1,5 @@
+import CookieEmpresaId from "./CookieGenerate/CookieEmpresaId";
+
 export default function GetUserType() {
-    return sessionStorage.getItem("role")
+    return CookieEmpresaId.get()
 }

@@ -1,10 +1,11 @@
+import { CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth"
 import { Link, useNavigate } from "react-router-dom"
 
 const Welcome = () => {
     const navigate = useNavigate()
-    const token = sessionStorage.getItem('token')
+    const token = CookieToken.get()
     const logout = () => {
-        sessionStorage.removeItem('token')
+        CookieToken.remove()
         navigate('/')
     }
     return <div className="bg-slate-400 min-h-screen grid place-content-center">
