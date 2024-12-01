@@ -1,5 +1,5 @@
-import CookieEmpresaId from "./CookieGenerate/CookieEmpresaId";
+import { CookieRole } from "./CookieGenerate/CookiesAuth";
 
 export default function GetUserType() {
-    return CookieEmpresaId.get()
+    return CookieRole.get()
 }

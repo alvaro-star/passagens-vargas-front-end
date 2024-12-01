@@ -6,7 +6,7 @@ import IPrecio2 from "@/Types/IViaje/IPrecio2";
 import HoraComponent from "./HoraComponent";
 interface Props {
     viaje: IVIajeResponse
-    precio: IPrecio2
+    precio?: IPrecio2
     escojerViaje?: (viaje: IVIajeResponse, idPrecio: string) => void
     className?: string
 }
@@ -37,7 +37,7 @@ const CardViaje = ({ viaje, escojerViaje, precio, className = '' }: Props) => {
             <section className="py-1 flex items-center justify-between">
                 <HoraComponent horaSalida={viaje.salida.dataHora} horaDestino={viaje.destino.dataHora} />
                 <div>
-                    {escojerViaje &&
+                    {escojerViaje && precio &&
                         <section className="w-full">
                             <div className="flex items-center space-x-3" key={precio.id}>
                                 <p>

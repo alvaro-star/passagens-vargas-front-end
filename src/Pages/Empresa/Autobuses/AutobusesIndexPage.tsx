@@ -36,7 +36,7 @@ const AutobusesIndexPage = () => {
         const fetchData = async () => {
             const [autobusesResposta] = await Promise.all([
                 http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}`)
-            ]);
+            ]);            
             setAutobuses(autobusesResposta.data.content);
             if (autobusesResposta.data.totalPages > 1) {
                 setNextPage(1)

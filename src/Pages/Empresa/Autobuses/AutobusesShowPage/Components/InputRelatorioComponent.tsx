@@ -1,18 +1,17 @@
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import http from "@/http"
+import IAutobus from "@/Types/IAutobus"
 import IPage from "@/Types/IPage"
 import { useEffect, useState } from "react"
 import { IoSearch } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import IViajeEmpresa from "../../../Types/IViajeEmpresa"
-import IAutobusExtends from "../Types/IAutobusExtends"
-import IAutobusExtendsApi from "../Types/IAutobusExtendsApi"
 
 interface Props {
     idAutobus: undefined | string | number
     viajes: IViajeEmpresa[]
     setViajes: (viaje: IViajeEmpresa[]) => void
-    setAutobus: (autobs: IAutobusExtends) => void
+    setAutobus: (autobs: IAutobus) => void
 }
 const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: Props) => {
     const meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -28,11 +27,8 @@ const InputRelatorioComponent = ({ idAutobus, viajes, setViajes, setAutobus }: P
 
             setMes((dateNow.getMonth() + 1).toString())
             setAno(dateNow.getFullYear().toString())
-            http.get<IAutobusExtendsApi>(`autobuses/${idAutobus}`)
-                .then(({ data }) => {
-                    let autobus: IAutobusExtends = { ...data, pisos: [] }
-                    setAutobus(autobus)
-                })
+            http.get<IAutobus>(`autobuses/${idAutobus}`)
+                .then(({ data }) => { setAutobus(data) })
             http.post<IPage<IViajeEmpresa>>(`empresa/viajes/from/autobus`, {
                 dataAnalise: dateNow,
                 idAutobus: idAutobus

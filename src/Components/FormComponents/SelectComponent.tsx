@@ -20,7 +20,7 @@ export default forwardRef(function TextInput({ className = '', labelValue = '', 
     return <div className='relative'>
         <select
             {...props}
-            className={`p-2 w-full border border-gray-400 focus:border-indigo-500 focus:ring-indigo-500 rounded shadow-sm  ${className} `}
+            className={`p-2 w-full border border-gray-400 focus:border-indigo-500 focus:ring-indigo-500 rounded shadow-sm outline-none ${className} `}
             ref={localRef}
         >
             {children}

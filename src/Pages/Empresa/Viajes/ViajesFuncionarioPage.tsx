@@ -44,7 +44,14 @@ const ViajesFuncionarioPage = () => {
             </section>
             <section className="bg-white mt-6 pt-5 rounded">
                 <TableComponent
-                    header={<div className="pb-2 -mt-2">Resultado dela busqueda</div>}
+                    header={
+                        <div className="flex items-center justify-between pb-2 -mt-2">
+                            <div className="">Resultado dela busqueda</div>
+                            <PrimaryButtonEmpresa>
+                                Registrar Viaje
+                            </PrimaryButtonEmpresa>
+                        </div>
+                    }
                     thead={<>
                         <ThComponent text="Salida" />
                         <ThComponent text="Destino" />
@@ -77,13 +84,11 @@ const ViajesFuncionarioPage = () => {
                                 </TdComponent>
                             </tr>
                         )}
-                        {viajes.length == 0 &&
-                            <tr>
-                                <td colSpan={5} className="py-2 text-center font-semibold">
-                                    No hay Viajes Registrados
-                                </td>
-                            </tr>
-                        }
+                        {viajes.length == 0 && <tr>
+                            <td colSpan={5} className="py-2 text-center font-semibold">
+                                No hay Viajes Registrados
+                            </td>
+                        </tr>}
                     </>}
                 />
             </section>

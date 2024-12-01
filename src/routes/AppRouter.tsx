@@ -92,13 +92,13 @@ const AppRouter = () => {
                         <Route path="autobuses">
                             <Route index element={<AutobusesIndexPage />} />
                             <Route path=":id" element={<AutobusesShowPage />} />
-                            <Route path=":id/viaje/create" element={<ViajesCreatePage />} />
                         </Route>
                         <Route path="paradas">
                             <Route path=":id/edit" element={<ParadaEditPage />} />
                         </Route>
                         <Route path="viajes">
                             <Route index element={<ViajesFuncionarioPage />} />
+                            <Route path="create" element={<ViajesCreatePage />} />
                             <Route path=":id" element={<ViajesShowPage />} />
                             <Route path=":id/vender" element={<ViajesVentaPage />} />
                             <Route path=":id/pagar" element={<ViajesPagosPage />} />

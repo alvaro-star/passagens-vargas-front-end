@@ -1,7 +1,6 @@
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import IAutobusExtends from "./Types/IAutobusExtends"
 import IViajeEmpresa from "../../Types/IViajeEmpresa"
 import InputRelatorioComponent from "./Components/InputRelatorioComponent"
 import DataHora from "@/Classes/DataHora"
@@ -16,6 +15,7 @@ import TableComponent from "@/Components/Table/TableComponent"
 import { FaBars } from "react-icons/fa"
 import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
+import IAutobus from "@/Types/IAutobus"
 
 const AutobusesShowPage = () => {
     const path = '/empresa'
@@ -23,7 +23,7 @@ const AutobusesShowPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const [autobus, setAutobus] = useState<IAutobusExtends | null>(null)
+    const [autobus, setAutobus] = useState<IAutobus | null>(null)
     const [viajes, setViajes] = useState<IViajeEmpresa[]>([])
 
     const showViaje = (id: string) => navigate(path + '/viajes/' + id)
@@ -65,7 +65,6 @@ const AutobusesShowPage = () => {
                             </>
                         }
                         <PrimaryButton className={showModel ? "rounded-none bg-blue-900" : "rounded-none"} onClick={() => setShowModel(!showModel)}>ver modelo</PrimaryButton>
-                        <PrimaryButton className="rounded-none" onClick={() => navigate('viaje/create')}> nuevo viaje</PrimaryButton>
                     </>}
                 />
             </>}>

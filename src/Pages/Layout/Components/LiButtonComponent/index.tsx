@@ -9,9 +9,9 @@ interface Props {
     setActiveRoute?: (rota: string) => void
 }
 
-export default function LiButtonComponent({ icon, to = "", text, activeRoute, setActiveRoute = (rota: string) => { }, ...props }: Props) {
+export default function LiButtonComponent({ icon, to = "", text, activeRoute, setActiveRoute, ...props }: Props) {
     const onClick = () => {
-        setActiveRoute(to)
+        if (setActiveRoute) setActiveRoute(to)
     }
 
     return <li className={`active inline-flex ${activeRoute == to ? "li-button-component-active" : 'li-button-component'}`} {...props}>

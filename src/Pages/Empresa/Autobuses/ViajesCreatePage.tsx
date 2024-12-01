@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import http from "@/http"
-import { useNavigate, useParams } from "react-router-dom"
-import IAutobusExtends from "./AutobusesShowPage/Types/IAutobusExtends"
+import { useNavigate } from "react-router-dom"
 import IType from "@/Types/IType"
 import ILugar from "@/Types/ILugar"
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
@@ -15,15 +14,19 @@ import SelectCiudad from "@/Components/FormComponents/SelectCiudad"
 import SelectComponent from "@/Components/FormComponents/SelectComponent"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import IPage from "@/Types/IPage"
+import IAutobus from "@/Types/IAutobus"
 
 
 const ViajesCreatePage = () => {
-    const { id } = useParams()
+    const [idAutobus, setIdAutobus] = useState('')
     const navigate = useNavigate()
 
     const [horasViaje, setHorasViaje] = useState('');
     const [carril, setCarril] = useState('');
     const [fechaSalida, setFechaSalida] = useState('');
+
+    const [autobuses, setAutobuses] = useState<IAutobus[]>([])
 
     const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null)
     const [lugaresSalida, setLugaresSalida] = useState<ILugar[]>([])
@@ -33,17 +36,17 @@ const ViajesCreatePage = () => {
     const [lugaresDestino, setLugaresDestino] = useState<ILugar[]>([])
     const [idLugarDestino, setIdLugarDestino] = useState("")
 
-    const [autobus, setAutobus] = useState<IAutobusExtends>()
+    const [autobus, setAutobus] = useState<IAutobus>()
     const [precio1, setPrecio1] = useState('')
     const [precio2, setPrecio2] = useState('')
     const [erros, setErros] = useState<Record<string, string>>({})
 
 
     useEffect(() => {
-        if (id) {
-            http.get<IAutobusExtends>(`autobuses/${id}`).then(resposta => setAutobus(resposta.data))
-        }
-    }, [id])
+        if (!idAutobus) return
+        http.get<IAutobus>(`autobuses/${idAutobus}`)
+            .then(({ data }) => setAutobus(data))
+    }, [idAutobus])
 
     const fetchLugares = (ciudad: IType | null, setIdLugar: (idLugar: string) => void, setLugares: (lugares: ILugar[]) => void) => {
         if (ciudad) {
@@ -56,8 +59,12 @@ const ViajesCreatePage = () => {
     }
 
     useEffect(() => {
-        
-        CookieEmpresaId.get()       
+        const idEmpresa = CookieEmpresaId.get()
+        const params = { size: 20 }
+        http.get<IPage<IAutobus>>(`autobuses/from/${idEmpresa}`, { params })
+            .then(({ data }) => {
+                setAutobuses(data.content)
+            })
     }, [])
 
     useEffect(() => {
@@ -87,7 +94,7 @@ const ViajesCreatePage = () => {
         if (!isFloatPositve(precio1))
             errorsForm.precioPiso1 = 'Valor inválido'
 
-        if (autobus?.pisos.length == 2 && !isFloatPositve(precio2))
+        if (autobus?.pisos?.length == 2 && !isFloatPositve(precio2))
             errorsForm.precioPiso2 = 'Valor inválido'
         return errorsForm
     }
@@ -104,21 +111,19 @@ const ViajesCreatePage = () => {
         }
         try {
             const formData = {
-                idAutobus: id,
+                idAutobus: idAutobus,
                 plataforma: carril,
                 fechaSalida: fechaSalida,
                 idLugarSalida: idLugarSalida,
                 horasViaje: horasViaje,
                 idLugarDestino: idLugarDestino,
                 precioPiso1: parseFloat(precio1),
-                precioPiso2: (autobus?.pisos.length == 2) ? parseFloat(precio2) : 0
+                precioPiso2: (autobus?.pisos?.length == 2) ? parseFloat(precio2) : 0
             };
             await http.post('empresa/viajes/create', formData)
             navigate(-1)
             return
         } catch (erro: CustomAxiosResponse | any) {
-            console.log(erro);
-
             if (erro.status == 422) {
                 const formError = processErro422(erro)
                 setErros(formError)
@@ -130,13 +135,10 @@ const ViajesCreatePage = () => {
 
     const processErro422 = (errorAxios: CustomAxiosResponse) => {
         let errors: Record<string, string> = {}
-        if (errorAxios.status != 422)
-            return {}
+        if (errorAxios.status != 422) return {}
         const data = errorAxios.response?.data
-        if (data?.errors) {
+        if (data?.errors)
             data.errors.forEach(error => errors[error.name] = error.message)
-        }
-
         return errors
     }
 
@@ -148,11 +150,13 @@ const ViajesCreatePage = () => {
         }>
         <div className="max-w-2xl mx-auto">
             <form className="bg-white border p-5 flex flex-col rounded" onSubmit={enviar}>
-                <h2 className="text-xl font-semibold mb-3">
-                    <SelectComponent>
-
-                    </SelectComponent>
-                </h2>
+                <SelectComponent labelValue="Autobus" onChange={e => setIdAutobus(e.target.value)}>
+                    {autobuses.map(autobus =>
+                        <option key={autobus.id} value={autobus.id}>
+                            {autobus.placa}
+                        </option>
+                    )}
+                </SelectComponent>
                 <h2 className="text-xl font-semibold mb-3">
                     Datos del Viaje
                 </h2>
@@ -199,7 +203,7 @@ const ViajesCreatePage = () => {
                             <TextInputEmpresa className="w-44" value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
                             <InputError className="w-full ml-2" message={erros.precioPiso1} />
                         </div>
-                        {autobus?.pisos.length == 2 && <div className="w-full">
+                        {autobus?.pisos?.length == 2 && <div className="w-full">
                             <TextInputEmpresa className="w-44" value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
                         </div>}
                     </div>
