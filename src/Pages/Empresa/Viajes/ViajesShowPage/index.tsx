@@ -41,11 +41,8 @@ const ViajesShowPage = () => {
                     viajeApi.paradas = ordenarParadas(viajeApi.paradas);
                     let dataAtual = new Date().getTime()
                     let dataViaje = new Date(viajeApi.paradas[viajeApi.paradas.length - 1].dataHora).getTime()
-                    if (dataViaje <= dataAtual) {
-                        setMostrarOptions(false)
-                    } else {
-                        setMostrarOptions(true)
-                    }
+                    if (dataViaje <= dataAtual) setMostrarOptions(false)
+                    else setMostrarOptions(true)
                     setViaje(viajeApi);
                 });
         }

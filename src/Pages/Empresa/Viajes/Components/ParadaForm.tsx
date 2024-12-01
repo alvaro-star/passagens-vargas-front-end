@@ -46,7 +46,7 @@ const ParadaForm = ({ parada, paradaErros, setParada }: Props) => {
             <InputError className="w-full ml-2" message={paradaErros.dataHora} />
         </div>
         <div className="text-black">
-            <SelectCiudad ciudadElejida={ciudad} setCiudadElejida={setCiudad} labelValue="Nombre dela Ciudad" />
+            <SelectCiudad labelValue="Ciudad" ciudadElejida={ciudad} setCiudadElejida={setCiudad} />
         </div>
 
         <div className="relative w-full">

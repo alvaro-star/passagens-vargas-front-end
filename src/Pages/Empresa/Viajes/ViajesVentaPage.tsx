@@ -58,6 +58,8 @@ const ViajesVentaPage = () => {
                     switch (viajeResponse.precios.length) {
                         case 1:
                             getPisoApi(viajeResponse.precios[0].id, setPrecio1)
+                            console.log("id" + viajeResponse.precios[0].id);
+
                             break;
                         case 2:
                             let indicePrimerPiso = viajeResponse.precios[0].nPiso == 1 ? 0 : 1
@@ -73,9 +75,7 @@ const ViajesVentaPage = () => {
     const getPisoApi = (idPrecio: string | null, setPrecioParam: (precio: IPrecio) => void) => {
         if (idPrecio) {
             http.get(`precios/${idPrecio}/vender`)
-                .then(resposta => {
-                    setPrecioParam(resposta.data)
-                })
+                .then(({ data }) => setPrecioParam(data))
         }
     }
     const ordenarParadas = (paradas: IParada2[]) => {

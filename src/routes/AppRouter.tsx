@@ -4,9 +4,9 @@ import React, { Suspense } from "react";
 const Login = React.lazy(() => import('../Pages/Auth/Login'));
 const Register = React.lazy(() => import('../Pages/Auth/Register'));
 const NotFound = React.lazy(() => import('../Pages/NotFound'));
-//const PassagensList = React.lazy(() => import('../Pages/Publico/PassagensList'));
-//const ViajesPage = React.lazy(() => import('../Pages/Publico/ViajesPage'));
-//const SobrePage = React.lazy(() => import('../Pages/Publico/SobrePage'));
+const PassagensList = React.lazy(() => import('../Pages/Publico/PassagensList'));
+const ViajesPage = React.lazy(() => import('../Pages/Publico/ViajesPage'));
+const SobrePage = React.lazy(() => import('../Pages/Publico/SobrePage'));
 const Dashboard = React.lazy(() => import('../Pages/Admin/Dashboard'));
 const EmpresasFormPage = React.lazy(() => import('../Pages/Admin/Empresas/EmpresasFormPage'));
 const EmpresaAdminLayout = React.lazy(() => import('../Pages/Layout/EmpresaAdminLayout'));
@@ -22,7 +22,7 @@ const AutobusesShowPage = React.lazy(() => import('../Pages/Empresa/Autobuses/Au
 const LugaresFormPage = React.lazy(() => import('../Pages/Admin/Lugares/LugaresFormPage'));
 const ViajesShowPage = React.lazy(() => import('../Pages/Empresa/Viajes/ViajesShowPage'));
 const ViajesIndexPage = React.lazy(() => import('../Pages/Empresa/Viajes/ViajesIndexPage'));
-//const SwitchSillasPage = React.lazy(() => import('../Pages/Publico/SwitchSillasPage'));
+const SwitchSillasPage = React.lazy(() => import('../Pages/Publico/SwitchSillasPage'));
 const FuncionariosListPage = React.lazy(() => import('../Pages/Empresa/Admin/FuncionariosListPage'));
 const FuncionariosFormPage = React.lazy(() => import('../Pages/Empresa/Admin/FuncionariosFormPage'));
 const ViajesFuncionarioPage = React.lazy(() => import('../Pages/Empresa/Viajes/ViajesFuncionarioPage'));
@@ -37,8 +37,8 @@ const ResetPassword = React.lazy(() => import('@/Pages/Auth/ResetPassword'));
 const Welcome = React.lazy(() => import("@/Pages/Publico/Welcome"));
 
 import Loading from "@/Pages/Publico/Loading";
-import Profile from "@/Pages/Auth/Profile";
-import ValidarUpdate from "@/Pages/Auth/ValidarUpdate";
+import Profile from "@/Pages/Auth/AdminPage/Profile";
+import Home from "@/Pages/Publico/Home";
 const AppRouter = () => {
     return (
         <Router>
@@ -48,22 +48,14 @@ const AppRouter = () => {
                         <Route index element={<Welcome />} />
                         <Route path="reset/password" element={<ResetPassword />} />
                         <Route path="login" element={<Login />} />
-                        <Route path="update" element={<Profile />} />
-                        <Route path="update/validar" element={<ValidarUpdate />} />
                         <Route path="registrar" element={<Register />} />
                         <Route path="validar" element={<ValidarUser />} />
 
-                        {/**
-                         <Route path="home" element={<Home />} />
-                         <Route path="viajes" element={<ViajesPage />} />
-                         <Route path="viaje" element={<SwitchSillasPage />} />
-                         <Route path="viaje/step3/:id" element={<PassagensList />} />
-                         <Route path="sobre" element={<SobrePage />} />
-                         * <Route path="viajes" element={<ViajesPage />} />
+                        <Route path="home" element={<Home />} />
+                        <Route path="viajes" element={<ViajesPage />} />
                         <Route path="viaje" element={<SwitchSillasPage />} />
                         <Route path="viaje/step3/:id" element={<PassagensList />} />
                         <Route path="sobre" element={<SobrePage />} />
-                        */}
                     </Route>
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Dashboard />} />
@@ -110,6 +102,9 @@ const AppRouter = () => {
                             <Route path=":id" element={<ViajesShowPage />} />
                             <Route path=":id/vender" element={<ViajesVentaPage />} />
                             <Route path=":id/pagar" element={<ViajesPagosPage />} />
+                        </Route>
+                        <Route path="perfil">
+                            <Route path="update" element={<Profile />} />
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />

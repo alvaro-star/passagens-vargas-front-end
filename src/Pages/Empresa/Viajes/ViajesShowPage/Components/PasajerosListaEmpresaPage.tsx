@@ -11,7 +11,6 @@ import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
 import PrecioEditComponent from "./PrecioEditComponent";
 import { FaAngleDown } from "react-icons/fa";
 import { LuMaximize2 } from "react-icons/lu";
-import getListaPasajero from "../getListaPasajero";
 interface Props {
     idPrecio: number | string
     setMostrarOptions: (value: boolean) => void
@@ -131,7 +130,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
 
         if (pisoModel && newWindow) {
             newWindow.document.open();
-            newWindow.document.write(getListaPasajero(pasajeros));
+            newWindow.document.write();
             newWindow.document.close();
         }
 
@@ -163,7 +162,7 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 1 ? 'bg-slate-200' : 'bg-slate-100')}
                         onClick={() => setAba(1)}
                     >
-                        Lista de Pasageros
+                        Lista de Pasageros 12
                     </div>
                     <div className={"w-1/2 text-center cursor-pointer p-3 " + (aba == 2 ? 'bg-slate-200' : 'bg-slate-100')}
                         onClick={() => setAba(2)}

@@ -8,7 +8,7 @@ import IPiso from "@/Types/IPiso";
 import ISilla from "@/Types/ISilla";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton";
 import IVIajeResponse from "./Types/IViajeResponse";
-import FormInlineTemplateIndependent from "./Components/FormInlineTemplateIndependent";
+import FormInlineTemplateIndependent from "./Components/FormInlineTemplate/FormInlineTemplateIndependent";
 
 interface IPrecio {
     id: string,

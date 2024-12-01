@@ -55,22 +55,8 @@ const Piso = ({ piso, sillasOcupadas = [], hidden = false, clickSilla = () => { 
         }
 
         sillasOcupadas.forEach(sillaOcupada => {
-            try {
-                console.log("La sila ocupada es ");
-                console.log(sillaOcupada);
-                console.log(piso.primeraSilla);
-                console.log(piso.id);
-
-                console.log(sillaOcupada - piso.primeraSilla);
-
-                SillasDisponibles[HashMapNSillaIndex[sillaOcupada - piso.primeraSilla]].ocupado = true
-            } catch (error) {
-                console.log(error);
-            }
+            SillasDisponibles[HashMapNSillaIndex[sillaOcupada - piso.primeraSilla]].ocupado = true
         })
-
-        console.log(SillasDisponibles);
-
         setSillas(SillasDisponibles)
     }, [piso])
     return (

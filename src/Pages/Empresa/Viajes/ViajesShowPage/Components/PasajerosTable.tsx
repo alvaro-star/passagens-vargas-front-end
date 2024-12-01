@@ -53,7 +53,7 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
             console.log("Hubo un error en la búsqueda", error);
             return [];
         }
-        
+
         let pasajeros: IPasajeComplete[] = [];
         promisesResponse.forEach(lista => pasajeros = pasajeros.concat(lista))
         return pasajeros; // Devuelve los pasajeros obtenidos
@@ -72,11 +72,9 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
     return (
         <div className="mt-3">
             <TableComponent
-                header={
-                    <div className="py-2 flex items-center justify-between">
-                        <h2>Lista de Pasajeros</h2>
-                    </div>
-                }
+                header={<div className="py-2 flex items-center justify-between">
+                    <h2>Lista de Pasajeros</h2>
+                </div>}
                 thead={<>
                     <ThComponent text="Asiento" />
                     <ThComponent text="Carnet" />
@@ -113,13 +111,11 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
                             </TdComponent>
                         </tr>
                     )}
-                    {pasajeros.length == 0 &&
-                        <tr>
-                            <td colSpan={7} className="py-2 text-center font-semibold">
-                                No hay Pasageros Registrados
-                            </td>
-                        </tr>
-                    }
+                    {pasajeros.length == 0 && <tr>
+                        <td colSpan={7} className="py-2 text-center font-semibold">
+                            No hay Pasageros Registrados
+                        </td>
+                    </tr>}
                 </>}
             />
         </div >

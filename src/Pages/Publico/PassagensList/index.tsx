@@ -23,7 +23,7 @@ interface IContactoError {
 
 const PassagensList = () => {
     const { id } = useParams();
-    const metodos = ['QR', 'DEB', 'CRE'];
+    const metodos = ['QR'];
     const [viaje, setViaje] = useState<IViajeResponse | null>(null);
     const [pasajes, setPasajes] = useState<IPasajeList[]>([]);
     const [precio, setPrecio] = useState<IPrecio | null>(null);

@@ -15,6 +15,7 @@ interface Props {
 const AutobusCreateCopyComponent = ({ idViajeProp, setShowForm }: Props) => {
     const [dataNovo, setDataNovo] = useState('')
     const [dataNovoError, setDataNovoError] = useState('')
+
     const enviarForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setDataNovoError("")
@@ -26,10 +27,11 @@ const AutobusCreateCopyComponent = ({ idViajeProp, setShowForm }: Props) => {
                 setShowForm(false)
             })
             .catch((erro) => {
-                if (erro.response.data.conteudo)
-                    alert(erro.response.data.conteudo)
-                else if (erro.response.data.errors) {
-                    erro.response.data.errors.forEach((erroItem: IError) => {
+                const errorData = erro.response.data;
+                if (errorData.conteudo)
+                    alert(errorData.conteudo)
+                else if (errorData.errors) {
+                    errorData.errors.forEach((erroItem: IError) => {
                         if (erroItem.name === "dataNovo")
                             setDataNovoError(erroItem.message)
                     });
@@ -38,20 +40,29 @@ const AutobusCreateCopyComponent = ({ idViajeProp, setShowForm }: Props) => {
                 }
             })
     }
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter')
+            e.preventDefault();
+    }
+
     const closeForm = () => {
         setDataNovo("")
         setDataNovoError("")
         setShowForm(false)
     }
-    return <form className="bg-white border p-5 w-72" onSubmit={enviarForm}>
+
+    return <form className="bg-white border p-5 w-72" onSubmit={enviarForm} onKeyDown={handleKeyDown}>
         <div className="flex items-center justify-between mb-2">
             <TituloForm text="Crear un nuevo viaje" />
             <CloseButton onClick={closeForm} />
         </div>
-        <TextInputEmpresa value={dataNovo} type="date" setValue={setDataNovo} labelValue="Fecha nueva" />
-        <InputError message={dataNovoError} className="ml-2" />
-        <div className="text-center">
-            <PrimaryButtonEmpresa className="mt-3">
+        <div>
+            <TextInputEmpresa value={dataNovo} type="date" setValue={setDataNovo} labelValue="Fecha nueva" />
+            <InputError message={dataNovoError} className="ml-2" />
+        </div>
+        <div className="flex justify-center">
+            <PrimaryButtonEmpresa className="mt-2 rounded">
                 Enviar
             </PrimaryButtonEmpresa>
         </div>

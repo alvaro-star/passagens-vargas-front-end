@@ -5,9 +5,15 @@
     color: rgb(156 163 175 / var(--tw-text-opacity))
 }
 
-.li-button-component a .active {
+.li-button-component-active a {
+    line-height: 1.5rem;
+    --tw-text-opacity: 1;
+    color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+.li-button-component-active a svg {
     font-size: 1rem;
     line-height: 1.5rem;
     --tw-text-opacity: 1;
-    color: rgb(156 163 175 / var(--tw-text-opacity))
+    color: rgb(37 99 235 / var(--tw-text-opacity));
 }

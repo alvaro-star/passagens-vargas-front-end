@@ -4,14 +4,15 @@ import { FaSearch } from "react-icons/fa";
 import InputError from "@/Components/FormComponents/InputError"
 import dataConvert from "@/Helpers/Date/dateConvert"
 import DatePickerCostumized from "@/Components/DatePickerCostumized"
-import SelectCostumized from "@/Components/FormComponents/SelectCostumized";
 import ICiudad from "@/Types/ICiudad";
 import http from "@/http";
-import IFormViaje from "../Types/IFormViaje";
+import IFormViaje from "../../Types/IFormViaje";
 import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter";
+import SelectCiudad from "@/Components/FormComponents/SelectCiudad";
+import IType from "@/Types/IType";
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {
-    className?: string,
+    className?: string
 }
 
 interface Erros {
@@ -23,10 +24,9 @@ interface Erros {
 
 const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
     const navigate = useNavigate();
-    const [ciudadSalida, setCiudadSalida] = useState<ICiudad | null>(null);
-    const [ciudadDestino, setCiudadDestino] = useState<ICiudad | null>(null);
+    const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null);
+    const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null);
     const [fechaIda, setFechaIda] = useState<Date | null>(new Date());
-    const [fechaVuelta, setFechaVuelta] = useState<Date | null>(new Date());
     const [errors, setErrors] = useState<Erros>({
         ciudadSalida: '',
         ciudadDestino: '',
@@ -43,17 +43,16 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
             fechaVuelta: ''
         };
 
-        if (ciudadSalida && ciudadDestino && ciudadSalida.id === ciudadDestino.id) {
+        if (ciudadSalida && ciudadDestino && ciudadSalida.value === ciudadDestino.value) {
             erros.ciudadSalida = 'La salida es igual al destino';
             erros.ciudadDestino = 'El destino es igual a la salida';
         }
 
         if (!Object.values(erros).some(error => !!error)) {
             const formViajes = {
-                idCiudadSalida: ciudadSalida!.id,
-                idCiudadDestino: ciudadDestino!.id,
-                fechaSalida: dataConvert(fechaIda!),
-                fechaVuelta: dataConvert(fechaVuelta!)
+                idCiudadSalida: ciudadSalida!.value,
+                idCiudadDestino: ciudadDestino!.value,
+                fechaSalida: dataConvert(fechaIda!)
             };
 
             sessionStorage.setItem("formViaje", JSON.stringify(formViajes));
@@ -64,12 +63,13 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
     };
 
 
-    const fetchCiudad = (idCiudad: number, setter: React.Dispatch<React.SetStateAction<ICiudad | null>>) => {
+    const fetchCiudad = (idCiudad: number, setter: React.Dispatch<React.SetStateAction<IType | null>>) => {
         http.get<ICiudad>(`ciudades/${idCiudad}`)
-            .then(resposta => {
-                setter({ ...resposta.data, nombre: capitalizeFirstLetter(resposta.data.nombre) })
+            .then(({ data }) => {
+                setter({ value: data.id, label: capitalizeFirstLetter(data.nombre) })
             });
     };
+
     useEffect(() => {
         let cookie1 = sessionStorage.getItem("formViaje");
         const formViaje: IFormViaje = cookie1 ? JSON.parse(cookie1) : {};
@@ -78,7 +78,6 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
             fetchCiudad(formViaje.idCiudadDestino, setCiudadDestino)
             let dataSalida = new Date(formViaje.fechaSalida + "T00:00:00")
             setFechaIda(dataSalida);
-            setFechaVuelta(new Date(formViaje.fechaVuelta + "T00:00:00"));
         }
     }, []);
 
@@ -87,20 +86,16 @@ const FormInlineTemplateIndependent = ({ className = '', ...props }: Props) => {
             {...props}
             onSubmit={enviar}>
             <div className="w-full">
-                <SelectCostumized ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} labelValue="Ciudad de Origen" />
+                <SelectCiudad ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} labelValue="Origen" />
                 <InputError message={errors.ciudadSalida} />
             </div>
             <div className="w-full">
-                <SelectCostumized ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Ciudad de Destino" />
+                <SelectCiudad ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} labelValue="Destino" />
                 <InputError message={errors.ciudadDestino} />
             </div>
             <div className="w-44">
                 <DatePickerCostumized minDate={new Date()} dataExtern={fechaIda} setDataExtern={setFechaIda} labelValue="Fecha Ida" />
                 <InputError message={errors.fechaIda} />
-            </div>
-            <div className="w-44">
-                <DatePickerCostumized minDate={new Date()} dataExtern={fechaVuelta} setDataExtern={setFechaVuelta} labelValue="Fecha Vuelta" />
-                <InputError message={errors.fechaVuelta} />
             </div>
             <div className="flex items-center h-full justify-center">
                 <button className="h-9 w-9 rounded bg-cyan-500 text-white grid place-content-center">

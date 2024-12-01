@@ -1,5 +1,5 @@
-import { Outlet, useNavigate } from "react-router-dom"
-import { FaBars, FaBell, FaBus, FaClipboardList, FaFingerprint, FaHome, FaMapMarked, FaNewspaper, FaTable, FaTools, FaTv, FaUserCircle, FaUserFriends } from "react-icons/fa"
+import { Link, Outlet, useNavigate } from "react-router-dom"
+import { FaBars, FaBell, FaBus, FaClipboardList, FaHome, FaUserCircle, FaUserFriends } from "react-icons/fa"
 import { TbLogout2 } from "react-icons/tb";
 import { useState } from "react"
 import CloseButton from "@/Components/Buttons/CloseButton"
@@ -41,7 +41,7 @@ const EmpresaAdminLayout = () => {
     }
     const [moreOptions, setMoreOptions] = useState(false)
     return (
-        <section className="min-h-screen bg-gray-100 w-full md:flex">
+        <section className="min-h-screen bg-gray-100 max-w-full md:flex">
             <div className=" md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-50">
                 <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
                     <button
@@ -69,13 +69,13 @@ const EmpresaAdminLayout = () => {
                             </div>
                         </li>
                         <li className="inline-block relative">
-                            <a className="text-blueGray-500 block" href="#pablo">
+                            <Link className="text-blueGray-500 block" to="/empresa">
                                 <div className="items-center flex">
-                                    <span className="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-                                        <img alt="..." className="w-full rounded-full align-middle border-none shadow-lg" src="https://demos.creative-tim.com/notus-nextjs/img/team-1-800x800.jpg" />
+                                    <span className="w-12 h-12 text-3xl font-bold text-green-600 inline-flex items-center justify-center rounded-full">
+                                        V
                                     </span>
                                 </div>
-                            </a>
+                            </Link>
                             <div className="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48">
                                 <LinkLayoutComponent>Action</LinkLayoutComponent>
                                 <LinkLayoutComponent>Another action</LinkLayoutComponent>
@@ -103,30 +103,36 @@ const EmpresaAdminLayout = () => {
                         <ul className="md:flex-col md:min-w-full flex flex-col list-none">
                             {tipoUsuario === "ROLE_EMPRESA_ADMIN" && <>
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
+
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaHome />}
                                     to={rotas.homePage.url}
                                     text={rotas.homePage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaBus />}
                                     to={rotas.autobusesPage.url}
                                     text={rotas.autobusesPage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaClipboardList />}
                                     to={rotas.viajesAdminPage.url}
                                     text={rotas.viajesAdminPage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaClipboardList />}
                                     to={rotas.viajesFuncionarioPage.url}
                                     text={rotas.viajesFuncionarioPage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaUserFriends />}
                                     to={rotas.funcionariosPage.url}
@@ -135,18 +141,21 @@ const EmpresaAdminLayout = () => {
                             </>}
                             {tipoUsuario === "ROLE_EMPRESA_FUNCIONARIO" && <>
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaHome />}
                                     to={rotas.homePage.url}
                                     text={rotas.homePage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaBus />}
                                     to={rotas.autobusesPage.url}
                                     text={rotas.autobusesPage.label}
                                 />
                                 <LiButtonComponent
+                                    activeRoute={activeRoute}
                                     setActiveRoute={setActiveRoute}
                                     icon={<FaClipboardList />}
                                     to={rotas.viajesFuncionarioPage.url}
@@ -158,8 +167,9 @@ const EmpresaAdminLayout = () => {
                         <SubtittleComponent text="Autenticacion" />
                         <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
                             <LiButtonComponent
+                                activeRoute={activeRoute}
                                 setActiveRoute={setActiveRoute}
-                                to="/update"
+                                to="/empresa/perfil/update"
                                 icon={<FaUserCircle />}
                                 text="Perfil"
                             />
@@ -173,9 +183,8 @@ const EmpresaAdminLayout = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full  ">
-                <div className="hidden md:block h-64 bg-yellow-500">
-                </div>
+            <div className="w-full">
+                <div className="hidden md:block h-64 bg-yellow-500" />
                 <div className="px-6 md:-mt-64">
                     <Outlet />
                 </div>

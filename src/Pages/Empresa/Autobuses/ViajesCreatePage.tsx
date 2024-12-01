@@ -1,147 +1,137 @@
 import { useEffect, useState } from "react"
-import InputError from "@/Components/FormComponents/InputError"
-import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import http from "@/http"
 import { useNavigate, useParams } from "react-router-dom"
-import ParadaForm from "../Viajes/Components/ParadaForm"
-import IParadaForm from "../Viajes/Types/IParadaForm"
-import IParadaFormErro from "../Viajes/Types/IParadaFormErro"
 import IAutobusExtends from "./AutobusesShowPage/Types/IAutobusExtends"
-import IError from "@/Types/IErrors/IError"
+import IType from "@/Types/IType"
+import ILugar from "@/Types/ILugar"
+import capitalizeFirstLetter from "@/Helpers/CapitalizeFirstLetter"
+import isNumber from "@/Helpers/Validate/isNumber"
+import isFloatPositve from "@/Helpers/Validate/isFloatPositive"
+import CustomAxiosResponse from "@/Types/AxiosResponse/CustomAxiosResponse"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
+import TextInputEmpresa from "@/Components/TextInputEmpresa"
+import InputError from "@/Components/FormComponents/InputError"
+import SelectCiudad from "@/Components/FormComponents/SelectCiudad"
+import SelectComponent from "@/Components/FormComponents/SelectComponent"
 import PrimaryButton from "@/Components/Buttons/PrimaryButton"
 
-interface IErros {
-    [key: string]: string | IParadaFormErro; // Firma de índice
-    idAutobus: string,
-    precioPiso1: string,
-    precioPiso2: string,
-    salida: IParadaFormErro,
-    destino: IParadaFormErro,
-}
-const construirParadaErro = () => {
-    return { plataforma: '', dataHora: '', idLugar: '' }
-}
-
-const construirViajeErro = () => {
-    let salida = construirParadaErro()
-    let destino = construirParadaErro()
-    return { idAutobus: '', precioPiso1: '', precioPiso2: '', salida: salida, destino: destino }
-}
 
 const ViajesCreatePage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const [salida, setSalida] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
-    const [destino, setDestino] = useState<IParadaForm>({ plataforma: '', dataHora: '', idLugar: '', id: '' })
+    const [horasViaje, setHorasViaje] = useState('');
+    const [carril, setCarril] = useState('');
+    const [fechaSalida, setFechaSalida] = useState('');
+
+    const [ciudadSalida, setCiudadSalida] = useState<IType | null>(null)
+    const [lugaresSalida, setLugaresSalida] = useState<ILugar[]>([])
+    const [idLugarSalida, setIdLugarSalida] = useState('')
+
+    const [ciudadDestino, setCiudadDestino] = useState<IType | null>(null)
+    const [lugaresDestino, setLugaresDestino] = useState<ILugar[]>([])
+    const [idLugarDestino, setIdLugarDestino] = useState("")
+
     const [autobus, setAutobus] = useState<IAutobusExtends>()
     const [precio1, setPrecio1] = useState('')
     const [precio2, setPrecio2] = useState('')
-    const [erros, setErros] = useState<IErros>(construirViajeErro())
+    const [erros, setErros] = useState<Record<string, string>>({})
 
-    const validarParada = (parada: IParadaForm, errosParada: IParadaFormErro) => {
-        let valido = true
-        if (parada.idLugar === '') {
-            valido = false
-            errosParada.idLugar = 'Escoje un valor válido'
-        }
-
-        if (!parseInt(parada.plataforma)) {
-            valido = false
-            errosParada.plataforma = 'Valor inválido'
-        }
-
-        if (parada.dataHora === '') {
-            valido = false
-            errosParada.dataHora = 'Valor inválido'
-        }
-
-        return valido;
-    }
 
     useEffect(() => {
         if (id) {
-            http.get<IAutobusExtends>(`autobuses/${id}`)
-                .then(resposta => setAutobus(resposta.data))
+            http.get<IAutobusExtends>(`autobuses/${id}`).then(resposta => setAutobus(resposta.data))
         }
     }, [id])
 
-
-    const enviar = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        let errosInFuncton: IErros = construirViajeErro()
-        let podeEnviar = true;
-        podeEnviar = validarParada(salida, errosInFuncton.salida)
-        podeEnviar = validarParada(destino, errosInFuncton.destino)
-        const dataSaida = new Date(salida.dataHora)
-        const dataDestino = new Date(destino.dataHora)
-
-        if (dataSaida >= dataDestino) {
-            podeEnviar = false
-            errosInFuncton.destino.dataHora = 'El destino tiene una fecha anterior ala dela salida'
-        }
-        if (!parseFloat(precio1)) {
-            podeEnviar = false
-            errosInFuncton.precioPiso1 = 'Valor inválido'
-        } else if (parseFloat(precio1) <= 0) {
-            podeEnviar = false
-            errosInFuncton.precioPiso1 = 'Valor inválido'
-        }
-
-        if (autobus?.pisos.length == 2) {
-            if (!parseFloat(precio2)) {
-                podeEnviar = false
-                errosInFuncton.precioPiso2 = 'Valor inválido'
-            } else if (parseFloat(precio2) <= 0) {
-                podeEnviar = false
-                errosInFuncton.precioPiso2 = 'Valor inválido'
-            }
-        }
-
-        if (podeEnviar) {
-            let formData = {
-                idAutobus: id, salida: salida, destino: destino, precioPiso1: parseFloat(precio1), precioPiso2: 0
-            }
-
-            if (autobus?.pisos.length == 2)
-                formData["precioPiso2"] = parseFloat(precio2)
-
-            http.post('empresa/viajes/create', formData)
-                .then(() => {
-                    setErros(errosInFuncton)
-                    navigate(-1)
+    const fetchLugares = (ciudad: IType | null, setIdLugar: (idLugar: string) => void, setLugares: (lugares: ILugar[]) => void) => {
+        if (ciudad) {
+            http.get<ILugar[]>(`ciudades/${ciudad.value}/lugares`)
+                .then(({ data }) => {
+                    setLugares(data.map(lugar => ({ ...lugar, nombre: capitalizeFirstLetter(lugar.nombre) })))
+                    if (data.length > 0) setIdLugar(data[0].id.toString())
                 })
-                .catch(erro => {
-                    let salidaError: IParadaFormErro = construirParadaErro();
-                    let destinoError: IParadaFormErro = construirParadaErro();
-                    let errosInFuncton = construirViajeErro();
+        }
+    }
+    useEffect(() => {
+        fetchLugares(ciudadSalida, setIdLugarSalida, setLugaresSalida)
+    }, [ciudadSalida])
 
-                    if (erro.response && erro.response.data && erro.response.data.errors) {
-                        erro.response.data.errors.forEach((erroItem: IError) => {
-                            let erroNome = erroItem.name.split('.');
-                            if (erroNome.length === 2) {
-                                if (erroNome[0] === 'salida') {
-                                    salidaError[erroNome[1]] = erroItem.message;
-                                } else if (erroNome[0] === 'destino') {
-                                    destinoError[erroNome[1]] = erroItem.message;
-                                }
-                            } else {
-                                errosInFuncton = { ...errosInFuncton, [erroItem.name]: erroItem.message }
-                            }
-                        });
-                    }
+    useEffect(() => {
+        fetchLugares(ciudadDestino, setIdLugarDestino, setLugaresDestino)
+    }, [ciudadDestino])
 
-                    // Actualizar los errores en el estado
-                    setErros({
-                        ...errosInFuncton,
-                        salida: salidaError,
-                        destino: destinoError
-                    });
-                });
+    const validarFormData: () => Record<string, string> = () => {
+        const errorsForm: Record<string, string> = {};
+        if (idLugarDestino == '')
+            errorsForm.idLugarDestino = 'Elije un lugar'
+        if (idLugarSalida == '')
+            errorsForm.idLugarSalida = 'Elije una lugar'
+        if (!isNumber(carril))
+            errorsForm.plataforma = "No puede ser nulo"
 
-        } else
-            setErros(errosInFuncton)
+        if (!isNumber(horasViaje) || parseInt(horasViaje) <= 0)
+            errorsForm.horasViaje = "Informe un valor valido"
+        if (fechaSalida == '')
+            errorsForm.fechaSalida = "La fecha es invalida"
+        if (isNaN((new Date(fechaSalida)).getTime()))
+            errorsForm.fechaSalida = "La fecha es invalida"
+
+        if (!isFloatPositve(precio1))
+            errorsForm.precioPiso1 = 'Valor inválido'
+
+        if (autobus?.pisos.length == 2 && !isFloatPositve(precio2))
+            errorsForm.precioPiso2 = 'Valor inválido'
+        return errorsForm
+    }
+
+
+
+    const enviar = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const errorsForm = validarFormData()
+        console.log(Object.values(errorsForm).length != 0);
+
+        if (Object.values(errorsForm).length != 0) {
+            setErros(errorsForm)
+            return
+        }
+        try {
+            const formData = {
+                idAutobus: id,
+                plataforma: carril,
+                fechaSalida: fechaSalida,
+                idLugarSalida: idLugarSalida,
+                horasViaje: horasViaje,
+                idLugarDestino: idLugarDestino,
+                precioPiso1: parseFloat(precio1),
+                precioPiso2: (autobus?.pisos.length == 2) ? parseFloat(precio2) : 0
+            };
+            await http.post('empresa/viajes/create', formData)
+            navigate(-1)
+            return
+        } catch (erro: CustomAxiosResponse | any) {
+            console.log(erro);
+            
+            if (erro.status == 422) {
+                const formError = processErro422(erro)
+                setErros(formError)
+            } else if (erro.status == 409) {    
+                alert(erro.response.data.conteudo)
+            } else alert("Hubo un error en la solicitud...")
+        }
+    }
+
+    const processErro422 = (errorAxios: CustomAxiosResponse) => {
+        let errors: Record<string, string> = {}
+        if (errorAxios.status != 422)
+            return {}
+        const data = errorAxios.response?.data
+        if (data?.errors) {
+            data.errors.forEach(error => errors[error.name] = error.message)
+        }
+
+        return errors
     }
 
     return <ContainerShowTemplate
@@ -152,30 +142,54 @@ const ViajesCreatePage = () => {
         }>
         <div className="max-w-2xl mx-auto">
             <form className="bg-white border p-5 flex flex-col rounded" onSubmit={enviar}>
-                <div className="grid sm:grid-cols-2 gap-4">
-                    <section>
-                        <p className="text-lg font-semibold">
-                            Datos dela Salida
-                        </p>
-                        <ParadaForm parada={salida} paradaErros={erros.salida} setParada={setSalida} />
-                    </section>
-                    <section className="">
-                        <p className="text-lg font-semibold">
-                            Datos del destino
-                        </p>
-                        <ParadaForm parada={destino} paradaErros={erros.destino} setParada={setDestino} />
-                    </section>
+                <h2 className="">
+                    Datos del Viaje
+                </h2>
+                <div className="flex gap-3">
+                    <div className="block">
+                        <TextInputEmpresa className="w-20" labelValue="Carril" value={carril} setValue={setCarril} />
+                        <InputError className="w-full ml-2" message={erros.plataforma} />
+                    </div>
+                    <div className="block w-full">
+                        <TextInputEmpresa className="w-full" labelValue="Fecha Salida" type="datetime-local" value={fechaSalida} setValue={setFechaSalida} />
+                        <InputError className="w-full ml-2" message={erros.fechaSalida} />
+                    </div>
+                    <div className="block">
+                        <TextInputEmpresa className="w-42" labelValue="Horas de Viaje" value={horasViaje} setValue={setHorasViaje} />
+                        <InputError className="w-full ml-2" message={erros.horasViaje} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                    <div className="space-y-3">
+                        <p>Origen</p>
+                        <SelectCiudad labelValue="Ciudad" ciudadElejida={ciudadSalida} setCiudadElejida={setCiudadSalida} />
+                        <SelectComponent labelValue="Lugar" value={idLugarSalida} onChange={e => setIdLugarSalida(e.target.value)}>
+                            {lugaresSalida.map(lugar => <option key={lugar.id} value={lugar.id}>
+                                {lugar.nombre}
+                            </option>)}
+                        </SelectComponent>
+                        <InputError className="w-full ml-2" message={erros.idLugarSalida} />
+                    </div>
+                    <div className="space-y-3">
+                        <p>Destino</p>
+                        <SelectCiudad labelValue="Ciudad" ciudadElejida={ciudadDestino} setCiudadElejida={setCiudadDestino} />
+                        <SelectComponent labelValue="Lugar" value={idLugarDestino} onChange={e => setIdLugarDestino(e.target.value)}>
+                            {lugaresDestino.map(lugar => <option key={lugar.id} value={lugar.id}>
+                                {lugar.nombre}
+                            </option>)}
+                        </SelectComponent>
+                        <InputError className="w-full ml-2" message={erros.idLugarDestino} />
+                    </div>
                 </div>
                 <section className=" flex justify-between items-center mt-5">
                     <p className="text-lg font-semibold my-2">Precios</p>
                     <div className="flex gap-2">
                         <div className="w-full">
-                            <TextInputEmpresa value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
-                            <InputError message={erros.precioPiso1} />
+                            <TextInputEmpresa className="w-44" value={precio1} setValue={setPrecio1} labelValue="Precio del piso 1 (Bs)" />
+                            <InputError className="w-full ml-2" message={erros.precioPiso1} />
                         </div>
                         {autobus?.pisos.length == 2 && <div className="w-full">
-                            <TextInputEmpresa value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
-                            <InputError message={erros.precioPiso2} />
+                            <TextInputEmpresa className="w-44" value={precio2} setValue={setPrecio2} labelValue="Precio del piso 2 (Bs)" />
                         </div>}
                     </div>
                 </section>

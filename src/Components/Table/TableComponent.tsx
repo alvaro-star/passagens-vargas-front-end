@@ -15,13 +15,11 @@ export default function TableComponent({ header, thead, tbody }: Props) {
                 </div>
             </div>
         </div>
-        <div className="block w-full overflow-x-auto">
+        <div className="block overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse">
-                <thead>
-                    <tr>
-                        {thead}
-                    </tr>
-                </thead>
+                <thead><tr>
+                    {thead}
+                </tr></thead>
                 <tbody>
                     {tbody}
                 </tbody>

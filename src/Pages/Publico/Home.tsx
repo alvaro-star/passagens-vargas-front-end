@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import FormInlineTemplateIndependent from "./Components/FormInlineTemplateIndependent"
+import FormInlineTemplateIndependent from "./Components/FormInlineTemplate/FormInlineTemplateIndependent"
 
 
 const Home = () => {
