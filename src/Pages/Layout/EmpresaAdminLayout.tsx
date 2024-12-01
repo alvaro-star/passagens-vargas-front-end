@@ -6,8 +6,7 @@ import CloseButton from "@/Components/Buttons/CloseButton"
 import SubtittleComponent from "./Components/SubtittleComponent"
 import LiButtonComponent from "./Components/LiButtonComponent"
 import LinkLayoutComponent from "./Components/LinkLayoutComponent"
-import { CookieRefreshToken, CookieRole, CookieToken } from "@/Helpers/CookieGenerate/CookiesAuth";
-import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId";
+import { CookieRole } from "@/Helpers/CookieGenerate/CookiesAuth";
 
 const EmpresaAdminLayout = () => {
     const navigate = useNavigate()
@@ -37,15 +36,14 @@ const EmpresaAdminLayout = () => {
     }
 
     const deslogar = () => {
-        CookieEmpresaId.remove()
-        CookieToken.remove()
-        CookieRefreshToken.remove()
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('idEmpresa')
         navigate('/')
     }
     const [moreOptions, setMoreOptions] = useState(false)
     return (
         <section className="min-h-screen bg-gray-100 max-w-full md:flex">
-            <div className=" md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-50">
+            <div className="md:min-w-64 md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative z-50">
                 <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
                     <button
                         className="cursor-pointer text-black opacity-50 md:hidden px-5 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"

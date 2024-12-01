@@ -13,7 +13,7 @@ import { FaBars, FaMapMarkerAlt } from "react-icons/fa"
 import ButtonOptionsMenu from "@/Components/ButtonOptionsMenu"
 import PasajerosTable from "./Components/PasajerosTable"
 import ContainerShowTemplate from "@/Pages/Layout/ContainerShowTemplate"
-
+import PreciosEditComponent from "./Components/PreciosEditComponent"
 
 interface IViajeExtends {
     codigo: string
@@ -29,9 +29,11 @@ const ViajesShowPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const [viaje, setViaje] = useState<IViajeExtends>()
+    const [precios, setPrecios] = useState<IPrecio2[]>([])
     const [openFormCreate, setOpenFormCreate] = useState(false)
     const [mostrarOptions, setMostrarOptions] = useState(true)
     const [showCreateCopyViaje, setShowCreateCopyViaje] = useState(false)
+    const [showPrecios, setShowPrecios] = useState(false)
 
     useEffect(() => {
         if (id) {
@@ -43,6 +45,7 @@ const ViajesShowPage = () => {
                     let dataViaje = new Date(viajeApi.paradas[viajeApi.paradas.length - 1].dataHora).getTime()
                     if (dataViaje <= dataAtual) setMostrarOptions(false)
                     else setMostrarOptions(true)
+                    setPrecios(data.precios)
                     setViaje(viajeApi);
                 });
         }
@@ -124,6 +127,9 @@ const ViajesShowPage = () => {
                                 <PrimaryButtonEmpresa className="rounded-none w-full" onClick={() => setShowCreateCopyViaje(true)}>
                                     duplicar viaje
                                 </PrimaryButtonEmpresa>
+                                <PrimaryButtonEmpresa className="rounded-none w-full bg-yellow-400" onClick={() => setShowPrecios(true)}>
+                                    Ver Precios
+                                </PrimaryButtonEmpresa>
                                 <PrimaryButtonEmpresa className="rounded-none w-full" onClick={downloadPasajesList}>
                                     imprimir lista
                                 </PrimaryButtonEmpresa>
@@ -141,34 +147,40 @@ const ViajesShowPage = () => {
                     </div>
                 </div>
             </>}>
-            <>
-                {viaje && <>
-                    {showCreateCopyViaje &&
-                        <div className="absolute inset-0 z-20 grid place-content-center bg-white bg-opacity-60">
-                            <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
-                        </div>
-                    }
-                    <div hidden={!mostrarParadas} className="absolute bg-slate-200 inset-0 pt-10 md:pt-20 z-50 bg-opacity-75">
-                        <ParadasTableComponent
-                            mostrarOptions={mostrarOptions}
-                            closeModal={() => setMostrarParadas(false)}
-                            paradas={viaje.paradas}
-                            eliminarParada={eliminarParada}
-                            setOpenFormCreate={setOpenFormCreate}
+            <>{viaje && <>
+                {showCreateCopyViaje &&
+                    <div className="absolute inset-0 z-20 grid place-content-center bg-white bg-opacity-60">
+                        <AutobusCreateCopyComponent idViajeProp={viaje.codigo} setShowForm={setShowCreateCopyViaje} />
+                    </div>
+                }
+                <PreciosEditComponent
+                    showModal={showPrecios}
+                    setShowModal={setShowPrecios}
+                    precios={precios}
+                    setPrecios={setPrecios}
+                />
+
+                <div hidden={!mostrarParadas} className="absolute bg-slate-200 inset-0 pt-10 md:pt-20 z-50 bg-opacity-75">
+                    <ParadasTableComponent
+                        mostrarOptions={mostrarOptions}
+                        closeModal={() => setMostrarParadas(false)}
+                        paradas={viaje.paradas}
+                        eliminarParada={eliminarParada}
+                        setOpenFormCreate={setOpenFormCreate}
+                    />
+                </div>
+                <div className={"absolute inset-0 mt-36 z-30 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
+                    <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
+                </div>
+                <div className="w-full">
+                    {viaje.precios.length != 0 &&
+                        <PasajerosTable
+                            setMostrarOptions={setMostrarOptions}
+                            idsPrecio={viaje.precios.map(item => item.id.toString())}
                         />
-                    </div>
-                    <div className={"absolute inset-0 mt-36 z-30 " + (openFormCreate && viaje.paradas.length >= 2 ? '' : 'hidden')}>
-                        <ParadaFormPage validarParada={validarParada} idViaje={viaje.codigo} setOpenForm={setOpenFormCreate} addParada={addParada} />
-                    </div>
-                    <div className="">
-                        {viaje.precios.length != 0 &&
-                            <PasajerosTable
-                                setMostrarOptions={setMostrarOptions}
-                                idsPrecio={viaje.precios.map(item => item.id.toString())}
-                            />
-                        }
-                    </div>
-                </>}
+                    }
+                </div>
+            </>}
             </>
         </ContainerShowTemplate>
     )

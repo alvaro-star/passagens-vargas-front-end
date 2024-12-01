@@ -47,7 +47,7 @@ const ViajesFuncionarioPage = () => {
                     header={
                         <div className="flex items-center justify-between pb-2 -mt-2">
                             <div className="">Resultado dela busqueda</div>
-                            <PrimaryButtonEmpresa>
+                            <PrimaryButtonEmpresa onClick={()=> navigate('create')}>
                                 Registrar Viaje
                             </PrimaryButtonEmpresa>
                         </div>

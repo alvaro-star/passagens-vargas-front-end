@@ -63,12 +63,6 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
         fetchPasajeros(idsPrecio).then(t => setPasajeros(t))
     }, [idsPrecio])
 
-    /*const editPrecio = (valor: number) => {
-        if (precioModel) {
-            setPrecioModel({ ...precioModel, precio: valor })
-        }
-    }*/
-
     return (
         <div className="mt-3">
             <TableComponent

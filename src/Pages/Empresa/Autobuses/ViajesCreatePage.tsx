@@ -24,7 +24,7 @@ const ViajesCreatePage = () => {
 
     const [horasViaje, setHorasViaje] = useState('');
     const [carril, setCarril] = useState('');
-    const [fechaSalida, setFechaSalida] = useState('');
+    const [fechaSalida, setFechaSalida] = useState(new Date().toISOString().slice(0, 16));
 
     const [autobuses, setAutobuses] = useState<IAutobus[]>([])
 
@@ -150,16 +150,16 @@ const ViajesCreatePage = () => {
         }>
         <div className="max-w-2xl mx-auto">
             <form className="bg-white border p-5 flex flex-col rounded" onSubmit={enviar}>
-                <SelectComponent labelValue="Autobus" onChange={e => setIdAutobus(e.target.value)}>
+                <h2 className="text-xl font-semibold mb-3">
+                    Datos del Viaje
+                </h2>
+                <SelectComponent className="mb-2.5" labelValue="Autobus" onChange={e => setIdAutobus(e.target.value)}>
                     {autobuses.map(autobus =>
                         <option key={autobus.id} value={autobus.id}>
                             {autobus.placa}
                         </option>
                     )}
                 </SelectComponent>
-                <h2 className="text-xl font-semibold mb-3">
-                    Datos del Viaje
-                </h2>
                 <div className="flex gap-3">
                     <div className="block">
                         <TextInputEmpresa className="w-20" labelValue="Carril" value={carril} setValue={setCarril} />

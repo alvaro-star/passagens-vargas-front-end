@@ -91,7 +91,7 @@ const InputRelatorioComponent = ({ idEmpresa, viajes, setViajes }: Props) => {
             </button>
         </section>
         <section>
-            {nextPage && <PrimaryButton onClick={verMais} className="rounded-none"> ver mas viajes </PrimaryButton>}
+            {nextPage && <PrimaryButton onClick={verMais}> ver mas viajes </PrimaryButton>}
         </section>
     </div>
 }

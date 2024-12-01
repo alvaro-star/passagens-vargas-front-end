@@ -8,7 +8,7 @@ import ISillaType from "../Types/ISillaType";
 import IPasajeComplete from "../Types/IPasajeComplete";
 import PasajeroCard from "./PasajeroCard";
 import IPrecio from "@/Pages/Publico/PassagensList/Types/IPrecio";
-import PrecioEditComponent from "./PrecioEditComponent";
+import PrecioEditComponent from "./PreciosEditComponent";
 import { FaAngleDown } from "react-icons/fa";
 import { LuMaximize2 } from "react-icons/lu";
 interface Props {
@@ -170,16 +170,6 @@ const PasajerosListaEmpresaPage = ({ idPrecio, setMostrarOptions }: Props) => {
                         Modelo del Autobus
                     </div>
                 </section>
-                {precioModel && showEditComponent &&
-                    <div className="absolute inset-0 grid z-10 place-content-center">
-                        <PrecioEditComponent
-                            setShowForm={setShowEditComponent}
-                            nPiso={precioModel.nPiso}
-                            idPrecio={precioModel.id}
-                            setPrecioProp={editPrecio}
-                            precioProp={precioModel.precio}
-                        />
-                    </div>}
                 <div hidden={aba != 2} className="bg-white">
                     <section className="relative flex flex-col justify-center items-center" >
                         {sillaElegido != null &&

@@ -27,7 +27,6 @@ const construtorPiso = {
 const AutobusesFormPage = () => {
 
     const navigate = useNavigate()
-
     const [idEmpresa, setIdEmpresa] = useState<string>('')
 
     const [piso1, setPiso1] = useState<IPiso>(construtorPiso)
@@ -89,7 +88,7 @@ const AutobusesFormPage = () => {
                 setPlaca('')
                 setEtapa(1)
                 setSegundoPiso(null)
-                navigate('/empresa/autobuses')
+                navigate(-1)
             }).catch(({ response }) => {
                 if (response.data.conteudo) {
                     alert(response.data.conteudo)
@@ -163,7 +162,7 @@ const AutobusesFormPage = () => {
                     </section>
                 }
             </>}
-            {etapa == 3 && <form className="relative border-2 py-8 sm:p-8 w-full " onSubmit={enviar}>
+            {etapa == 3 && <form className="relative border-2 py-8 sm:p-8 w-full bg-slate-100" onSubmit={enviar}>
                 <PrimaryButtonEmpresa
                     onClick={() => setEtapa(2)}
                     className='absolute ml-5'>

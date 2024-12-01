@@ -26,7 +26,9 @@ const ViajesIndexPage = () => {
         }>
 
         {idEmpresa && <TableComponent
-            header={<InputRelatorioComponent idEmpresa={idEmpresa} viajes={viajes} setViajes={setViajes} />}
+            header={<>
+                <InputRelatorioComponent idEmpresa={idEmpresa} viajes={viajes} setViajes={setViajes} />
+            </>}
             thead={
                 <>
                     <ThComponent text="Salida" />
