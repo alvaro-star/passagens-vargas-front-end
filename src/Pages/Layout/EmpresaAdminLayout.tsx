@@ -42,8 +42,8 @@ const EmpresaAdminLayout = () => {
     }
     const [moreOptions, setMoreOptions] = useState(false)
     return (
-        <section className="min-h-screen bg-gray-100 max-w-full md:flex">
-            <div className="md:min-w-64 md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative z-50">
+        <section className="min-h-screen bg-gray-100 max-w-full">
+            <div className="md:min-w-60 md:fixed md:left-0 md:block md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative z-50">
                 <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
                     <button
                         className="cursor-pointer text-black opacity-50 md:hidden px-5 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
@@ -184,7 +184,7 @@ const EmpresaAdminLayout = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-full">
+            <div className="md:ml-60">
                 <div className="hidden md:block h-64 bg-yellow-500" />
                 <div className="px-6 md:-mt-64">
                     <Outlet />

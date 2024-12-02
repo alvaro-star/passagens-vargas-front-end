@@ -38,7 +38,7 @@ const ParadaForm = ({ parada, paradaErros, setParada }: Props) => {
     }
     return <div className="w-full space-y-4">
         <div className="">
-            <TextInputObject className="text-center" type="text" value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Numero de Carril" />
+            <TextInputObject className="text-center" type="text" value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Carril" />
             <InputError message={paradaErros.plataforma} />
         </div>
         <div className="">

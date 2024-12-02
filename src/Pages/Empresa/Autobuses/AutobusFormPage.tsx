@@ -10,6 +10,7 @@ import TextInputEmpresa from "@/Components/TextInputEmpresa"
 import IError from "@/Types/IErrors/IError"
 import InputError from "@/Components/FormComponents/InputError"
 import CookieEmpresaId from "@/Helpers/CookieGenerate/CookieEmpresaId"
+import { proceccErroDefault, processErro422 } from "@/Helpers/Exceptions/processorsError"
 
 const construtorPiso = {
     id: null,
@@ -89,19 +90,17 @@ const AutobusesFormPage = () => {
                 setEtapa(1)
                 setSegundoPiso(null)
                 navigate(-1)
-            }).catch(({ response }) => {
-                if (response.data.conteudo) {
-                    alert(response.data.conteudo)
-                } else if (response.data.errors) {
-                    response.data.errors.forEach((errorList: IError) => {
-                        if (errorList.name === "placa")
-                            setPlacaErro(errorList.message)
-                    });
-                }
+            }).catch(error => {
+                if (error.response.data.errors) {
+                    const errors: Record<string, string> = processErro422(error)
+                    if (Object.keys(errors).includes("placa"))
+                        setPlacaErro(errors["placa"])
+                } else if (error.response.data.conteudo) {
+                    alert(error.response.data.conteudo)
+                } else proceccErroDefault()
 
             })
     }
-
 
     return (
         <div className="px-5 sm:px-24 pb-32">

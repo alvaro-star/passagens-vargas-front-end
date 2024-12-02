@@ -27,11 +27,15 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
     const rembolsarPasaje = (id: string | number) => {
         http.delete(`pasajes/${id}`)
             .then(() => {
+                console.log(id);
+                
                 setPasajeros((prevPasajes) =>
                     prevPasajes.map((pasaje) => pasaje.id === id ? { ...pasaje, rembolsado: true } : pasaje)
                 );
             })
-            .catch(({ error }) => {
+            .catch((error) => {
+                console.log(error);
+                
                 if (error.response.data.conteudo)
                     alert(error.response.data.conteudo)
                 console.error('Erro ao reembolsar o pasaje:', error);
@@ -67,7 +71,7 @@ const PasajerosTable = ({ idsPrecio, setMostrarOptions }: Props) => {
         <div className="mt-3">
             <TableComponent
                 header={<div className="py-2 flex items-center justify-between">
-                    <h2>Lista de Pasajeros</h2>
+                    <h2>Lista de Pasajeros teste</h2>
                 </div>}
                 thead={<>
                     <ThComponent text="Asiento" />

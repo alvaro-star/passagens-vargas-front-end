@@ -20,7 +20,7 @@ interface Props {
 const ParadasTableComponent = ({ mostrarOptions, paradas, closeModal, eliminarParada, setOpenFormCreate }: Props) => {
     return <div className="max-w-7xl mx-auto my-auto">
         <TableComponent
-            header={<div className="flex items-center justify-between pt-5 pb-3">
+            header={<div className="flex items-center justify-between pt-5 pb-2">
                 <h2 className="text-xl font-semibold">Paradas del viaje</h2>
                 <CloseButton onClick={closeModal} />
             </div>}
@@ -65,7 +65,10 @@ const ParadasTableComponent = ({ mostrarOptions, paradas, closeModal, eliminarPa
         />
         <div className="pt-2 flex justify-center">
             {mostrarOptions &&
-                <PrimaryButtonEmpresa onClick={() => setOpenFormCreate(true)}>registrar una parada</PrimaryButtonEmpresa>
+                <PrimaryButtonEmpresa onClick={() => {
+                    setOpenFormCreate(true)
+                    closeModal()
+                }}>registrar una parada</PrimaryButtonEmpresa>
             }
         </div>
     </div>

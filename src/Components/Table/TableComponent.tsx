@@ -15,7 +15,7 @@ export default function TableComponent({ header, thead, tbody }: Props) {
                 </div>
             </div>
         </div>
-        <div className="block max-w-6xl overflow-x-auto">
+        <div className="block overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse">
                 <thead><tr>
                     {thead}

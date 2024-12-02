@@ -96,9 +96,10 @@ const ParadaEditPage = () => {
                     <h2 className="text-gray-800 text-lg font-semibold">Editar Parada</h2>
                 </div>
                 <div className="text-center mt-2">
+                    {/*<ParadaForm parada={parada} setParada={setParada} paradaErros={paradaErros}/>*/}
                     <div className="space-y-4">
                         <div className="4">
-                            <TextInputObject className="text-center" type="text" min={1} value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Plataforma" />
+                            <TextInputObject className="text-center" type="text" min={1} value={parada.plataforma} onChange={(eve) => editar('plataforma', eve.target.value)} labelValue="Carril" />
                             <InputError className="text-wrap" message={paradaErros.plataforma} />
                         </div>
                         <div className="relative">
